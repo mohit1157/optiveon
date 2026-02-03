@@ -140,13 +140,14 @@ function initContactForm() {
 
         try {
             // Submit to Netlify Forms
-            const response = await fetch('/', {
+            const response = await fetch(form.action || '/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams(formData).toString()
             });
 
-            if (response.ok) {
+            // Netlify returns 200 or 303 on success
+            if (response.ok || response.status === 303 || response.status === 302) {
                 // Show success message
                 showFormMessage(form, 'success', 'Thank you for your message! We\'ll get back to you shortly.');
                 form.reset();
@@ -155,6 +156,7 @@ function initContactForm() {
             }
 
         } catch (error) {
+            console.error('Form error:', error);
             // Show error message
             showFormMessage(form, 'error', 'There was an error sending your message. Please try again or email us directly at info@optiveon.com');
         } finally {
