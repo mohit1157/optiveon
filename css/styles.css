@@ -73,6 +73,7 @@ html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
 body {
@@ -82,6 +83,7 @@ body {
     color: var(--text-primary);
     background: var(--bg-dark);
     overflow-x: hidden;
+    min-width: 320px;
 }
 
 a {
@@ -1156,6 +1158,42 @@ section {
         gap: var(--space-md);
     }
 
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .trading-terminal {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .terminal-content {
+        padding: var(--space-md);
+    }
+
+    .terminal-content pre {
+        font-size: 0.7rem;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .tech-diagram {
+        display: none;
+    }
+
+    .tech-visual {
+        display: none;
+    }
+
     .footer-content {
         flex-direction: column;
     }
@@ -1174,6 +1212,20 @@ section {
         gap: var(--space-sm);
         text-align: center;
     }
+
+    .footer-disclaimer p {
+        font-size: 0.75rem;
+    }
+
+    .contact-details {
+        align-items: center;
+    }
+
+    .contact-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1185,14 +1237,54 @@ section {
         padding: 60px 0;
     }
 
-    .tech-diagram {
-        width: 300px;
-        height: 300px;
+    .hero {
+        padding: 100px 0 60px;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-badge {
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+
+    .terminal-content pre {
+        font-size: 0.65rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .feature-card,
+    .solution-card,
+    .pricing-card {
+        padding: var(--space-lg);
+    }
+
+    .price {
+        font-size: 2rem;
+    }
+
+    .btn-lg {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .tech-diagram,
+    .tech-visual {
+        display: none;
     }
 
     .diagram-node {
         padding: var(--space-sm) var(--space-md);
         font-size: 0.75rem;
+    }
+
+    .gradient-orb {
+        display: none;
     }
 }
 
