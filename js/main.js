@@ -110,7 +110,7 @@ function initScrollAnimations() {
 }
 
 /**
- * Contact form handling
+ * Contact form handling - Netlify Forms
  */
 function initContactForm() {
     const form = document.getElementById('contactForm');
@@ -137,18 +137,22 @@ function initContactForm() {
 
         // Collect form data
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
 
         try {
-            // For static site, we'll use mailto as fallback
-            // In production, you would send to your backend or use a service like Formspree
+            // Submit to Netlify Forms
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(formData).toString()
+            });
 
-            // Simulate sending (replace with actual API call)
-            await simulateFormSubmission(data);
-
-            // Show success message
-            showFormMessage(form, 'success', 'Thank you for your message! We\'ll get back to you shortly.');
-            form.reset();
+            if (response.ok) {
+                // Show success message
+                showFormMessage(form, 'success', 'Thank you for your message! We\'ll get back to you shortly.');
+                form.reset();
+            } else {
+                throw new Error('Form submission failed');
+            }
 
         } catch (error) {
             // Show error message
@@ -191,37 +195,6 @@ function validateForm(form) {
     return isValid;
 }
 
-/**
- * Simulate form submission (for demo purposes)
- * Replace with actual API call in production
- */
-function simulateFormSubmission(data) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            // Log submission data
-            console.log('Form submission:', data);
-
-            // Create mailto link as fallback
-            const subject = encodeURIComponent(`[Optiveon] Inquiry: ${data.interest}`);
-            const body = encodeURIComponent(
-                `Name: ${data.name}\n` +
-                `Email: ${data.email}\n` +
-                `Company: ${data.company || 'Not provided'}\n` +
-                `Interest: ${data.interest}\n\n` +
-                `Message:\n${data.message}`
-            );
-
-            // For static site without backend, open mailto
-            // In production, you would use a proper form service
-            const mailtoLink = `mailto:info@optiveon.com?subject=${subject}&body=${body}`;
-
-            // Store the mailto link for potential use
-            window.optiveonMailto = mailtoLink;
-
-            resolve();
-        }, 1000);
-    });
-}
 
 /**
  * Show form message (success/error)
