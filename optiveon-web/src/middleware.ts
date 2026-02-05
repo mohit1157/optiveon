@@ -33,13 +33,19 @@ export default withAuth(
           "/register",
           "/forgot-password",
           "/verify-email",
+          "/checkout",
           "/privacy",
           "/terms",
           "/disclaimer",
         ];
 
         // API routes that don't need auth
-        const publicApiRoutes = ["/api/auth", "/api/contact", "/api/webhooks"];
+        const publicApiRoutes = [
+          "/api/auth",
+          "/api/contact",
+          "/api/webhooks",
+          "/api/market",
+        ];
 
         // Check if it's a public route
         if (

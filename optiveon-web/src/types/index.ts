@@ -60,6 +60,8 @@ export interface Feature {
 
 // Pricing
 export interface PricingTier {
+  plan: "STARTER" | "PROFESSIONAL" | "ENTERPRISE";
+  slug: "starter" | "professional" | "enterprise";
   name: string;
   description: string;
   price: number | null;

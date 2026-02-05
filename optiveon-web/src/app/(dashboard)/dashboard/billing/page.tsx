@@ -90,9 +90,11 @@ export default async function BillingPage() {
         <h2 className="text-xl font-semibold mb-lg">Available Plans</h2>
         <div className="grid gap-lg md:grid-cols-3">
           {pricingTiers.map((tier) => {
-            const isCurrentPlan =
-              tier.name.toUpperCase() === currentPlan ||
-              (currentPlan === "FREE" && tier.name === "Starter");
+            const isCurrentPlan = tier.plan === currentPlan;
+            const checkoutHref =
+              tier.plan === "ENTERPRISE"
+                ? `/checkout?plan=${tier.slug}`
+                : `/api/billing/checkout?plan=${tier.slug}`;
 
             return (
               <Card
@@ -133,8 +135,13 @@ export default async function BillingPage() {
                     variant={isCurrentPlan ? "outline" : "primary"}
                     className="w-full"
                     disabled={isCurrentPlan}
+                    asChild={!isCurrentPlan}
                   >
-                    {isCurrentPlan ? "Current Plan" : tier.cta}
+                    {isCurrentPlan ? (
+                      "Current Plan"
+                    ) : (
+                      <Link href={checkoutHref}>{tier.cta}</Link>
+                    )}
                   </Button>
                 </CardContent>
               </Card>

@@ -1,6 +1,11 @@
 export { Hero } from "./hero";
+export { LiveMetrics } from "./live-metrics";
 export { Features } from "./features";
+export { ProductTour } from "./product-tour";
 export { Solutions } from "./solutions";
 export { Technology } from "./technology";
+export { ActivityFeed } from "./activity-feed";
+export { InquiryInsights } from "./inquiry-insights";
+export { StackBand } from "./stack-band";
 export { Pricing } from "./pricing";
 export { Contact } from "./contact";

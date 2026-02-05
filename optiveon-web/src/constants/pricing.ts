@@ -2,6 +2,8 @@ import { PricingTier } from "@/types";
 
 export const pricingTiers: PricingTier[] = [
   {
+    plan: "STARTER",
+    slug: "starter",
     name: "Starter",
     description: "For individual researchers and analysts",
     price: 99,
@@ -13,9 +15,11 @@ export const pricingTiers: PricingTier[] = [
       "Email support",
     ],
     cta: "Get Started",
-    href: "/#contact",
+    href: "/checkout?plan=starter",
   },
   {
+    plan: "PROFESSIONAL",
+    slug: "professional",
     name: "Professional",
     description: "For serious traders and small teams",
     price: 299,
@@ -28,11 +32,13 @@ export const pricingTiers: PricingTier[] = [
       "Priority support",
     ],
     cta: "Get Started",
-    href: "/#contact",
+    href: "/checkout?plan=professional",
     featured: true,
     badge: "Recommended",
   },
   {
+    plan: "ENTERPRISE",
+    slug: "enterprise",
     name: "Enterprise",
     description: "For institutions and trading firms",
     price: null,
@@ -45,6 +51,6 @@ export const pricingTiers: PricingTier[] = [
       "SLA guarantee",
     ],
     cta: "Contact Sales",
-    href: "/#contact",
+    href: "/checkout?plan=enterprise",
   },
 ];
