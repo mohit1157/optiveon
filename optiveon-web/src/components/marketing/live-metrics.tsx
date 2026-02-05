@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { MetricsGrid } from "./metrics-grid";
+import { cn, formatCurrency } from "@/lib/utils";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 interface MarketItem {
   symbol: string;
@@ -19,6 +20,11 @@ interface MarketSnapshot {
   error?: string;
 }
 
+interface LiveMetricsProps {
+  className?: string;
+  limit?: number;
+}
+
 const fallbackItems: MarketItem[] = [
   { symbol: "SPY", name: "S&P 500 ETF", price: 0, change: 0, changePercent: 0 },
   {
@@ -32,7 +38,7 @@ const fallbackItems: MarketItem[] = [
   { symbol: "USO", name: "Crude Oil", price: 0, change: 0, changePercent: 0 },
 ];
 
-export function LiveMetrics() {
+export function LiveMetrics({ className, limit = 3 }: LiveMetricsProps) {
   const [snapshot, setSnapshot] = useState<MarketSnapshot | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,16 +66,6 @@ export function LiveMetrics() {
   }, []);
 
   const items = snapshot?.items?.length ? snapshot.items : fallbackItems;
-  const metrics = items.map((item) => ({
-    label: item.name,
-    value: item.price,
-    prefix: "$",
-    decimals: 2,
-    deltaLabel: `${item.change >= 0 ? "+" : ""}${item.change.toFixed(2)} (${
-      item.changePercent >= 0 ? "+" : ""
-    }${item.changePercent.toFixed(2)}%)`,
-  }));
-
   const updatedAt = snapshot?.updatedAt
     ? new Date(snapshot.updatedAt).toLocaleTimeString("en-US", {
         hour: "numeric",
@@ -78,44 +74,68 @@ export function LiveMetrics() {
     : null;
 
   const subtitle = useMemo(() => {
-    if (error) return "Connect a market data provider to display live prices.";
+    if (error) return "Connect a market data provider.";
     if (updatedAt) return `Updated ${updatedAt}`;
-    return "Live pricing snapshots refreshed every minute.";
+    return "Updating...";
   }, [error, updatedAt]);
 
+  const displayItems = items.slice(0, limit);
+
   return (
-    <section className="py-[120px] relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-dark">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(ellipse 60% 50% at 10% 0%, rgba(27, 53, 89, 0.2) 0%, transparent 60%),
-              radial-gradient(ellipse 40% 40% at 90% 20%, rgba(214, 179, 106, 0.06) 0%, transparent 60%)
-            `,
-          }}
-        />
+    <div
+      className={cn(
+        "absolute top-24 right-6 w-[240px] rounded-2xl border border-border bg-background/85 p-lg shadow-lg backdrop-blur-md",
+        className
+      )}
+    >
+      <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.2em] text-foreground-muted">
+        <span>Market Snapshot</span>
+        <span>{subtitle}</span>
       </div>
 
-      <div className="container">
-        <div className="max-w-[760px] mb-4xl text-center mx-auto">
-          <span className="section-tag mb-lg">Market Pulse</span>
-          <h2 className="text-section-title mb-lg text-balance">
-            Live Market <span className="gradient-text">Signals</span>
-          </h2>
-          <p className="text-lg text-foreground-secondary leading-relaxed text-balance">
-            {subtitle}
-          </p>
-          {error && (
-            <p className="text-sm text-warning mt-md">
-              {error}. Add `ALPHAVANTAGE_API_KEY` or `POLYGON_API_KEY` in your
-              environment.
-            </p>
-          )}
-        </div>
+      <div className="mt-md space-y-md">
+        {displayItems.map((item) => {
+          const isUp = item.changePercent > 0;
+          const isDown = item.changePercent < 0;
+          const deltaClass = isUp
+            ? "text-success"
+            : isDown
+              ? "text-error"
+              : "text-foreground-muted";
 
-        <MetricsGrid items={metrics} />
+          return (
+            <div
+              key={item.symbol}
+              className="flex items-center justify-between gap-md"
+            >
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {item.symbol}
+                </p>
+                <p className="text-xs text-foreground-muted">{item.name}</p>
+              </div>
+              <div className="text-right">
+                <p className={cn("text-sm font-semibold", deltaClass)}>
+                  {formatCurrency(item.price || 0)}
+                </p>
+                <p className={cn("text-xs flex items-center justify-end", deltaClass)}>
+                  {isUp && <ArrowUpRight className="w-3 h-3" />}
+                  {isDown && <ArrowDownRight className="w-3 h-3" />}
+                  {!isUp && !isDown && <span className="w-3" />}
+                  {item.changePercent >= 0 ? "+" : ""}
+                  {item.changePercent.toFixed(2)}%
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
-    </section>
+
+      {error && (
+        <p className="mt-md text-[0.7rem] text-warning leading-relaxed">
+          {error}. Add `ALPHAVANTAGE_API_KEY` or `POLYGON_API_KEY`.
+        </p>
+      )}
+    </div>
   );
 }

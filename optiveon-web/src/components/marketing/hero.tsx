@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { heroStats } from "@/constants/content";
+import { LiveMetrics } from "./live-metrics";
 
 export function Hero() {
   return (
@@ -31,6 +32,8 @@ export function Hero() {
         <div className="absolute w-[900px] h-[900px] rounded-full bg-gradient-to-br from-primary to-primary-dark -top-[400px] -right-[300px] opacity-15 blur-[120px] animate-orb-float-1" />
         <div className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-br from-accent to-accent-dark -bottom-[200px] -left-[150px] opacity-[0.08] blur-[120px] animate-orb-float-2" />
       </div>
+
+      <LiveMetrics className="hidden lg:block" />
 
       <div className="container">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-4xl items-center">

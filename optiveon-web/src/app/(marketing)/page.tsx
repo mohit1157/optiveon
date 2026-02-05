@@ -1,6 +1,5 @@
 import {
   Hero,
-  LiveMetrics,
   Features,
   ProductTour,
   Solutions,
@@ -19,7 +18,6 @@ export default function HomePage() {
     <>
       <Hero />
       <StackBand />
-      <LiveMetrics />
       <Features />
       <ProductTour />
       <Solutions />
