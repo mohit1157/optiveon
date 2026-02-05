@@ -14,7 +14,7 @@ export function Contact() {
           className="absolute bottom-0 left-0 right-0 h-1/2"
           style={{
             background:
-              "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(30, 58, 95, 0.1) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 40% at 50% 100%, rgba(27, 53, 89, 0.1) 0%, transparent 70%)",
           }}
         />
       </div>

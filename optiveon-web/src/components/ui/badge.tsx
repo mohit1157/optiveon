@@ -10,9 +10,9 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-accent text-background-dark text-[0.6875rem] font-semibold uppercase tracking-wider px-lg py-xs",
+          "bg-gradient-accent text-background-dark text-[0.6875rem] font-semibold uppercase tracking-[0.2em] px-lg py-xs",
         outline:
-          "border border-accent/20 bg-accent/10 text-accent text-xs font-semibold uppercase tracking-widest px-lg py-xs",
+          "border border-accent/30 bg-accent/10 text-accent text-xs font-semibold uppercase tracking-widest px-lg py-xs",
         success:
           "bg-success/10 text-success border border-success/20 text-xs px-3 py-1",
         warning:

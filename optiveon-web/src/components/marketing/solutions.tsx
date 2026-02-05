@@ -77,8 +77,8 @@ export function Solutions() {
         className="absolute inset-0 -z-10"
         style={{
           background: `
-            radial-gradient(ellipse 60% 40% at 0% 50%, rgba(30, 58, 95, 0.15) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 50% at 100% 80%, rgba(201, 162, 39, 0.05) 0%, transparent 60%)
+            radial-gradient(ellipse 60% 40% at 0% 50%, rgba(27, 53, 89, 0.15) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 100% 80%, rgba(214, 179, 106, 0.05) 0%, transparent 60%)
           `,
         }}
       />

@@ -128,8 +128,8 @@ export function Technology() {
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(ellipse 50% 60% at 80% 20%, rgba(201, 162, 39, 0.06) 0%, transparent 60%),
-              radial-gradient(ellipse 40% 40% at 20% 80%, rgba(30, 58, 95, 0.15) 0%, transparent 60%)
+              radial-gradient(ellipse 50% 60% at 80% 20%, rgba(214, 179, 106, 0.06) 0%, transparent 60%),
+              radial-gradient(ellipse 40% 40% at 20% 80%, rgba(27, 53, 89, 0.15) 0%, transparent 60%)
             `,
           }}
         />

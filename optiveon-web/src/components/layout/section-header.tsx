@@ -31,14 +31,14 @@ export function SectionHeader({
       <Badge variant="outline" className="mb-lg">
         {tag}
       </Badge>
-      <h2 className="text-section-title mb-lg">
+      <h2 className="text-section-title mb-lg text-balance">
         {title}{" "}
         {highlightedText && (
           <span className="gradient-text">{highlightedText}</span>
         )}
       </h2>
       {subtitle && (
-        <p className="text-lg text-foreground-secondary leading-relaxed">
+        <p className="text-lg text-foreground-secondary leading-relaxed text-balance">
           {subtitle}
         </p>
       )}

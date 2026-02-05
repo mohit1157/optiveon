@@ -53,8 +53,8 @@ export function Features() {
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(ellipse 50% 50% at 50% 0%, rgba(30, 58, 95, 0.2) 0%, transparent 70%),
-              radial-gradient(ellipse 40% 40% at 90% 90%, rgba(201, 162, 39, 0.05) 0%, transparent 60%)
+              radial-gradient(ellipse 50% 50% at 50% 0%, rgba(27, 53, 89, 0.2) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 40% at 90% 90%, rgba(214, 179, 106, 0.05) 0%, transparent 60%)
             `,
           }}
         />
@@ -63,8 +63,8 @@ export function Features() {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(201, 162, 39, 0.02) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(201, 162, 39, 0.02) 1px, transparent 1px)
+              linear-gradient(rgba(214, 179, 106, 0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(214, 179, 106, 0.02) 1px, transparent 1px)
             `,
             backgroundSize: "60px 60px",
             maskImage:

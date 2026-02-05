@@ -16,10 +16,10 @@ export function Hero() {
           className="absolute inset-0"
           style={{
             background: `
-              radial-gradient(ellipse 80% 50% at 50% -20%, rgba(30, 58, 95, 0.4) 0%, transparent 50%),
-              radial-gradient(ellipse 60% 40% at 100% 50%, rgba(201, 162, 39, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse 50% 50% at 0% 80%, rgba(30, 58, 95, 0.2) 0%, transparent 50%),
-              #0c1221
+              radial-gradient(ellipse 80% 50% at 50% -20%, rgba(27, 53, 89, 0.45) 0%, transparent 50%),
+              radial-gradient(ellipse 60% 40% at 100% 50%, rgba(214, 179, 106, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse 50% 50% at 0% 80%, rgba(27, 53, 89, 0.2) 0%, transparent 50%),
+              #0b111b
             `,
           }}
         />
@@ -41,12 +41,12 @@ export function Hero() {
               Advanced Trading Technology
             </Badge>
 
-            <h1 className="text-hero-title mb-xl">
+            <h1 className="text-hero-title mb-xl text-balance">
               Intelligent Market Research &{" "}
               <span className="gradient-text">Algorithmic Trading</span>
             </h1>
 
-            <p className="text-xl text-foreground-secondary mb-2xl max-w-[560px] leading-relaxed lg:mx-0 mx-auto">
+            <p className="text-xl text-foreground-secondary mb-2xl max-w-[560px] leading-relaxed lg:mx-0 mx-auto text-balance">
               Leverage cutting-edge algorithms and real-time market analysis to
               make informed trading decisions. Our proprietary technology powers
               sophisticated research tools for futures, options, and forex

@@ -93,8 +93,8 @@ export function Pricing() {
         className="absolute inset-0 -z-10"
         style={{
           background: `
-            radial-gradient(ellipse 50% 50% at 50% 0%, rgba(30, 58, 95, 0.12) 0%, transparent 60%),
-            radial-gradient(ellipse 40% 40% at 80% 100%, rgba(201, 162, 39, 0.04) 0%, transparent 60%)
+            radial-gradient(ellipse 50% 50% at 50% 0%, rgba(27, 53, 89, 0.12) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 40% at 80% 100%, rgba(214, 179, 106, 0.04) 0%, transparent 60%)
           `,
         }}
       />

@@ -19,14 +19,14 @@ const config: Config = {
       colors: {
         // Primary Colors - Deep Navy & Gold
         primary: {
-          DEFAULT: "#1e3a5f",
-          light: "#2d5a8a",
-          dark: "#0f2440",
+          DEFAULT: "#1b3559",
+          light: "#2b4a76",
+          dark: "#0f1f36",
         },
         accent: {
-          DEFAULT: "#c9a227",
-          light: "#d4b54a",
-          dark: "#a8861f",
+          DEFAULT: "#d6b36a",
+          light: "#e3c98a",
+          dark: "#b19045",
         },
         // Semantic Colors
         success: "#059669",
@@ -34,34 +34,41 @@ const config: Config = {
         error: "#dc2626",
         // Backgrounds - Sophisticated Dark Theme
         background: {
-          DEFAULT: "#0c1221",
-          dark: "#080d16",
-          card: "#111827",
-          "card-hover": "#1a2234",
-          elevated: "#1f2937",
+          DEFAULT: "#0b111b",
+          dark: "#090e17",
+          card: "#111b2a",
+          "card-hover": "#162134",
+          elevated: "#1b273a",
         },
         // Text Colors
         foreground: {
-          DEFAULT: "#f8fafc",
-          secondary: "#94a3b8",
-          muted: "#64748b",
+          DEFAULT: "#f5f7fb",
+          secondary: "#a3b1c6",
+          muted: "#6f7c92",
         },
         // Border Colors
         border: {
-          DEFAULT: "rgba(148, 163, 184, 0.1)",
-          hover: "rgba(148, 163, 184, 0.2)",
-          accent: "rgba(201, 162, 39, 0.3)",
+          DEFAULT: "rgba(163, 177, 198, 0.14)",
+          hover: "rgba(163, 177, 198, 0.26)",
+          accent: "rgba(214, 179, 106, 0.35)",
         },
       },
       fontFamily: {
         sans: [
-          "Inter",
+          "var(--font-sans)",
+          "system-ui",
           "-apple-system",
-          "BlinkMacSystemFont",
           "Segoe UI",
           "sans-serif",
         ],
-        mono: ["JetBrains Mono", "SF Mono", "monospace"],
+        heading: [
+          "var(--font-heading)",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "sans-serif",
+        ],
+        mono: ["var(--font-mono)", "SF Mono", "ui-monospace", "monospace"],
       },
       fontSize: {
         "hero-title": [
@@ -92,21 +99,21 @@ const config: Config = {
         "2xl": "24px",
       },
       boxShadow: {
-        sm: "0 1px 2px rgba(0, 0, 0, 0.2)",
-        md: "0 4px 12px rgba(0, 0, 0, 0.15)",
-        lg: "0 12px 40px rgba(0, 0, 0, 0.25)",
-        glow: "0 0 60px rgba(30, 58, 95, 0.3)",
-        accent: "0 0 40px rgba(201, 162, 39, 0.15)",
-        "accent-lg": "0 0 50px rgba(201, 162, 39, 0.25)",
+        sm: "0 1px 2px rgba(2, 6, 23, 0.2)",
+        md: "0 6px 16px rgba(2, 6, 23, 0.25)",
+        lg: "0 18px 48px rgba(2, 6, 23, 0.35)",
+        glow: "0 0 60px rgba(27, 53, 89, 0.3)",
+        accent: "0 0 40px rgba(214, 179, 106, 0.15)",
+        "accent-lg": "0 0 50px rgba(214, 179, 106, 0.2)",
       },
       backgroundImage: {
-        "gradient-primary": "linear-gradient(135deg, #1e3a5f 0%, #2d5a8a 100%)",
-        "gradient-accent": "linear-gradient(135deg, #c9a227 0%, #d4b54a 100%)",
+        "gradient-primary": "linear-gradient(135deg, #1b3559 0%, #2b4a76 100%)",
+        "gradient-accent": "linear-gradient(135deg, #d6b36a 0%, #e3c98a 100%)",
         "gradient-premium":
-          "linear-gradient(135deg, #1e3a5f 0%, #0f2440 50%, #1e3a5f 100%)",
+          "linear-gradient(135deg, #1b3559 0%, #0f1f36 50%, #1b3559 100%)",
         "gradient-text":
-          "linear-gradient(135deg, #c9a227 0%, #f4d875 50%, #c9a227 100%)",
-        "gradient-dark": "linear-gradient(180deg, #0c1221 0%, #111827 100%)",
+          "linear-gradient(135deg, #d6b36a 0%, #f1e2b3 50%, #d6b36a 100%)",
+        "gradient-dark": "linear-gradient(180deg, #0b111b 0%, #111b2a 100%)",
       },
       transitionDuration: {
         fast: "150ms",

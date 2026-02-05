@@ -15,7 +15,7 @@ const Card = React.forwardRef<
       "relative rounded-xl border bg-background-card p-2xl transition-all duration-slow",
       featured
         ? "border-accent bg-gradient-to-b from-accent/5 to-transparent"
-        : "border-border hover:border-border-hover hover:bg-background-card-hover hover:-translate-y-1 hover:shadow-lg",
+        : "border-border hover:border-border-hover hover:bg-background-card-hover hover:-translate-y-0.5 hover:shadow-lg",
       className
     )}
     {...props}

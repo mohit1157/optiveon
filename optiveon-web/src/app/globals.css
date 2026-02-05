@@ -5,45 +5,45 @@
 @layer base {
   :root {
     /* CSS Variables for compatibility with existing styles */
-    --color-primary: #1e3a5f;
-    --color-primary-light: #2d5a8a;
-    --color-primary-dark: #0f2440;
-    --color-accent: #c9a227;
-    --color-accent-light: #d4b54a;
-    --color-accent-dark: #a8861f;
+    --color-primary: #1b3559;
+    --color-primary-light: #2b4a76;
+    --color-primary-dark: #0f1f36;
+    --color-accent: #d6b36a;
+    --color-accent-light: #e3c98a;
+    --color-accent-dark: #b19045;
 
     --color-success: #059669;
     --color-warning: #d97706;
     --color-error: #dc2626;
 
-    --bg-dark: #0c1221;
-    --bg-darker: #080d16;
-    --bg-card: #111827;
-    --bg-card-hover: #1a2234;
-    --bg-elevated: #1f2937;
+    --bg-dark: #0b111b;
+    --bg-darker: #090e17;
+    --bg-card: #111b2a;
+    --bg-card-hover: #162134;
+    --bg-elevated: #1b273a;
 
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --text-primary: #f5f7fb;
+    --text-secondary: #a3b1c6;
+    --text-muted: #6f7c92;
 
-    --border-color: rgba(148, 163, 184, 0.1);
-    --border-hover: rgba(148, 163, 184, 0.2);
-    --border-accent: rgba(201, 162, 39, 0.3);
+    --border-color: rgba(163, 177, 198, 0.14);
+    --border-hover: rgba(163, 177, 198, 0.26);
+    --border-accent: rgba(214, 179, 106, 0.35);
 
-    --gradient-primary: linear-gradient(135deg, #1e3a5f 0%, #2d5a8a 100%);
-    --gradient-accent: linear-gradient(135deg, #c9a227 0%, #d4b54a 100%);
+    --gradient-primary: linear-gradient(135deg, #1b3559 0%, #2b4a76 100%);
+    --gradient-accent: linear-gradient(135deg, #d6b36a 0%, #e3c98a 100%);
     --gradient-text: linear-gradient(
       135deg,
-      #c9a227 0%,
-      #f4d875 50%,
-      #c9a227 100%
+      #d6b36a 0%,
+      #f1e2b3 50%,
+      #d6b36a 100%
     );
 
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 0 60px rgba(30, 58, 95, 0.3);
-    --shadow-accent: 0 0 40px rgba(201, 162, 39, 0.15);
+    --shadow-sm: 0 1px 2px rgba(2, 6, 23, 0.2);
+    --shadow-md: 0 6px 16px rgba(2, 6, 23, 0.25);
+    --shadow-lg: 0 18px 48px rgba(2, 6, 23, 0.35);
+    --shadow-glow: 0 0 60px rgba(27, 53, 89, 0.3);
+    --shadow-accent: 0 0 40px rgba(214, 179, 106, 0.15);
 
     --radius-sm: 4px;
     --radius-md: 8px;
@@ -69,6 +69,26 @@
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
+    background-image:
+      radial-gradient(
+        1000px 700px at 10% -10%,
+        rgba(27, 53, 89, 0.25),
+        transparent 60%
+      ),
+      radial-gradient(
+        800px 600px at 100% 15%,
+        rgba(214, 179, 106, 0.08),
+        transparent 50%
+      );
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply font-heading tracking-tight;
   }
 
   /* Selection styling */
@@ -99,12 +119,12 @@
   /* Grid lines background effect */
   .grid-lines {
     background-image: linear-gradient(
-        rgba(201, 162, 39, 0.03) 1px,
+        rgba(214, 179, 106, 0.03) 1px,
         transparent 1px
       ),
-      linear-gradient(90deg, rgba(201, 162, 39, 0.03) 1px, transparent 1px),
-      linear-gradient(rgba(30, 58, 95, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(30, 58, 95, 0.05) 1px, transparent 1px);
+      linear-gradient(90deg, rgba(214, 179, 106, 0.03) 1px, transparent 1px),
+      linear-gradient(rgba(27, 53, 89, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(27, 53, 89, 0.05) 1px, transparent 1px);
     background-size:
       100px 100px,
       100px 100px,

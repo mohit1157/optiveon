@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export function ContactForm() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    control,
     reset,
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
@@ -133,22 +133,24 @@ export function ContactForm() {
         <Label htmlFor="interest" error={!!errors.interest}>
           Area of Interest
         </Label>
-        <Select
-          onValueChange={(value) =>
-            setValue("interest", value as ContactInput["interest"])
-          }
-        >
-          <SelectTrigger error={!!errors.interest}>
-            <SelectValue placeholder="Select an option" />
-          </SelectTrigger>
-          <SelectContent>
-            {interestOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Controller
+          control={control}
+          name="interest"
+          render={({ field }) => (
+            <Select value={field.value} onValueChange={field.onChange}>
+              <SelectTrigger error={!!errors.interest}>
+                <SelectValue placeholder="Select an option" />
+              </SelectTrigger>
+              <SelectContent>
+                {interestOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.interest && (
           <p className="text-sm text-error">{errors.interest.message}</p>
         )}

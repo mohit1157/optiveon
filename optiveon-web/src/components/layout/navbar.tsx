@@ -10,7 +10,7 @@ import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
 
 export function Navbar() {
-  const { isScrolled, isHidden } = useNavbarScroll();
+  const { isScrolled } = useNavbarScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -24,23 +24,22 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 py-lg transition-all duration-slow",
+        "fixed top-0 left-0 right-0 z-50 py-md transition-all duration-slow",
         isScrolled
-          ? "bg-background/95 backdrop-blur-xl border-b border-border py-md"
-          : "bg-transparent",
-        isHidden ? "-translate-y-full" : "translate-y-0"
+          ? "bg-background/90 backdrop-blur-xl border-b border-border shadow-sm"
+          : "bg-transparent"
       )}
     >
       <div className="container flex items-center justify-between">
-        <Logo />
+        <Logo collapsed={isScrolled} />
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center gap-2xl">
+        <ul className="hidden md:flex items-center gap-xl">
           {mainNavItems.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="text-[0.9375rem] font-[450] text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
+                className="text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
               >
                 {item.title}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-normal group-hover:w-full" />
@@ -51,7 +50,7 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-md">
-          <Button variant="outline" asChild>
+          <Button variant="primary" asChild>
             <Link href="/#contact">Get Started</Link>
           </Button>
         </div>
