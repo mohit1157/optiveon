@@ -1,0 +1,106 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useNavbarScroll } from "@/hooks/use-navbar-scroll";
+import { mainNavItems } from "@/constants/navigation";
+import { Logo } from "./logo";
+import { Button } from "@/components/ui/button";
+
+export function Navbar() {
+  const { isScrolled, isHidden } = useNavbarScroll();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  return (
+    <nav
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 py-lg transition-all duration-slow",
+        isScrolled
+          ? "bg-background/95 backdrop-blur-xl border-b border-border py-md"
+          : "bg-transparent",
+        isHidden ? "-translate-y-full" : "translate-y-0"
+      )}
+    >
+      <div className="container flex items-center justify-between">
+        <Logo />
+
+        {/* Desktop Navigation */}
+        <ul className="hidden md:flex items-center gap-2xl">
+          {mainNavItems.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="text-[0.9375rem] font-[450] text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
+              >
+                {item.title}
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-normal group-hover:w-full" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* Desktop CTA */}
+        <div className="hidden md:flex items-center gap-md">
+          <Button variant="outline" asChild>
+            <Link href="/#contact">Get Started</Link>
+          </Button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden flex flex-col gap-1.5 p-2"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle menu"
+          aria-expanded={isMobileMenuOpen}
+        >
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6 text-foreground" />
+          ) : (
+            <Menu className="w-6 h-6 text-foreground" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Navigation */}
+      <div
+        className={cn(
+          "md:hidden absolute top-full left-0 right-0 bg-background-card border-b border-border transition-all duration-normal",
+          isMobileMenuOpen
+            ? "opacity-100 visible"
+            : "opacity-0 invisible pointer-events-none"
+        )}
+      >
+        <ul className="flex flex-col p-xl gap-lg">
+          {mainNavItems.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
+                onClick={closeMobileMenu}
+              >
+                {item.title}
+              </Link>
+            </li>
+          ))}
+          <li className="pt-md">
+            <Button variant="primary" className="w-full" asChild>
+              <Link href="/#contact" onClick={closeMobileMenu}>
+                Get Started
+              </Link>
+            </Button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
+}

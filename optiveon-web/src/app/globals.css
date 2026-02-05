@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* CSS Variables for compatibility with existing styles */
+    --color-primary: #1e3a5f;
+    --color-primary-light: #2d5a8a;
+    --color-primary-dark: #0f2440;
+    --color-accent: #c9a227;
+    --color-accent-light: #d4b54a;
+    --color-accent-dark: #a8861f;
+
+    --color-success: #059669;
+    --color-warning: #d97706;
+    --color-error: #dc2626;
+
+    --bg-dark: #0c1221;
+    --bg-darker: #080d16;
+    --bg-card: #111827;
+    --bg-card-hover: #1a2234;
+    --bg-elevated: #1f2937;
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    --border-color: rgba(148, 163, 184, 0.1);
+    --border-hover: rgba(148, 163, 184, 0.2);
+    --border-accent: rgba(201, 162, 39, 0.3);
+
+    --gradient-primary: linear-gradient(135deg, #1e3a5f 0%, #2d5a8a 100%);
+    --gradient-accent: linear-gradient(135deg, #c9a227 0%, #d4b54a 100%);
+    --gradient-text: linear-gradient(
+      135deg,
+      #c9a227 0%,
+      #f4d875 50%,
+      #c9a227 100%
+    );
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.25);
+    --shadow-glow: 0 0 60px rgba(30, 58, 95, 0.3);
+    --shadow-accent: 0 0 40px rgba(201, 162, 39, 0.15);
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+    --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground min-w-[320px] overflow-x-hidden;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-accent/30 text-foreground;
+  }
+}
+
+@layer components {
+  /* Gradient text utility */
+  .gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Container */
+  .container {
+    @apply mx-auto w-full max-w-[1280px] px-xl;
+  }
+
+  /* Section tag */
+  .section-tag {
+    @apply inline-block rounded-full border border-accent/20 bg-accent/10 px-lg py-xs text-xs font-semibold uppercase tracking-widest text-accent;
+  }
+
+  /* Grid lines background effect */
+  .grid-lines {
+    background-image: linear-gradient(
+        rgba(201, 162, 39, 0.03) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(201, 162, 39, 0.03) 1px, transparent 1px),
+      linear-gradient(rgba(30, 58, 95, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30, 58, 95, 0.05) 1px, transparent 1px);
+    background-size:
+      100px 100px,
+      100px 100px,
+      20px 20px,
+      20px 20px;
+    mask-image: radial-gradient(
+      ellipse 90% 70% at 50% 30%,
+      black 0%,
+      transparent 70%
+    );
+  }
+
+  /* Code syntax highlighting colors */
+  .code-keyword {
+    @apply text-sky-300;
+  }
+  .code-string {
+    @apply text-green-300;
+  }
+  .code-number {
+    @apply text-amber-300;
+  }
+  .code-function {
+    @apply text-violet-300;
+  }
+  .code-comment {
+    @apply text-foreground-muted;
+  }
+
+  /* Form error state */
+  .form-group.error input,
+  .form-group.error textarea,
+  .form-group.error select {
+    @apply !border-error;
+  }
+
+  .form-group.error label {
+    @apply !text-error;
+  }
+
+  /* Spinner animation */
+  .spinner {
+    @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background-dark;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground-muted/30 rounded-full hover:bg-foreground-muted/50;
+  }
+}
+
+@layer utilities {
+  /* Animation delay utilities */
+  .animation-delay-150 {
+    animation-delay: 150ms;
+  }
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animation-delay-450 {
+    animation-delay: 450ms;
+  }
+
+  /* Custom text balancing */
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
