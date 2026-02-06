@@ -118,10 +118,8 @@
 
   /* Grid lines background effect */
   .grid-lines {
-    background-image: linear-gradient(
-        rgba(214, 179, 106, 0.03) 1px,
-        transparent 1px
-      ),
+    background-image:
+      linear-gradient(rgba(214, 179, 106, 0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(214, 179, 106, 0.03) 1px, transparent 1px),
       linear-gradient(rgba(27, 53, 89, 0.05) 1px, transparent 1px),
       linear-gradient(90deg, rgba(27, 53, 89, 0.05) 1px, transparent 1px);
@@ -168,6 +166,27 @@
   /* Spinner animation */
   .spinner {
     @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white;
+  }
+
+  /* Range slider */
+  .slider-track::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    border: 2px solid #0b111b;
+    box-shadow: 0 0 0 4px rgba(214, 179, 106, 0.2);
+  }
+
+  .slider-track::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    border: 2px solid #0b111b;
+    box-shadow: 0 0 0 4px rgba(214, 179, 106, 0.2);
   }
 
   /* Scrollbar styling */

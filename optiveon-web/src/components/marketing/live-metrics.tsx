@@ -53,7 +53,9 @@ export function LiveMetrics({ className, limit = 3 }: LiveMetricsProps) {
         setError(data.ok ? null : data.error || "Market data unavailable");
       } catch (err) {
         if (!isMounted) return;
-        setError(err instanceof Error ? err.message : "Market data unavailable");
+        setError(
+          err instanceof Error ? err.message : "Market data unavailable"
+        );
       }
     };
 
@@ -118,7 +120,12 @@ export function LiveMetrics({ className, limit = 3 }: LiveMetricsProps) {
                 <p className={cn("text-sm font-semibold", deltaClass)}>
                   {formatCurrency(item.price || 0)}
                 </p>
-                <p className={cn("text-xs flex items-center justify-end", deltaClass)}>
+                <p
+                  className={cn(
+                    "text-xs flex items-center justify-end",
+                    deltaClass
+                  )}
+                >
                   {isUp && <ArrowUpRight className="w-3 h-3" />}
                   {isDown && <ArrowDownRight className="w-3 h-3" />}
                   {!isUp && !isDown && <span className="w-3" />}

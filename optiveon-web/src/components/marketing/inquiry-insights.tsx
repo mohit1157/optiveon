@@ -45,21 +45,23 @@ export async function InquiryInsights() {
     );
   }
 
-  let grouped: Awaited<ReturnType<typeof db.contact.groupBy>> = [];
+  let grouped: Record<string, number> = {};
   try {
-    grouped = await db.contact.groupBy({
-      by: ["interest"],
-      _count: { interest: true },
+    const contacts = await db.contact.findMany({
+      select: { interest: true },
     });
+    grouped = contacts.reduce<Record<string, number>>((acc, contact) => {
+      acc[contact.interest] = (acc[contact.interest] || 0) + 1;
+      return acc;
+    }, {});
   } catch {
-    grouped = [];
+    grouped = {};
   }
 
-  const total = grouped.reduce((sum, item) => sum + item._count.interest, 0);
+  const total = Object.values(grouped).reduce((sum, count) => sum + count, 0);
 
   const insights: InsightItem[] = interestOptions.map((option) => {
-    const match = grouped.find((item) => item.interest === option.value);
-    const count = match?._count.interest || 0;
+    const count = grouped[option.value] || 0;
     return {
       label: option.label,
       count,

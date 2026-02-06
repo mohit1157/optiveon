@@ -13,7 +13,9 @@ interface CheckoutPageProps {
   searchParams: { plan?: string; canceled?: string };
 }
 
-export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
+export default async function CheckoutPage({
+  searchParams,
+}: CheckoutPageProps) {
   const planSlug = (searchParams.plan || "").toLowerCase();
   const tier = pricingTiers.find((item) => item.slug === planSlug);
 
@@ -120,7 +122,10 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
 
             <p className="text-xs text-foreground-muted">
               By continuing, you agree to our{" "}
-              <Link href="/terms" className="text-accent hover:text-accent-light">
+              <Link
+                href="/terms"
+                className="text-accent hover:text-accent-light"
+              >
                 Terms of Service
               </Link>{" "}
               and{" "}

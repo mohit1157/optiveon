@@ -38,7 +38,7 @@ function useCountUp(target: number, isActive: boolean, decimals = 0) {
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [target, isActive]);
+  }, [target, isActive, decimals]);
 
   return value;
 }
@@ -61,13 +61,7 @@ export function MetricsGrid({ items }: MetricsGridProps) {
   );
 }
 
-function MetricCard({
-  item,
-  active,
-}: {
-  item: MetricItem;
-  active: boolean;
-}) {
+function MetricCard({ item, active }: { item: MetricItem; active: boolean }) {
   const count = useCountUp(item.value, active, item.decimals || 0);
   const formatted = useMemo(() => {
     const formatter = new Intl.NumberFormat("en-US", {

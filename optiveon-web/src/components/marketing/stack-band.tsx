@@ -14,7 +14,8 @@ export function StackBand() {
         <div className="max-w-[760px] mb-2xl text-center mx-auto">
           <span className="section-tag mb-lg">Platform Stack</span>
           <h2 className="text-section-title mb-lg text-balance">
-            Built on <span className="gradient-text">Trusted Infrastructure</span>
+            Built on{" "}
+            <span className="gradient-text">Trusted Infrastructure</span>
           </h2>
           <p className="text-lg text-foreground-secondary leading-relaxed text-balance">
             Enterprise-grade tooling powering secure payments, reliable data,

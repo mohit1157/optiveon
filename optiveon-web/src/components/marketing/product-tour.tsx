@@ -49,9 +49,9 @@ const TOUR_STEPS = [
 ];
 
 export function ProductTour() {
-  const [active, setActive] = useState(TOUR_STEPS[0].id);
+  const [active, setActive] = useState(TOUR_STEPS[0]?.id ?? "research");
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
-  const step = TOUR_STEPS.find((item) => item.id === active) || TOUR_STEPS[0];
+  const step = TOUR_STEPS.find((item) => item.id === active) ?? TOUR_STEPS[0]!;
 
   return (
     <section
@@ -112,11 +112,11 @@ export function ProductTour() {
                 <p className="text-xs uppercase tracking-[0.2em] text-foreground-muted">
                   {step.title}
                 </p>
-                <h3 className="text-2xl font-semibold mt-sm">{step.highlight}</h3>
+                <h3 className="text-2xl font-semibold mt-sm">
+                  {step.highlight}
+                </h3>
               </div>
-              <div className="text-xs text-foreground-muted">
-                Live preview
-              </div>
+              <div className="text-xs text-foreground-muted">Live preview</div>
             </div>
 
             <div className="grid gap-lg sm:grid-cols-2">
@@ -131,7 +131,9 @@ export function ProductTour() {
             </div>
 
             <div className="rounded-xl border border-accent/30 bg-gradient-to-r from-accent/10 via-transparent to-transparent p-lg text-sm text-foreground-secondary">
-              <span className="font-semibold text-foreground">Optiveon Lens:</span>{" "}
+              <span className="font-semibold text-foreground">
+                Optiveon Lens:
+              </span>{" "}
               {step.description}
             </div>
           </div>

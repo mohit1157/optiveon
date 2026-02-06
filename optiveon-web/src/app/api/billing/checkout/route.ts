@@ -91,5 +91,8 @@ export async function GET(request: NextRequest) {
     metadata: { plan: planKey },
   });
 
-  return NextResponse.redirect(checkoutSession.url || "/dashboard/billing", 303);
+  return NextResponse.redirect(
+    checkoutSession.url || "/dashboard/billing",
+    303
+  );
 }

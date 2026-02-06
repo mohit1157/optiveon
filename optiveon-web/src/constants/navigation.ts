@@ -6,12 +6,12 @@ export const mainNavItems: NavItem[] = [
     href: "/#features",
   },
   {
-    title: "Solutions",
-    href: "/#solutions",
+    title: "ROI",
+    href: "/#roi",
   },
   {
-    title: "Technology",
-    href: "/#technology",
+    title: "Proof",
+    href: "/#proof",
   },
   {
     title: "Pricing",
@@ -28,6 +28,8 @@ export const footerNavSections: NavSection[] = [
     title: "Product",
     items: [
       { title: "Features", href: "/#features" },
+      { title: "ROI Planner", href: "/#roi" },
+      { title: "Customer Stories", href: "/#proof" },
       { title: "Solutions", href: "/#solutions" },
       { title: "Pricing", href: "/#pricing" },
     ],
@@ -36,6 +38,7 @@ export const footerNavSections: NavSection[] = [
     title: "Company",
     items: [
       { title: "Technology", href: "/#technology" },
+      { title: "Release Radar", href: "/#roadmap" },
       { title: "Contact", href: "/#contact" },
     ],
   },

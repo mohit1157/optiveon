@@ -125,12 +125,15 @@ async function fetchPolygonQuote(
 
 export async function getMarketSnapshot(): Promise<MarketSnapshot> {
   const provider =
-    (process.env.MARKET_DATA_PROVIDER || "alphavantage").toLowerCase() || "alphavantage";
+    (process.env.MARKET_DATA_PROVIDER || "alphavantage").toLowerCase() ||
+    "alphavantage";
 
   const cacheKey = "__market_snapshot_cache__";
-  const cached = (globalThis as typeof globalThis & {
-    [key: string]: { data: MarketSnapshot; expiresAt: number } | undefined;
-  })[cacheKey];
+  const cached = (
+    globalThis as typeof globalThis & {
+      [key: string]: { data: MarketSnapshot; expiresAt: number } | undefined;
+    }
+  )[cacheKey];
 
   if (cached && cached.expiresAt > Date.now()) {
     return cached.data;
@@ -165,9 +168,11 @@ export async function getMarketSnapshot(): Promise<MarketSnapshot> {
 
     const snapshot = createSnapshot(provider, items);
 
-    (globalThis as typeof globalThis & {
-      [key: string]: { data: MarketSnapshot; expiresAt: number } | undefined;
-    })[cacheKey] = {
+    (
+      globalThis as typeof globalThis & {
+        [key: string]: { data: MarketSnapshot; expiresAt: number } | undefined;
+      }
+    )[cacheKey] = {
       data: snapshot,
       expiresAt: Date.now() + CACHE_TTL_MS,
     };
@@ -180,9 +185,11 @@ export async function getMarketSnapshot(): Promise<MarketSnapshot> {
       error instanceof Error ? error.message : "Market data unavailable"
     );
 
-    (globalThis as typeof globalThis & {
-      [key: string]: { data: MarketSnapshot; expiresAt: number } | undefined;
-    })[cacheKey] = {
+    (
+      globalThis as typeof globalThis & {
+        [key: string]: { data: MarketSnapshot; expiresAt: number } | undefined;
+      }
+    )[cacheKey] = {
       data: snapshot,
       expiresAt: Date.now() + 15_000,
     };

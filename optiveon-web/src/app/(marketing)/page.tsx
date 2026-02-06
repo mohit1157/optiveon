@@ -2,10 +2,13 @@ import {
   Hero,
   Features,
   ProductTour,
+  RoiCalculator,
+  CustomerStories,
   Solutions,
   Technology,
   ActivityFeed,
   InquiryInsights,
+  ReleaseRadar,
   StackBand,
   Pricing,
   Contact,
@@ -20,10 +23,13 @@ export default function HomePage() {
       <StackBand />
       <Features />
       <ProductTour />
+      <RoiCalculator />
+      <CustomerStories />
       <Solutions />
       <Technology />
       <ActivityFeed />
       <InquiryInsights />
+      <ReleaseRadar />
       <Pricing />
       <Contact />
     </>
