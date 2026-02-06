@@ -20,6 +20,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <Pricing />
       <StackBand />
       <Features />
       <ProductTour />
@@ -30,7 +31,6 @@ export default function HomePage() {
       <ActivityFeed />
       <InquiryInsights />
       <ReleaseRadar />
-      <Pricing />
       <Contact />
     </>
   );

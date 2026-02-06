@@ -58,13 +58,13 @@ export function Hero() {
 
             <div className="flex gap-lg mb-4xl lg:justify-start justify-center flex-col sm:flex-row">
               <Button size="lg" asChild>
-                <Link href="/#solutions">
-                  Explore Solutions
+                <Link href="/#pricing">
+                  View Pricing
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
               <Button variant="ghost" size="lg" asChild>
-                <Link href="/#technology">Our Technology</Link>
+                <Link href="/#solutions">Explore Solutions</Link>
               </Button>
             </div>
 
