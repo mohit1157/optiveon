@@ -54,24 +54,52 @@ export type PlanName = keyof typeof PLANS;
 export async function createCheckoutSession({
   customerId,
   priceId,
+  planName,
+  amountUsd,
   successUrl,
   cancelUrl,
 }: {
   customerId: string;
-  priceId: string;
+  priceId?: string | null;
+  planName?: string;
+  amountUsd?: number | null;
   successUrl: string;
   cancelUrl: string;
 }) {
+  let lineItem: Stripe.Checkout.SessionCreateParams.LineItem;
+
+  if (priceId) {
+    lineItem = {
+      price: priceId,
+      quantity: 1,
+    };
+  } else {
+    if (!planName || !amountUsd || amountUsd <= 0) {
+      throw new Error(
+        "Unable to create checkout session: missing Stripe price ID or fallback amount."
+      );
+    }
+
+    lineItem = {
+      price_data: {
+        currency: "usd",
+        recurring: {
+          interval: "month",
+        },
+        product_data: {
+          name: `Optiveon ${planName} Plan`,
+        },
+        unit_amount: Math.round(amountUsd * 100),
+      },
+      quantity: 1,
+    };
+  }
+
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     mode: "subscription",
     payment_method_types: ["card"],
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1,
-      },
-    ],
+    line_items: [lineItem],
     success_url: successUrl,
     cancel_url: cancelUrl,
   });

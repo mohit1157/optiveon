@@ -14,10 +14,6 @@ export const mainNavItems: NavItem[] = [
     href: "/#roi",
   },
   {
-    title: "Proof",
-    href: "/#proof",
-  },
-  {
     title: "Contact",
     href: "/#contact",
   },

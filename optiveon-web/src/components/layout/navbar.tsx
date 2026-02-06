@@ -8,10 +8,12 @@ import { useNavbarScroll } from "@/hooks/use-navbar-scroll";
 import { mainNavItems } from "@/constants/navigation";
 import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
+import { SiteChatbot } from "./site-chatbot";
 
 export function Navbar() {
   const { isScrolled, isHidden } = useNavbarScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -53,7 +55,7 @@ export function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-md">
             <Button variant="primary" asChild>
-              <Link href="/#contact">Get Started</Link>
+              <Link href="/#pricing">Get Started</Link>
             </Button>
           </div>
 
@@ -95,7 +97,7 @@ export function Navbar() {
             ))}
             <li className="pt-md">
               <Button variant="primary" className="w-full" asChild>
-                <Link href="/#contact" onClick={closeMobileMenu}>
+                <Link href="/#pricing" onClick={closeMobileMenu}>
                   Get Started
                 </Link>
               </Button>
@@ -121,6 +123,8 @@ export function Navbar() {
           </Link>
         </div>
       </div>
+
+      <SiteChatbot isOpen={isChatOpen} onOpenChange={setIsChatOpen} />
     </>
   );
 }

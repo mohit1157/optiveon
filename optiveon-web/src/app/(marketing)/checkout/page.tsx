@@ -30,7 +30,7 @@ export default async function CheckoutPage({
       ? tier.priceLabel || "Custom"
       : `$${plan.price}`;
   const periodLabel = tier.period || (plan.price ? "/month" : "");
-  const hasCheckout = Boolean(plan.priceId);
+  const hasCheckout = plan.price !== null;
 
   return (
     <section className="py-[140px] min-h-screen">
@@ -87,7 +87,7 @@ export default async function CheckoutPage({
                     <Button size="lg" className="w-full" asChild>
                       <Link
                         href={`/login?callbackUrl=${encodeURIComponent(
-                          `/checkout?plan=${tier.slug}`
+                          `/api/billing/checkout?plan=${tier.slug}`
                         )}`}
                       >
                         Sign In to Continue

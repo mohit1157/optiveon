@@ -45,6 +45,7 @@ export default withAuth(
           "/api/contact",
           "/api/webhooks",
           "/api/market",
+          "/api/chatbot",
         ];
 
         // Check if it's a public route

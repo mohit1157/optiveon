@@ -21,7 +21,6 @@ export default function HomePage() {
     <>
       <Hero />
       <Pricing />
-      <StackBand />
       <Features />
       <ProductTour />
       <RoiCalculator />
@@ -31,6 +30,7 @@ export default function HomePage() {
       <ActivityFeed />
       <InquiryInsights />
       <ReleaseRadar />
+      <StackBand />
       <Contact />
     </>
   );

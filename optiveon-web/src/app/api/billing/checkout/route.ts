@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
 
-  if (!PLANS[planKey].priceId) {
+  if (planKey === "ENTERPRISE") {
     return NextResponse.redirect(
       absoluteUrl(`/checkout?plan=${planParam}`),
       303
@@ -78,7 +78,9 @@ export async function GET(request: NextRequest) {
 
   const checkoutSession = await createCheckoutSession({
     customerId: stripeCustomerId,
-    priceId: PLANS[planKey].priceId!,
+    priceId: PLANS[planKey].priceId,
+    planName: PLANS[planKey].name,
+    amountUsd: PLANS[planKey].price,
     successUrl: absoluteUrl("/dashboard/billing?success=1"),
     cancelUrl: absoluteUrl(`/checkout?plan=${planParam}&canceled=1`),
   });
