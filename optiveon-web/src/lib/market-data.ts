@@ -14,6 +14,11 @@ export interface MarketSnapshot {
   error?: string;
 }
 
+interface ProviderQuoteResult {
+  quote: MarketQuote | null;
+  error?: string;
+}
+
 const DEFAULT_TICKERS = ["SPY", "QQQ", "GLD", "USO"];
 const NAME_MAP: Record<string, string> = {
   SPY: "S&P 500 ETF",
@@ -23,6 +28,10 @@ const NAME_MAP: Record<string, string> = {
 };
 
 const CACHE_TTL_MS = 60_000;
+
+function sanitizeProviderError(message: string) {
+  return message.replace(/API key as [A-Za-z0-9_-]+/g, "API key [redacted]");
+}
 
 function getTickers() {
   const raw = process.env.MARKET_DATA_TICKERS;
@@ -55,7 +64,7 @@ function createSnapshot(
 async function fetchAlphaVantageQuote(
   symbol: string,
   apiKey: string
-): Promise<MarketQuote | null> {
+): Promise<ProviderQuoteResult> {
   const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
     symbol
   )}&apikey=${encodeURIComponent(apiKey)}`;
@@ -63,15 +72,25 @@ async function fetchAlphaVantageQuote(
   const data = (await response.json()) as {
     ["Global Quote"]?: Record<string, string>;
     Note?: string;
+    Information?: string;
     ["Error Message"]?: string;
   };
 
-  if (!data || data.Note || data["Error Message"]) {
-    return null;
+  const providerError =
+    data?.Information || data?.Note || data?.["Error Message"];
+  if (!data || providerError) {
+    return {
+      quote: null,
+      error: providerError
+        ? sanitizeProviderError(providerError)
+        : "Alpha Vantage did not return data",
+    };
   }
 
   const quote = data["Global Quote"];
-  if (!quote) return null;
+  if (!quote) {
+    return { quote: null, error: "Alpha Vantage response missing quote data" };
+  }
 
   const price = Number(quote["05. price"]);
   const change = Number(quote["09. change"]);
@@ -79,14 +98,18 @@ async function fetchAlphaVantageQuote(
     (quote["10. change percent"] || "0").replace("%", "")
   );
 
-  if (Number.isNaN(price)) return null;
+  if (Number.isNaN(price)) {
+    return { quote: null, error: `Invalid price returned for ${symbol}` };
+  }
 
   return {
-    symbol,
-    name: normalizeName(symbol),
-    price,
-    change: Number.isNaN(change) ? 0 : change,
-    changePercent: Number.isNaN(changePercent) ? 0 : changePercent,
+    quote: {
+      symbol,
+      name: normalizeName(symbol),
+      price,
+      change: Number.isNaN(change) ? 0 : change,
+      changePercent: Number.isNaN(changePercent) ? 0 : changePercent,
+    },
   };
 }
 
@@ -140,6 +163,10 @@ export async function getMarketSnapshot(): Promise<MarketSnapshot> {
   }
 
   const tickers = getTickers();
+  const cacheTtlMs = Number(
+    process.env.MARKET_DATA_CACHE_TTL_MS ||
+      (provider === "alphavantage" ? 1000 * 60 * 60 : CACHE_TTL_MS)
+  );
 
   try {
     let items: MarketQuote[] = [];
@@ -159,11 +186,26 @@ export async function getMarketSnapshot(): Promise<MarketSnapshot> {
       if (!apiKey) {
         return createSnapshot(provider, [], "Missing ALPHAVANTAGE_API_KEY");
       }
+      let providerError: string | undefined;
+      for (let index = 0; index < tickers.length; index++) {
+        const symbol = tickers[index];
+        if (!symbol) continue;
+        const result = await fetchAlphaVantageQuote(symbol, apiKey);
+        if (result.quote) {
+          items.push(result.quote);
+        } else if (!providerError && result.error) {
+          providerError = result.error;
+        }
 
-      const results = await Promise.all(
-        tickers.map((symbol) => fetchAlphaVantageQuote(symbol, apiKey))
-      );
-      items = results.filter((item): item is MarketQuote => Boolean(item));
+        // Alpha Vantage free tier recommends spacing requests.
+        if (index < tickers.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 1100));
+        }
+      }
+
+      if (!items.length && providerError) {
+        return createSnapshot(provider, [], providerError);
+      }
     }
 
     const snapshot = createSnapshot(provider, items);
@@ -174,7 +216,7 @@ export async function getMarketSnapshot(): Promise<MarketSnapshot> {
       }
     )[cacheKey] = {
       data: snapshot,
-      expiresAt: Date.now() + CACHE_TTL_MS,
+      expiresAt: Date.now() + cacheTtlMs,
     };
 
     return snapshot;

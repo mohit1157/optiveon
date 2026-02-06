@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { cn, formatCurrency } from "@/lib/utils";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
@@ -41,31 +41,33 @@ const fallbackItems: MarketItem[] = [
 export function LiveMetrics({ className, limit = 3 }: LiveMetricsProps) {
   const [snapshot, setSnapshot] = useState<MarketSnapshot | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const load = useCallback(async (mounted = true) => {
+    try {
+      setIsRefreshing(true);
+      const response = await fetch("/api/market/overview");
+      const data = (await response.json()) as MarketSnapshot;
+      if (!mounted) return;
+      setSnapshot(data);
+      setError(data.ok ? null : data.error || "Market data unavailable");
+    } catch (err) {
+      if (!mounted) return;
+      setError(err instanceof Error ? err.message : "Market data unavailable");
+    } finally {
+      if (mounted) {
+        setIsRefreshing(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
-    const load = async () => {
-      try {
-        const response = await fetch("/api/market/overview");
-        const data = (await response.json()) as MarketSnapshot;
-        if (!isMounted) return;
-        setSnapshot(data);
-        setError(data.ok ? null : data.error || "Market data unavailable");
-      } catch (err) {
-        if (!isMounted) return;
-        setError(
-          err instanceof Error ? err.message : "Market data unavailable"
-        );
-      }
-    };
-
-    load();
-    const interval = window.setInterval(load, 60_000);
+    load(isMounted);
     return () => {
       isMounted = false;
-      window.clearInterval(interval);
     };
-  }, []);
+  }, [load]);
 
   const items = snapshot?.items?.length ? snapshot.items : fallbackItems;
   const updatedAt = snapshot?.updatedAt
@@ -76,7 +78,7 @@ export function LiveMetrics({ className, limit = 3 }: LiveMetricsProps) {
     : null;
 
   const subtitle = useMemo(() => {
-    if (error) return "Connect a market data provider.";
+    if (error) return "Provider error";
     if (updatedAt) return `Updated ${updatedAt}`;
     return "Updating...";
   }, [error, updatedAt]);
@@ -93,6 +95,17 @@ export function LiveMetrics({ className, limit = 3 }: LiveMetricsProps) {
       <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.2em] text-foreground-muted">
         <span>Market Snapshot</span>
         <span>{subtitle}</span>
+      </div>
+
+      <div className="mt-sm flex justify-end">
+        <button
+          type="button"
+          onClick={() => load(true)}
+          className="text-[0.65rem] uppercase tracking-[0.16em] text-foreground-muted hover:text-foreground transition-colors disabled:opacity-50"
+          disabled={isRefreshing}
+        >
+          {isRefreshing ? "Refreshing" : "Refresh"}
+        </button>
       </div>
 
       <div className="mt-md space-y-md">
@@ -140,7 +153,7 @@ export function LiveMetrics({ className, limit = 3 }: LiveMetricsProps) {
 
       {error && (
         <p className="mt-md text-[0.7rem] text-warning leading-relaxed">
-          {error}. Add `ALPHAVANTAGE_API_KEY` or `POLYGON_API_KEY`.
+          {error}
         </p>
       )}
     </div>
