@@ -8,6 +8,14 @@ interface InsightItem {
   percent: number;
 }
 
+const sampleInsights: InsightItem[] = [
+  { label: "Market Research Platform", count: 38, percent: 34 },
+  { label: "Enterprise API", count: 26, percent: 23 },
+  { label: "Signal Generation Suite", count: 24, percent: 21 },
+  { label: "Custom Solution", count: 16, percent: 14 },
+  { label: "General Inquiry", count: 9, percent: 8 },
+];
+
 export async function InquiryInsights() {
   if (!process.env.DATABASE_URL) {
     return (
@@ -36,9 +44,26 @@ export async function InquiryInsights() {
           </div>
 
           <div className="rounded-2xl border border-border bg-background-card p-2xl">
-            <p className="text-sm text-warning">
-              Set `DATABASE_URL` to display inquiry insights.
-            </p>
+            <div className="space-y-lg">
+              {sampleInsights.map((item) => (
+                <div key={item.label} className="space-y-sm">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-foreground-secondary">
+                      {item.label}
+                    </span>
+                    <span className="text-foreground-muted">
+                      {formatNumber(item.count)} · {item.percent}%
+                    </span>
+                  </div>
+                  <div className="h-2 w-full rounded-full bg-background-elevated">
+                    <div
+                      className="h-2 rounded-full bg-gradient-accent"
+                      style={{ width: `${item.percent}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

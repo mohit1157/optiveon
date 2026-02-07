@@ -1,28 +1,29 @@
 import { Stat } from "@/types";
 
 export const heroStats: Stat[] = [
-  { value: "99.9%", label: "System Uptime" },
-  { value: "<10ms", label: "Latency" },
-  { value: "24/7", label: "Market Coverage" },
+  { value: "42", label: "Strategies Under Validation" },
+  { value: "18", label: "Global Markets & Venues" },
+  { value: "<12ms", label: "Median Signal Pipeline Latency" },
 ];
 
-export const heroCode = `from optiveon import MarketAnalyzer
+export const heroCode = `from optiveon import StrategyPipeline
 
-# Initialize real-time analyzer
-analyzer = MarketAnalyzer(
-    markets=["futures", "options", "forex"],
-    strategy="momentum_alpha"
+# Build a production-grade research to execution pipeline
+pipeline = StrategyPipeline(
+    assets=["equities", "futures", "fx", "crypto"],
+    regime_model="adaptive_volatility",
+    risk_profile="institutional"
 )
 
-# Generate trading signals
-signals = analyzer.get_signals(
-    timeframe="1h",
-    confidence_threshold=0.85
+# Validate before deployment
+report = pipeline.validate(
+    in_sample="2018-2022",
+    out_of_sample="2023-2025",
+    max_drawdown=0.08
 )
 
-for signal in signals:
-    print(f"📊 {signal.asset}: {signal.action}")
-    print(f"   Confidence: {signal.score:.2%}")`;
+if report.status == "approved":
+    deployment = pipeline.deploy(mode="paper_or_live")`;
 
 export const interestOptions = [
   { value: "market-research", label: "Market Research Platform" },

@@ -2,6 +2,7 @@ import {
   Hero,
   Features,
   ProductTour,
+  ValidationLab,
   RoiCalculator,
   CustomerStories,
   Solutions,
@@ -21,6 +22,7 @@ export default function HomePage() {
     <>
       <Hero />
       <Pricing />
+      <ValidationLab />
       <Features />
       <ProductTour />
       <RoiCalculator />

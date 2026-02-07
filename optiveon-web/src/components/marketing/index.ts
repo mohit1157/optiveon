@@ -2,6 +2,7 @@ export { Hero } from "./hero";
 export { LiveMetrics } from "./live-metrics";
 export { Features } from "./features";
 export { ProductTour } from "./product-tour";
+export { ValidationLab } from "./validation-lab";
 export { RoiCalculator } from "./roi-calculator";
 export { CustomerStories } from "./customer-stories";
 export { Solutions } from "./solutions";

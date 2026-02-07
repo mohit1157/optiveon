@@ -10,8 +10,8 @@ export const mainNavItems: NavItem[] = [
     href: "/#features",
   },
   {
-    title: "ROI",
-    href: "/#roi",
+    title: "Validation",
+    href: "/#validation",
   },
   {
     title: "Contact",
@@ -25,6 +25,7 @@ export const footerNavSections: NavSection[] = [
     items: [
       { title: "Pricing", href: "/#pricing" },
       { title: "Features", href: "/#features" },
+      { title: "Validation", href: "/#validation" },
       { title: "ROI Planner", href: "/#roi" },
       { title: "Customer Stories", href: "/#proof" },
       { title: "Solutions", href: "/#solutions" },

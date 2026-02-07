@@ -108,7 +108,7 @@
 
   /* Container */
   .container {
-    @apply mx-auto w-full max-w-[1440px] px-lg md:px-xl;
+    @apply mx-auto w-full max-w-[1320px] px-md md:px-xl;
   }
 
   /* Section tag */

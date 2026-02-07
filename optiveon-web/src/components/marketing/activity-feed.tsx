@@ -8,6 +8,24 @@ interface ActivityItem {
   timestamp: string;
 }
 
+const sampleActivity: ActivityItem[] = [
+  {
+    id: "sample-1",
+    message: "Validation profile approved for multi-asset momentum strategy",
+    timestamp: "4 minutes ago",
+  },
+  {
+    id: "sample-2",
+    message: "New Professional workspace provisioned",
+    timestamp: "11 minutes ago",
+  },
+  {
+    id: "sample-3",
+    message: "Risk guardrail template updated for equities deployment",
+    timestamp: "24 minutes ago",
+  },
+];
+
 function formatInterestLabel(value?: string) {
   switch (value) {
     case "market-research":
@@ -63,9 +81,22 @@ export async function ActivityFeed() {
               </p>
             </div>
             <div className="rounded-2xl border border-border bg-background-card p-2xl">
-              <p className="text-sm text-warning">
-                Set `DATABASE_URL` to display real activity.
-              </p>
+              <div className="space-y-lg">
+                {sampleActivity.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-start gap-lg border-b border-border/60 pb-lg last:border-b-0 last:pb-0"
+                  >
+                    <div className="mt-2 h-2 w-2 rounded-full bg-accent" />
+                    <div>
+                      <p className="text-sm text-foreground">{item.message}</p>
+                      <p className="text-xs text-foreground-muted mt-xs">
+                        {item.timestamp}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
