@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3168 792" width="3168" height="792" role="img" aria-labelledby="title desc">
+  <title id="title">Optiveon Wordmark LinkedIn Cover</title>
+  <desc id="desc">Full color Optiveon wordmark for LinkedIn cover photo.</desc>
+
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1f36"/>
+      <stop offset="45%" stop-color="#0b111b"/>
+      <stop offset="100%" stop-color="#090e17"/>
+    </linearGradient>
+    <radialGradient id="glowLeft" cx="20%" cy="15%" r="55%">
+      <stop offset="0%" stop-color="#1b3559" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#1b3559" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowRight" cx="85%" cy="75%" r="45%">
+      <stop offset="0%" stop-color="#d6b36a" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#d6b36a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wordmarkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f5f7fb"/>
+      <stop offset="50%" stop-color="#d6b36a"/>
+      <stop offset="100%" stop-color="#f1e2b3"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="3168" height="792" fill="url(#bgGradient)"/>
+  <rect width="3168" height="792" fill="url(#glowLeft)"/>
+  <rect width="3168" height="792" fill="url(#glowRight)"/>
+
+  <text
+    x="1584"
+    y="505"
+    text-anchor="middle"
+    fill="url(#wordmarkGradient)"
+    font-family="Montserrat, Avenir Next, Segoe UI, Arial, sans-serif"
+    font-size="260"
+    font-weight="700"
+    letter-spacing="22"
+  >
+    OPTIVEON
+  </text>
+</svg>

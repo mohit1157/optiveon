@@ -36,9 +36,9 @@ export function Hero() {
       <LiveMetrics className="hidden lg:block" />
 
       <div className="container">
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-4xl items-center">
+        <div className="grid lg:grid-cols-2 gap-3xl xl:gap-4xl items-center">
           {/* Content */}
-          <div className="lg:text-left text-center animate-fade-in-up">
+          <div className="lg:text-left text-center animate-fade-in-up lg:pr-xl">
             <Badge variant="outline" className="mb-xl inline-flex gap-sm">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               Advanced Trading Technology
@@ -49,7 +49,7 @@ export function Hero() {
               <span className="gradient-text">Algorithmic Trading</span>
             </h1>
 
-            <p className="text-xl text-foreground-secondary mb-2xl max-w-[560px] leading-relaxed lg:mx-0 mx-auto text-balance">
+            <p className="text-xl text-foreground-secondary mb-2xl max-w-[640px] leading-relaxed lg:mx-0 mx-auto text-balance">
               Leverage cutting-edge algorithms and real-time market analysis to
               make informed trading decisions. Our proprietary technology powers
               sophisticated research tools for futures, options, and forex
@@ -87,7 +87,7 @@ export function Hero() {
           </div>
 
           {/* Terminal Visual */}
-          <div className="flex justify-center lg:order-none order-first animate-fade-in-up-delay">
+          <div className="flex justify-center lg:justify-end lg:order-none order-first animate-fade-in-up-delay">
             <div className="w-full max-w-[520px] bg-background-card border border-border rounded-xl overflow-hidden shadow-lg shadow-glow">
               {/* Terminal Header */}
               <div className="flex items-center gap-md px-lg py-md bg-black/40 border-b border-border">
