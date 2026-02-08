@@ -19,8 +19,8 @@ function FeatureCard({
     <div
       ref={ref}
       className={cn(
-        "relative p-2xl bg-background-card border border-border rounded-xl transition-all duration-slow overflow-hidden group",
-        "hover:bg-background-card-hover hover:border-border-hover hover:-translate-y-1 hover:shadow-lg",
+        "motion-card relative p-2xl bg-background-card border border-border rounded-xl transition-all duration-slow overflow-hidden group",
+        "hover:bg-background-card-hover hover:border-border-hover hover:shadow-lg",
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       )}
       style={{

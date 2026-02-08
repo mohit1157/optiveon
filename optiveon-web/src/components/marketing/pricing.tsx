@@ -1,13 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Building2, Check, FileText, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { pricingTiers } from "@/constants/pricing";
+
+type BillingCycle = "monthly" | "annual";
 
 const comparisonPlans = [
   {
@@ -79,45 +82,57 @@ const comparisonRows = [
       enterprise: "Guaranteed",
     },
   },
-];
-
-const pricingFaqs = [
   {
-    question: "Can I cancel or change plans anytime?",
-    answer:
-      "Yes. You can upgrade, downgrade, or cancel from the billing portal. Plan changes apply at the next billing cycle unless noted otherwise.",
+    capability: "Onboarding",
+    values: {
+      starter: "Self-serve docs",
+      professional: "Guided setup",
+      enterprise: "White-glove",
+    },
   },
   {
-    question: "Do I need a credit card to evaluate the platform?",
-    answer:
-      "For paid plans, checkout is processed by Stripe with secure card handling. Enterprise evaluations can be coordinated through sales.",
-  },
-  {
-    question: "How does API access differ between plans?",
-    answer:
-      "Professional includes a fixed daily API quota suitable for production pilots. Enterprise provides higher throughput and tailored integration support.",
-  },
-  {
-    question: "What is included in Enterprise onboarding?",
-    answer:
-      "Enterprise includes tailored rollout support, integration guidance, and a dedicated account contact aligned to your team requirements.",
+    capability: "Billing options",
+    values: {
+      starter: "Card checkout",
+      professional: "Card + invoice",
+      enterprise: "Contract invoicing",
+    },
   },
 ];
 
 function PricingCard({
   tier,
   index,
+  billingCycle,
 }: {
   tier: (typeof pricingTiers)[0];
   index: number;
+  billingCycle: BillingCycle;
 }) {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
+  const hasNumericPrice = typeof tier.price === "number";
+  const monthlyPrice = hasNumericPrice ? tier.price : null;
+  const annualPrice =
+    monthlyPrice !== null ? Math.round(monthlyPrice * 0.82) : null;
+  const displayPrice =
+    billingCycle === "annual" && annualPrice !== null
+      ? annualPrice
+      : monthlyPrice;
+  const priceLabel =
+    tier.priceLabel || (displayPrice !== null ? `$${displayPrice}` : "Custom");
+  const periodLabel = tier.priceLabel
+    ? tier.period
+    : billingCycle === "annual" && displayPrice !== null
+      ? "/month"
+      : tier.period;
+  const annualBillTotal = annualPrice !== null ? annualPrice * 12 : null;
+  const ctaHref = `${tier.href}${tier.href.includes("?") ? "&" : "?"}billing=${billingCycle}`;
 
   return (
     <div
       ref={ref}
       className={cn(
-        "relative p-2xl border rounded-xl transition-all duration-slow",
+        "relative p-2xl border rounded-xl transition-all duration-slow motion-card",
         tier.featured
           ? "border-accent bg-gradient-to-b from-accent/5 to-transparent scale-[1.02]"
           : "border-border bg-background-card hover:border-border-hover hover:shadow-md",
@@ -142,14 +157,24 @@ function PricingCard({
         </p>
         <div className="flex items-baseline justify-center gap-xs">
           <span className="text-5xl font-bold tracking-tight">
-            {tier.priceLabel || `$${tier.price}`}
+            {priceLabel}
           </span>
-          {tier.period && (
+          {periodLabel && (
             <span className="text-[0.9375rem] text-foreground-muted">
-              {tier.period}
+              {periodLabel}
             </span>
           )}
         </div>
+        {billingCycle === "annual" && annualBillTotal !== null && (
+          <p className="mt-sm text-xs text-accent">
+            Billed annually at ${annualBillTotal}/year
+          </p>
+        )}
+        {billingCycle === "monthly" && hasNumericPrice && (
+          <p className="mt-sm text-xs text-foreground-muted">
+            Switch to annual to save 18%
+          </p>
+        )}
       </div>
 
       {/* Features */}
@@ -171,7 +196,7 @@ function PricingCard({
         className="w-full"
         asChild
       >
-        <Link href={tier.href}>{tier.cta}</Link>
+        <Link href={ctaHref}>{tier.cta}</Link>
       </Button>
     </div>
   );
@@ -199,6 +224,8 @@ function getComparisonValueStyle(value: string, isFeatured: boolean) {
 }
 
 export function Pricing() {
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
+
   return (
     <section
       id="pricing"
@@ -214,18 +241,61 @@ export function Pricing() {
           `,
         }}
       />
+      <div className="noise-overlay absolute inset-0 -z-10" />
 
       <div className="container">
         <SectionHeader
           tag="Pricing"
           title="Simple, Transparent"
           highlightedText="Pricing"
-          subtitle="Choose the plan that fits your research and analysis needs."
+          subtitle="Choose the plan that fits your research, deployment, and procurement requirements."
         />
+
+        <div className="mb-2xl flex justify-center">
+          <div
+            className="inline-flex items-center rounded-full border border-border bg-background-card/70 p-1"
+            role="tablist"
+            aria-label="Billing cycle"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={billingCycle === "monthly"}
+              onClick={() => setBillingCycle("monthly")}
+              className={cn(
+                "rounded-full px-lg py-xs text-sm font-medium transition-colors duration-fast",
+                billingCycle === "monthly"
+                  ? "bg-primary text-foreground"
+                  : "text-foreground-muted hover:text-foreground"
+              )}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={billingCycle === "annual"}
+              onClick={() => setBillingCycle("annual")}
+              className={cn(
+                "rounded-full px-lg py-xs text-sm font-medium transition-colors duration-fast",
+                billingCycle === "annual"
+                  ? "bg-accent text-background-dark"
+                  : "text-foreground-muted hover:text-foreground"
+              )}
+            >
+              Annual (Save 18%)
+            </button>
+          </div>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-xl items-start">
           {pricingTiers.map((tier, index) => (
-            <PricingCard key={tier.name} tier={tier} index={index} />
+            <PricingCard
+              key={tier.name}
+              tier={tier}
+              index={index}
+              billingCycle={billingCycle}
+            />
           ))}
         </div>
 
@@ -238,7 +308,7 @@ export function Pricing() {
           <div className="relative flex flex-wrap items-center justify-between gap-lg mb-lg">
             <h3 className="text-2xl font-semibold">Plan Comparison</h3>
             <p className="text-sm text-foreground-secondary">
-              Compare core capabilities before checkout.
+              Compare core capabilities, onboarding, and billing readiness.
             </p>
           </div>
 
@@ -274,7 +344,7 @@ export function Pricing() {
                             {plan.label}
                           </span>
                           {plan.featured && (
-                            <Badge className="text-[0.62rem] px-sm py-[2px]">
+                            <Badge className="inline-flex items-center justify-center whitespace-nowrap text-[0.62rem] leading-none px-sm py-[3px]">
                               Best Value
                             </Badge>
                           )}
@@ -341,49 +411,51 @@ export function Pricing() {
               </table>
             </div>
           </div>
-        </div>
 
-        <div className="mt-3xl grid lg:grid-cols-[1.1fr_0.9fr] gap-2xl">
-          <div className="rounded-2xl border border-border bg-background-card p-xl md:p-2xl">
-            <h3 className="text-2xl font-semibold mb-md">Pricing FAQ</h3>
-            <div className="space-y-md">
-              {pricingFaqs.map((faq) => (
-                <details
-                  key={faq.question}
-                  className="group rounded-xl border border-border bg-background-elevated px-lg py-md"
-                >
-                  <summary className="cursor-pointer list-none text-sm font-semibold text-foreground flex items-center justify-between gap-md">
-                    {faq.question}
-                    <span className="text-foreground-muted transition-transform group-open:rotate-45">
-                      +
-                    </span>
-                  </summary>
-                  <p className="mt-md text-sm leading-relaxed text-foreground-secondary">
-                    {faq.answer}
-                  </p>
-                </details>
-              ))}
+          <div className="mt-xl grid gap-md md:grid-cols-3">
+            <div className="rounded-xl border border-border bg-background-elevated/70 p-lg motion-card">
+              <div className="flex items-center gap-sm text-accent">
+                <ShieldCheck className="h-4 w-4" />
+                <p className="text-xs uppercase tracking-[0.14em]">Security</p>
+              </div>
+              <p className="mt-sm text-sm text-foreground-secondary">
+                Stripe-hosted checkout with secure payment handling and billing
+                controls.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-background-elevated/70 p-lg motion-card">
+              <div className="flex items-center gap-sm text-accent">
+                <FileText className="h-4 w-4" />
+                <p className="text-xs uppercase tracking-[0.14em]">
+                  Procurement
+                </p>
+              </div>
+              <p className="mt-sm text-sm text-foreground-secondary">
+                Invoice workflows and contract support for compliance-driven
+                teams.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-background-elevated/70 p-lg motion-card">
+              <div className="flex items-center gap-sm text-accent">
+                <Building2 className="h-4 w-4" />
+                <p className="text-xs uppercase tracking-[0.14em]">
+                  Enterprise Support
+                </p>
+              </div>
+              <p className="mt-sm text-sm text-foreground-secondary">
+                Dedicated onboarding, technical alignment, and rollout guidance.
+              </p>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-background-card p-xl md:p-2xl">
-            <h3 className="text-2xl font-semibold mb-md">
-              Checkout Confidence
-            </h3>
-            <ul className="space-y-md text-sm text-foreground-secondary">
-              <li className="flex items-start gap-md">
-                <span className="mt-1 h-2 w-2 rounded-full bg-success" />
-                Secure billing through Stripe-hosted checkout
-              </li>
-              <li className="flex items-start gap-md">
-                <span className="mt-1 h-2 w-2 rounded-full bg-success" />
-                Plan changes available from your billing portal
-              </li>
-              <li className="flex items-start gap-md">
-                <span className="mt-1 h-2 w-2 rounded-full bg-success" />
-                Enterprise support for integration and rollout
-              </li>
-            </ul>
+          <div className="mt-lg flex flex-wrap items-center justify-between gap-md rounded-xl border border-accent/30 bg-accent/10 px-lg py-md">
+            <p className="text-sm text-foreground-secondary">
+              Need procurement review before checkout? We can configure billing,
+              terms, and rollout support.
+            </p>
+            <Button variant="outline" asChild>
+              <Link href="/#contact">Talk to Sales</Link>
+            </Button>
           </div>
         </div>
       </div>

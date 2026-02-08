@@ -178,7 +178,7 @@ export function ValidationLab() {
         />
 
         <div className="grid gap-2xl xl:grid-cols-[0.92fr_1.08fr]">
-          <div className="rounded-2xl border border-border bg-background-card/85 p-xl md:p-2xl">
+          <div className="motion-card rounded-2xl border border-border bg-background-card/85 p-xl md:p-2xl">
             <p className="text-[0.68rem] uppercase tracking-[0.16em] text-foreground-muted mb-lg">
               Validation Lifecycle
             </p>
@@ -191,7 +191,7 @@ export function ValidationLab() {
                     key={item.id}
                     onClick={() => setActiveStageId(item.id)}
                     className={cn(
-                      "group w-full rounded-xl border px-lg py-lg text-left transition-all duration-normal",
+                      "motion-card group w-full rounded-xl border px-lg py-lg text-left transition-all duration-normal",
                       active
                         ? "border-accent bg-accent/10 shadow-accent"
                         : "border-border bg-background-dark/55 hover:border-border-hover hover:bg-background-card"
@@ -226,7 +226,7 @@ export function ValidationLab() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-background-card p-xl md:p-2xl">
+          <div className="motion-card rounded-2xl border border-border bg-background-card p-xl md:p-2xl">
             <div className="flex flex-wrap items-center justify-between gap-md border-b border-border pb-lg">
               <div>
                 <p className="text-[0.68rem] uppercase tracking-[0.16em] text-foreground-muted">
@@ -245,7 +245,7 @@ export function ValidationLab() {
               {stage.checks.map((check) => (
                 <div
                   key={check}
-                  className="flex items-start gap-md rounded-xl border border-border bg-background-elevated/70 px-lg py-md"
+                  className="motion-card flex items-start gap-md rounded-xl border border-border bg-background-elevated/70 px-lg py-md"
                 >
                   <span className="mt-[7px] h-2 w-2 rounded-full bg-accent" />
                   <p className="text-sm leading-relaxed text-foreground-secondary">
@@ -255,7 +255,7 @@ export function ValidationLab() {
               ))}
             </div>
 
-            <div className="mt-xl rounded-xl border border-border bg-background-dark/70 p-lg">
+            <div className="motion-card mt-xl rounded-xl border border-border bg-background-dark/70 p-lg">
               <div className="flex flex-wrap items-center justify-between gap-sm">
                 <p className="text-[0.68rem] uppercase tracking-[0.16em] text-foreground-muted">
                   Global Validation Pulse

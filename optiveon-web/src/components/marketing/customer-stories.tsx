@@ -79,7 +79,7 @@ export function CustomerStories() {
           subtitle="Outcomes from firms using Optiveon in live research and execution environments."
         />
 
-        <div className="rounded-2xl border border-border bg-background-card p-2xl">
+        <div className="motion-card rounded-2xl border border-border bg-background-card p-2xl">
           <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-2xl items-center">
             <div className="space-y-lg">
               <Quote className="w-7 h-7 text-accent" />
@@ -102,7 +102,7 @@ export function CustomerStories() {
                   }
                   aria-label="Previous story"
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ArrowLeft className="w-4 h-4 text-foreground" />
                 </Button>
                 <Button
                   variant="outline"
@@ -112,7 +112,7 @@ export function CustomerStories() {
                   }
                   aria-label="Next story"
                 >
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 text-foreground" />
                 </Button>
                 <div className="flex items-center gap-2 ml-sm">
                   {stories.map((_, dot) => (
@@ -134,7 +134,7 @@ export function CustomerStories() {
               {story.impact.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-xl border border-border bg-background-elevated p-lg"
+                  className="motion-card rounded-xl border border-border bg-background-elevated p-lg"
                 >
                   <p className="text-xs uppercase tracking-[0.18em] text-foreground-muted">
                     {item.label}

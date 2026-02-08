@@ -10,8 +10,8 @@ import {
   ActivityFeed,
   InquiryInsights,
   ReleaseRadar,
-  StackBand,
   Pricing,
+  CommonQuestions,
   Contact,
 } from "@/components/marketing";
 
@@ -21,18 +21,18 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Pricing />
-      <ValidationLab />
-      <Features />
-      <ProductTour />
-      <RoiCalculator />
       <CustomerStories />
+      <ProductTour />
+      <ValidationLab />
+      <Pricing />
+      <Features />
+      <RoiCalculator />
       <Solutions />
       <Technology />
       <ActivityFeed />
       <InquiryInsights />
       <ReleaseRadar />
-      <StackBand />
+      <CommonQuestions />
       <Contact />
     </>
   );

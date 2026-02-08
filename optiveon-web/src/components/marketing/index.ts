@@ -12,4 +12,5 @@ export { InquiryInsights } from "./inquiry-insights";
 export { ReleaseRadar } from "./release-radar";
 export { StackBand } from "./stack-band";
 export { Pricing } from "./pricing";
+export { CommonQuestions } from "./common-questions";
 export { Contact } from "./contact";

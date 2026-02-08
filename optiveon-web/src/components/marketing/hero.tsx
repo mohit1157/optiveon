@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { heroCode, heroStats } from "@/constants/content";
+import { heroStats } from "@/constants/content";
 import { LiveMetrics } from "./live-metrics";
 
 export function Hero() {
@@ -27,6 +27,7 @@ export function Hero() {
 
         {/* Grid lines */}
         <div className="grid-lines absolute inset-0 animate-grid-pulse" />
+        <div className="noise-overlay absolute inset-0" />
 
         {/* Floating orbs */}
         <div className="absolute w-[900px] h-[900px] rounded-full bg-gradient-to-br from-primary to-primary-dark -top-[400px] -right-[300px] opacity-15 blur-[120px] animate-orb-float-1" />
@@ -116,14 +117,67 @@ export function Hero() {
 
                 {/* Terminal Content */}
                 <div className="p-xl">
-                  <pre className="font-mono text-sm leading-relaxed overflow-x-auto text-foreground-secondary">
-                    <code>{heroCode}</code>
+                  <pre className="font-mono text-sm leading-relaxed overflow-x-auto">
+                    <code>
+                      <span className="code-keyword">from</span> optiveon{" "}
+                      <span className="code-keyword">import</span>{" "}
+                      StrategyPipeline{"\n\n"}
+                      <span className="code-comment">
+                        # Build a production-grade research to execution
+                        pipeline
+                      </span>
+                      {"\n"}
+                      pipeline = StrategyPipeline({"\n"}
+                      {"    "}assets=[{"\n"}
+                      {"      "}
+                      <span className="code-string">
+                        &quot;equities&quot;
+                      </span>,{" "}
+                      <span className="code-string">&quot;futures&quot;</span>,{" "}
+                      <span className="code-string">&quot;fx&quot;</span>,{" "}
+                      <span className="code-string">&quot;crypto&quot;</span>
+                      {"\n"}
+                      {"    "}],
+                      {"\n"}
+                      {"    "}regime_model=
+                      <span className="code-string">
+                        &quot;adaptive_volatility&quot;
+                      </span>
+                      ,{"\n"}
+                      {"    "}risk_profile=
+                      <span className="code-string">
+                        &quot;institutional&quot;
+                      </span>
+                      {"\n"}){"\n\n"}
+                      <span className="code-comment">
+                        # Validate before deployment
+                      </span>
+                      {"\n"}
+                      report = pipeline.validate({"\n"}
+                      {"    "}in_sample=
+                      <span className="code-string">&quot;2018-2022&quot;</span>
+                      ,{"\n"}
+                      {"    "}out_of_sample=
+                      <span className="code-string">&quot;2023-2025&quot;</span>
+                      ,{"\n"}
+                      {"    "}max_drawdown=
+                      <span className="code-number">0.08</span>
+                      {"\n"}){"\n\n"}
+                      <span className="code-keyword">if</span> report.status ==
+                      <span className="code-string">&quot;approved&quot;</span>:
+                      {"\n"}
+                      {"    "}deployment = pipeline.deploy(mode=
+                      <span className="code-string">
+                        &quot;paper_or_live&quot;
+                      </span>
+                      )
+                    </code>
                   </pre>
                 </div>
               </div>
 
               <div className="mt-md grid gap-md sm:grid-cols-2">
-                <div className="rounded-xl border border-border bg-background-card/80 p-lg">
+                <div className="motion-card rounded-xl border border-border bg-background-card/80 p-lg">
                   <p className="text-[0.68rem] uppercase tracking-[0.14em] text-foreground-muted">
                     Validation Matrix
                   </p>
@@ -136,7 +190,7 @@ export function Hero() {
                   <p className="mt-sm text-xs text-success">86% Approved</p>
                 </div>
 
-                <div className="rounded-xl border border-border bg-background-card/80 p-lg">
+                <div className="motion-card rounded-xl border border-border bg-background-card/80 p-lg">
                   <p className="text-[0.68rem] uppercase tracking-[0.14em] text-foreground-muted">
                     Deployment Queue
                   </p>

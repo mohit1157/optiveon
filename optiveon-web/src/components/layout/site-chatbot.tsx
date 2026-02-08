@@ -30,6 +30,11 @@ interface SiteChatbotProps {
   onOpenChange: (isOpen: boolean) => void;
 }
 
+interface LocalReply {
+  answer: string;
+  suggestions: AssistantSuggestion[];
+}
+
 const QUICK_PROMPTS = [
   "Which plan should I start with?",
   "How does checkout and billing work?",
@@ -48,6 +53,72 @@ const INITIAL_MESSAGE: ChatMessage = {
     { label: "Contact Optiveon", href: "/#contact" },
   ],
 };
+
+function getLocalReply(rawMessage: string): LocalReply {
+  const question = rawMessage.toLowerCase();
+
+  if (
+    /(pricing|price|plan|tier|cost|start|starter|professional|enterprise)/.test(
+      question
+    )
+  ) {
+    return {
+      answer:
+        "Start with Professional if you need API access and active strategy workflows. Starter is best for individual exploration, and Enterprise is for institutional rollout with procurement support.",
+      suggestions: [
+        { label: "Compare plans", href: "/#pricing" },
+        { label: "Start Professional", href: "/checkout?plan=professional" },
+        { label: "Contact sales", href: "/#contact" },
+      ],
+    };
+  }
+
+  if (/(checkout|billing|invoice|payment|stripe)/.test(question)) {
+    return {
+      answer:
+        "Checkout is processed securely through Stripe. You can select a plan, complete payment, and then manage billing from your dashboard billing page. Enterprise teams can request invoice and contract workflows.",
+      suggestions: [
+        { label: "Go to pricing", href: "/#pricing" },
+        { label: "Billing portal", href: "/dashboard/billing" },
+        { label: "Talk to sales", href: "/#contact" },
+      ],
+    };
+  }
+
+  if (/(api|integration|webhook|endpoint|key)/.test(question)) {
+    return {
+      answer:
+        "API access is available on Professional and Enterprise plans. Professional includes daily call limits for production pilots, while Enterprise supports higher throughput and tailored integration support.",
+      suggestions: [
+        { label: "API keys", href: "/dashboard/api-keys" },
+        { label: "Professional plan", href: "/checkout?plan=professional" },
+        { label: "Integration support", href: "/#contact" },
+      ],
+    };
+  }
+
+  if (/(contact|team|support|email|sales|demo)/.test(question)) {
+    return {
+      answer:
+        "You can reach the Optiveon team through the Contact section for sales, onboarding, and technical requests.",
+      suggestions: [
+        { label: "Go to contact", href: "/#contact" },
+        { label: "Compare plans", href: "/#pricing" },
+        { label: "Explore features", href: "/#features" },
+      ],
+    };
+  }
+
+  return {
+    answer:
+      "I can help with pricing, checkout, API access, product capabilities, and support. Ask a specific question and I will point you to the exact section.",
+    suggestions: [
+      { label: "Pricing", href: "/#pricing" },
+      { label: "Features", href: "/#features" },
+      { label: "Contact", href: "/#contact" },
+    ],
+  };
+}
 
 function createMessageId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -127,6 +198,7 @@ export function SiteChatbot({ isOpen, onOpenChange }: SiteChatbotProps) {
     ]);
     setInput("");
     setIsLoading(true);
+    const localReply = getLocalReply(content);
 
     try {
       const response = await fetch("/api/chatbot", {
@@ -143,17 +215,31 @@ export function SiteChatbot({ isOpen, onOpenChange }: SiteChatbotProps) {
       const payload = (await response.json()) as ChatbotApiResponse;
       const answer = payload.answer;
 
-      if (!response.ok || !answer) {
-        throw new Error(payload.error || "Request failed");
+      if (response.ok && answer) {
+        setMessages((current) => [
+          ...current,
+          {
+            id: createMessageId(),
+            role: "assistant",
+            content: answer,
+            suggestions: payload.suggestions,
+          },
+        ]);
+        return;
       }
+
+      const prefix =
+        response.status === 429
+          ? "You have hit the chat rate limit for a moment. "
+          : "Live assistant was temporarily unavailable. ";
 
       setMessages((current) => [
         ...current,
         {
           id: createMessageId(),
           role: "assistant",
-          content: answer,
-          suggestions: payload.suggestions,
+          content: `${prefix}${localReply.answer}`,
+          suggestions: localReply.suggestions,
         },
       ]);
     } catch (error) {
@@ -163,9 +249,8 @@ export function SiteChatbot({ isOpen, onOpenChange }: SiteChatbotProps) {
         {
           id: createMessageId(),
           role: "assistant",
-          content:
-            "I could not process that request right now. Ask again in a moment or use the Contact section for direct help.",
-          suggestions: [{ label: "Go to contact", href: "/#contact" }],
+          content: `Connection issue detected. ${localReply.answer}`,
+          suggestions: localReply.suggestions,
         },
       ]);
     } finally {

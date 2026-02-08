@@ -90,7 +90,7 @@ export function ProductTour() {
                 key={item.id}
                 onClick={() => setActive(item.id)}
                 className={cn(
-                  "text-left rounded-xl border px-xl py-lg transition-all duration-normal",
+                  "motion-card text-left rounded-xl border px-xl py-lg transition-all duration-normal",
                   active === item.id
                     ? "border-accent bg-accent/10 shadow-accent"
                     : "border-border bg-background-card hover:border-border-hover hover:bg-background-card-hover"
@@ -106,7 +106,7 @@ export function ProductTour() {
             ))}
           </div>
 
-          <div className="rounded-2xl border border-border bg-background-card p-2xl flex flex-col gap-xl">
+          <div className="motion-card rounded-2xl border border-border bg-background-card p-2xl flex flex-col gap-xl">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-foreground-muted">
@@ -123,14 +123,14 @@ export function ProductTour() {
               {step.bullets.map((bullet) => (
                 <div
                   key={bullet}
-                  className="rounded-xl border border-border bg-background-elevated p-lg text-sm text-foreground-secondary"
+                  className="motion-card rounded-xl border border-border bg-background-elevated p-lg text-sm text-foreground-secondary"
                 >
                   {bullet}
                 </div>
               ))}
             </div>
 
-            <div className="rounded-xl border border-accent/30 bg-gradient-to-r from-accent/10 via-transparent to-transparent p-lg text-sm text-foreground-secondary">
+            <div className="motion-card rounded-xl border border-accent/30 bg-gradient-to-r from-accent/10 via-transparent to-transparent p-lg text-sm text-foreground-secondary">
               <span className="font-semibold text-foreground">
                 Optiveon Lens:
               </span>{" "}
