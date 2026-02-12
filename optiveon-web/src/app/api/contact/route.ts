@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 
     // Send email notification (optional - don't fail if email fails)
     try {
-      const adminEmail = process.env.ADMIN_EMAIL || "info@optiveon.com";
+      const adminEmail = process.env.ADMIN_EMAIL || "admin@optiveon.com";
       await sendEmail({
         to: adminEmail,
         subject: `New Contact Form Submission: ${interest}`,

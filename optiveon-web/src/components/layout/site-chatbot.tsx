@@ -36,8 +36,8 @@ interface LocalReply {
 }
 
 const QUICK_PROMPTS = [
-  "Which plan should I start with?",
-  "How does checkout and billing work?",
+  "How do I request a demo?",
+  "How does onboarding work?",
   "What API access do I get?",
   "How do I contact the Optiveon team?",
 ];
@@ -46,9 +46,9 @@ const INITIAL_MESSAGE: ChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "I can help with pricing, plans, checkout, features, API access, support, and policy pages. Ask anything about the Optiveon site and company.",
+    "I can help with demos, onboarding, features, API access, support, and policy pages. Ask anything about the Optiveon site and company.",
   suggestions: [
-    { label: "Compare plans", href: "/#pricing" },
+    { label: "Request demo", href: "/#contact" },
     { label: "Explore features", href: "/#features" },
     { label: "Contact Optiveon", href: "/#contact" },
   ],
@@ -64,10 +64,21 @@ function getLocalReply(rawMessage: string): LocalReply {
   ) {
     return {
       answer:
-        "Start with Professional if you need API access and active strategy workflows. Starter is best for individual exploration, and Enterprise is for institutional rollout with procurement support.",
+        "Public pricing is currently not listed. The best next step is to request a demo so the team can recommend the right package for your use case.",
       suggestions: [
-        { label: "Compare plans", href: "/#pricing" },
-        { label: "Start Professional", href: "/checkout?plan=professional" },
+        { label: "Request demo", href: "/#contact" },
+        { label: "Talk to sales", href: "/#contact" },
+        { label: "Explore features", href: "/#features" },
+      ],
+    };
+  }
+
+  if (/(demo|onboarding|trial|get started)/.test(question)) {
+    return {
+      answer:
+        "Use the contact form to request a demo. The Optiveon team will follow up to schedule a walkthrough and discuss implementation details.",
+      suggestions: [
+        { label: "Go to contact", href: "/#contact" },
         { label: "Contact sales", href: "/#contact" },
       ],
     };
@@ -76,10 +87,9 @@ function getLocalReply(rawMessage: string): LocalReply {
   if (/(checkout|billing|invoice|payment|stripe)/.test(question)) {
     return {
       answer:
-        "Checkout is processed securely through Stripe. You can select a plan, complete payment, and then manage billing from your dashboard billing page. Enterprise teams can request invoice and contract workflows.",
+        "Checkout and billing are handled during sales onboarding right now. Please request a demo and the team will guide you through commercial setup.",
       suggestions: [
-        { label: "Go to pricing", href: "/#pricing" },
-        { label: "Billing portal", href: "/dashboard/billing" },
+        { label: "Request demo", href: "/#contact" },
         { label: "Talk to sales", href: "/#contact" },
       ],
     };
@@ -88,10 +98,9 @@ function getLocalReply(rawMessage: string): LocalReply {
   if (/(api|integration|webhook|endpoint|key)/.test(question)) {
     return {
       answer:
-        "API access is available on Professional and Enterprise plans. Professional includes daily call limits for production pilots, while Enterprise supports higher throughput and tailored integration support.",
+        "API access is available based on your onboarding package. Request a demo and the team can map API scope and limits to your workflow.",
       suggestions: [
-        { label: "API keys", href: "/dashboard/api-keys" },
-        { label: "Professional plan", href: "/checkout?plan=professional" },
+        { label: "Request demo", href: "/#contact" },
         { label: "Integration support", href: "/#contact" },
       ],
     };
@@ -103,7 +112,6 @@ function getLocalReply(rawMessage: string): LocalReply {
         "You can reach the Optiveon team through the Contact section for sales, onboarding, and technical requests.",
       suggestions: [
         { label: "Go to contact", href: "/#contact" },
-        { label: "Compare plans", href: "/#pricing" },
         { label: "Explore features", href: "/#features" },
       ],
     };
@@ -111,9 +119,9 @@ function getLocalReply(rawMessage: string): LocalReply {
 
   return {
     answer:
-      "I can help with pricing, checkout, API access, product capabilities, and support. Ask a specific question and I will point you to the exact section.",
+      "I can help with demos, onboarding, API access, product capabilities, and support. Ask a specific question and I will point you to the right section.",
     suggestions: [
-      { label: "Pricing", href: "/#pricing" },
+      { label: "Request demo", href: "/#contact" },
       { label: "Features", href: "/#features" },
       { label: "Contact", href: "/#contact" },
     ],

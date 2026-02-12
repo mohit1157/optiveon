@@ -55,7 +55,7 @@ export function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-md">
             <Button variant="primary" asChild>
-              <Link href="/#pricing">Get Started</Link>
+              <Link href="/#contact">Request Demo</Link>
             </Button>
           </div>
 
@@ -97,8 +97,8 @@ export function Navbar() {
             ))}
             <li className="pt-md">
               <Button variant="primary" className="w-full" asChild>
-                <Link href="/#pricing" onClick={closeMobileMenu}>
-                  Get Started
+                <Link href="/#contact" onClick={closeMobileMenu}>
+                  Request Demo
                 </Link>
               </Button>
             </li>

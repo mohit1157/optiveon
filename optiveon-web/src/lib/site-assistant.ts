@@ -1,6 +1,5 @@
 import { companyInfo } from "@/constants/content";
 import { features } from "@/constants/features";
-import { pricingTiers } from "@/constants/pricing";
 
 export interface AssistantSuggestion {
   label: string;
@@ -51,23 +50,6 @@ const STOP_WORDS = new Set([
   "need",
 ]);
 
-function getTierPriceLabel(slug: "starter" | "professional" | "enterprise") {
-  const tier = pricingTiers.find((item) => item.slug === slug);
-  if (!tier) {
-    return "N/A";
-  }
-
-  if (tier.priceLabel) {
-    return tier.period ? `${tier.priceLabel}${tier.period}` : tier.priceLabel;
-  }
-
-  if (typeof tier.price === "number") {
-    return `${`$${tier.price}`}${tier.period || ""}`;
-  }
-
-  return "Custom";
-}
-
 function getFeatureHighlights() {
   return features
     .slice(0, 4)
@@ -93,18 +75,11 @@ const TOPICS: SiteTopic[] = [
       "billing",
     ],
     answer: () =>
-      `Optiveon has three plans: Starter (${getTierPriceLabel(
-        "starter"
-      )}), Professional (${getTierPriceLabel(
-        "professional"
-      )}), and Enterprise (Custom). Starter is for individual analysts, Professional is for serious traders and teams, and Enterprise is tailored for institutions with custom requirements.`,
+      "Public pricing is currently not listed. Request a demo and the team will recommend the right package based on your workflow, integration needs, and team size.",
     suggestions: [
-      { label: "Compare plans", href: "/#pricing" },
-      {
-        label: "Go to Professional checkout",
-        href: "/checkout?plan=professional",
-      },
-      { label: "Billing portal", href: "/dashboard/billing" },
+      { label: "Request demo", href: "/#contact" },
+      { label: "Talk to sales", href: "/#contact" },
+      { label: "Contact team", href: "/#contact" },
     ],
   },
   {
@@ -148,7 +123,7 @@ const TOPICS: SiteTopic[] = [
       "API access is included from the Professional tier upward, with higher throughput and custom integration support in Enterprise. You can manage API keys from the dashboard and use the platform for data-driven workflows.",
     suggestions: [
       { label: "API keys page", href: "/dashboard/api-keys" },
-      { label: "Professional plan", href: "/checkout?plan=professional" },
+      { label: "Request demo", href: "/#contact" },
       { label: "Contact integrations team", href: "/#contact" },
     ],
   },
@@ -192,7 +167,7 @@ const TOPICS: SiteTopic[] = [
     suggestions: [
       { label: "Open contact section", href: "/#contact" },
       { label: "Send email", href: `mailto:${companyInfo.email}` },
-      { label: "Checkout options", href: "/#pricing" },
+      { label: "Request demo", href: "/#contact" },
     ],
   },
   {
@@ -254,10 +229,10 @@ export function getSiteAssistantReply(message: string): SiteAssistantReply {
   if (!question) {
     return {
       answer:
-        "Ask me about plans, checkout, product features, API access, support, or legal policy pages.",
+        "Ask me about demos, onboarding, product features, API access, support, or legal policy pages.",
       matchedTopics: [],
       suggestions: [
-        { label: "Pricing", href: "/#pricing" },
+        { label: "Request demo", href: "/#contact" },
         { label: "Features", href: "/#features" },
         { label: "Contact", href: "/#contact" },
       ],
@@ -276,10 +251,10 @@ export function getSiteAssistantReply(message: string): SiteAssistantReply {
   if (rankedTopics.length === 0) {
     return {
       answer:
-        "I can answer questions about Optiveon pricing, product capabilities, API access, support contacts, and legal pages. If you share your goal, I can point you to the exact page and next step.",
+        "I can answer questions about Optiveon demos, product capabilities, API access, support contacts, and legal pages. If you share your goal, I can point you to the exact page and next step.",
       matchedTopics: [],
       suggestions: [
-        { label: "Compare plans", href: "/#pricing" },
+        { label: "Request demo", href: "/#contact" },
         { label: "View features", href: "/#features" },
         { label: "Talk to team", href: "/#contact" },
       ],

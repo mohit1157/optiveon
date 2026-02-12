@@ -43,7 +43,7 @@ export const companyInfo = {
     zip: "78731",
     full: "5900 Balcones Drive, Suite 100, Austin, TX 78731",
   },
-  email: "info@optiveon.com",
+  email: "admin@optiveon.com",
   copyright: `© ${new Date().getFullYear()} Optiveon LLC. All rights reserved.`,
 };
 

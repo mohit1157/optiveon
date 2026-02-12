@@ -2,8 +2,8 @@ import { NavItem, NavSection } from "@/types";
 
 export const mainNavItems: NavItem[] = [
   {
-    title: "Pricing",
-    href: "/#pricing",
+    title: "Request Demo",
+    href: "/#contact",
   },
   {
     title: "Features",
@@ -23,10 +23,9 @@ export const footerNavSections: NavSection[] = [
   {
     title: "Product",
     items: [
-      { title: "Pricing", href: "/#pricing" },
+      { title: "Request Demo", href: "/#contact" },
       { title: "Features", href: "/#features" },
       { title: "Validation", href: "/#validation" },
-      { title: "ROI Planner", href: "/#roi" },
       { title: "Customer Stories", href: "/#proof" },
       { title: "Solutions", href: "/#solutions" },
     ],
