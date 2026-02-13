@@ -1,38 +1,59 @@
-import { Resend } from "resend";
-
-// Lazy-load Resend client to avoid build-time initialization errors
-let resend: Resend | null = null;
-
-function getResendClient(): Resend {
-  if (!resend) {
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-      throw new Error("RESEND_API_KEY environment variable is not set");
-    }
-    resend = new Resend(apiKey);
-  }
-  return resend;
-}
+import nodemailer from "nodemailer";
 
 interface SendEmailOptions {
   to: string;
   subject: string;
   html: string;
+  replyTo?: string;
 }
 
-export async function sendEmail({ to, subject, html }: SendEmailOptions) {
-  const fromEmail = process.env.FROM_EMAIL || "noreply@optiveon.com";
+export async function sendEmail({ to, subject, html, replyTo }: SendEmailOptions) {
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, FROM_EMAIL } = process.env;
+
+  // Mock for development if SMTP is not configured
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASSWORD) {
+    if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+      console.log("-----------------------------------------");
+      console.log(`[MOCK EMAIL] To: ${to}`);
+      console.log(`[MOCK EMAIL] Subject: ${subject}`);
+      console.log(`[MOCK EMAIL] From: ${FROM_EMAIL || "noreply@optiveon.com"}`);
+      if (replyTo) console.log(`[MOCK EMAIL] Reply-To: ${replyTo}`);
+      console.log(`[MOCK EMAIL] Content: (see below)`);
+      console.log(html);
+      console.log("-----------------------------------------");
+      return { success: true, data: { messageId: "mock-email-id" } };
+    }
+    console.error("SMTP configuration missing (SMTP_HOST, SMTP_USER, SMTP_PASSWORD)");
+    return { success: false, error: "Email configuration missing" };
+  }
 
   try {
-    const client = getResendClient();
-    const data = await client.emails.send({
-      from: `Optiveon <${fromEmail}>`,
+    const transporter = nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: Number(SMTP_PORT),
+      secure: Number(SMTP_PORT) === 465, // true for 465, false for 587
+      auth: {
+        user: SMTP_USER,
+        pass: SMTP_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+
+    console.log(`[Email] Attempting to send email from ${SMTP_USER} to ${to}`);
+
+    const info = await transporter.sendMail({
+      from: `"Optiveon" <${SMTP_USER}>`, // Force sender to be the authenticated user
       to,
+      replyTo: replyTo || to, // Default replyTo
       subject,
       html,
     });
 
-    return { success: true, data };
+    console.log(`[Email] Sent successfully. MessageID: ${info.messageId}`);
+
+    return { success: true, data: info };
   } catch (error) {
     console.error("Failed to send email:", error);
     return { success: false, error };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,9 +11,19 @@ import { Button } from "@/components/ui/button";
 import { SiteChatbot } from "./site-chatbot";
 
 export function Navbar() {
+  // Fix hydration mismatch by only rendering after mount
+  const [mounted, setMounted] = useState(false);
   const { isScrolled, isHidden } = useNavbarScroll();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; // or a simplified server-safe version
+  }
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

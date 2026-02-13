@@ -3,29 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  USER
-  ADMIN
-}
-
-enum SubscriptionPlan {
-  FREE
-  STARTER
-  PROFESSIONAL
-  ENTERPRISE
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  CANCELED
-  PAST_DUE
-  TRIALING
-  PAUSED
-}
+// Enums are not supported in SQLite, so we use String
+// UserRole
+// SubscriptionPlan
+// SubscriptionStatus
 
 // User model
 model User {
@@ -34,7 +19,7 @@ model User {
   passwordHash   String?
   name           String?
   company        String?
-  role           UserRole  @default(USER)
+  role           String    @default("USER")
   emailVerified  DateTime?
   image          String?
   createdAt      DateTime  @default(now())
@@ -96,8 +81,8 @@ model Subscription {
   userId               String   @unique
   stripeCustomerId     String?  @unique
   stripeSubscriptionId String?  @unique
-  plan                 SubscriptionPlan   @default(FREE)
-  status               SubscriptionStatus @default(ACTIVE)
+  plan                 String   @default("FREE")
+  status               String   @default("ACTIVE")
   currentPeriodStart   DateTime?
   currentPeriodEnd     DateTime?
   cancelAtPeriodEnd    Boolean  @default(false)

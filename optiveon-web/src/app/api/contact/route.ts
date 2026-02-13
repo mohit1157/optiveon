@@ -73,6 +73,7 @@ export async function POST(request: NextRequest) {
       const adminEmail = process.env.ADMIN_EMAIL || "admin@optiveon.com";
       await sendEmail({
         to: adminEmail,
+        replyTo: email,
         subject: `New Contact Form Submission: ${interest}`,
         html: generateContactNotificationEmail(
           name,
@@ -96,8 +97,22 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error("Contact form error:", error);
+
+    // Check if it's a Prisma error
+    if (error instanceof Error) {
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+    }
+
+    // For debugging purposes, return the actual error message
+    // In production, we should keep the generic message
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+
     return NextResponse.json(
-      { error: "An error occurred. Please try again." },
+      {
+        error: "An error occurred while processing your request.",
+        details: process.env.NODE_ENV === "development" ? errorMessage : undefined
+      },
       { status: 500 }
     );
   }
