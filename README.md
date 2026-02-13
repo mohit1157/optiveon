@@ -24,4 +24,4 @@ npm install
 npm run dev
 ```
 
-See `optiveon-web/README.md` for more details on the application setup.
+See `optiveon-web/README.md` for more details on the application setup test.
