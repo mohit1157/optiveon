@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',   // 👈 REQUIRED for S3 static hosting
   reactStrictMode: true,
   images: {
-    domains: [],
+    unoptimized: true, // 👈 REQUIRED for static export
   },
-  experimental: {},
 };
 
 module.exports = nextConfig;
