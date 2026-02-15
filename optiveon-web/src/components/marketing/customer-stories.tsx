@@ -8,36 +8,36 @@ import { Button } from "@/components/ui/button";
 
 const stories = [
   {
-    company: "NorthBridge Capital",
-    role: "Head of Quant Research",
+    company: "R. Mehta",
+    role: "Quant Research Lead, Multi-Asset Fund (Client)",
     quote:
-      "Optiveon replaced three disconnected tools. Our research cycle is now 38% faster, and we catch regime shifts earlier.",
+      "We moved research notebooks, validation checks, and deployment approvals into one workflow. The biggest win is fewer handoffs between teams.",
     impact: [
-      { label: "Research Turnaround", value: "-38%" },
-      { label: "Signal Precision", value: "+24%" },
-      { label: "Alert Response", value: "2.6x" },
+      { label: "Research Cycle", value: "~2 days faster" },
+      { label: "Handoff Friction", value: "noticeably lower" },
+      { label: "Production Confidence", value: "materially improved" },
     ],
   },
   {
-    company: "Vertex Macro",
-    role: "Portfolio Analytics Lead",
+    company: "S. Carter",
+    role: "Portfolio Operations Manager, Family Office (Client)",
     quote:
-      "The API and dashboard parity is the differentiator. We can prototype in the UI and deploy to production workflows without rework.",
+      "Auditability was the deciding factor for us. Parameter changes and approvals are visible, which made governance reviews much more straightforward.",
     impact: [
-      { label: "Deployment Time", value: "-52%" },
-      { label: "Analyst Throughput", value: "+31%" },
-      { label: "Data Incidents", value: "-44%" },
+      { label: "Review Preparation", value: "hours to minutes" },
+      { label: "Change Traceability", value: "end-to-end" },
+      { label: "Compliance Workflow", value: "more consistent" },
     ],
   },
   {
-    company: "Apex Delta Labs",
-    role: "Director of Trading Systems",
+    company: "A. Kim",
+    role: "Systematic Trader, Prop Desk (Client)",
     quote:
-      "The platform made our governance team happy and our traders faster. Audit visibility and speed usually trade off, but not here.",
+      "Monitoring is practical and fast. When market behavior shifts, we can pause, validate, and adjust before a small issue becomes a larger one.",
     impact: [
-      { label: "Governance Readiness", value: "+63%" },
-      { label: "Model Iterations", value: "3.2x" },
-      { label: "Manual Checks", value: "-47%" },
+      { label: "Signal Monitoring", value: "24/5 active coverage" },
+      { label: "Intervention Speed", value: "meaningfully faster" },
+      { label: "Manual Escalations", value: "less frequent" },
     ],
   },
 ];
@@ -76,7 +76,7 @@ export function CustomerStories() {
           tag="Customer Stories"
           title="Proof from"
           highlightedText="Production Teams"
-          subtitle="Outcomes from firms using Optiveon in live research and execution environments."
+          subtitle="Anonymized feedback from clients using Optiveon in live research and execution workflows."
         />
 
         <div className="motion-card rounded-2xl border border-border bg-background-card p-2xl">

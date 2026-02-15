@@ -1,7 +1,6 @@
 import { NavItem, NavSection } from "@/types";
 
 export const mainNavItems: NavItem[] = [
-
   {
     title: "Features",
     href: "/#features",

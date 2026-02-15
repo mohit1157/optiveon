@@ -106,12 +106,14 @@ export async function POST(request: NextRequest) {
 
     // For debugging purposes, return the actual error message
     // In production, we should keep the generic message
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
 
     return NextResponse.json(
       {
         error: "An error occurred while processing your request.",
-        details: process.env.NODE_ENV === "development" ? errorMessage : undefined
+        details:
+          process.env.NODE_ENV === "development" ? errorMessage : undefined,
       },
       { status: 500 }
     );

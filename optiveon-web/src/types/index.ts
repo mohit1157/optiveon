@@ -2,8 +2,17 @@ import { User, Subscription } from "@prisma/client";
 
 // Manually define Enums as String Unions for SQLite compatibility
 export type UserRole = "USER" | "ADMIN";
-export type SubscriptionPlan = "FREE" | "STARTER" | "PROFESSIONAL" | "ENTERPRISE";
-export type SubscriptionStatus = "ACTIVE" | "CANCELED" | "PAST_DUE" | "TRIALING" | "PAUSED";
+export type SubscriptionPlan =
+  | "FREE"
+  | "STARTER"
+  | "PROFESSIONAL"
+  | "ENTERPRISE";
+export type SubscriptionStatus =
+  | "ACTIVE"
+  | "CANCELED"
+  | "PAST_DUE"
+  | "TRIALING"
+  | "PAUSED";
 
 // Extended user type with subscription
 export interface UserWithSubscription extends User {

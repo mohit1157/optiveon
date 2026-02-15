@@ -7,12 +7,21 @@ interface SendEmailOptions {
   replyTo?: string;
 }
 
-export async function sendEmail({ to, subject, html, replyTo }: SendEmailOptions) {
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, FROM_EMAIL } = process.env;
+export async function sendEmail({
+  to,
+  subject,
+  html,
+  replyTo,
+}: SendEmailOptions) {
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, FROM_EMAIL } =
+    process.env;
 
   // Mock for development if SMTP is not configured
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASSWORD) {
-    if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+    if (
+      process.env.NODE_ENV === "development" ||
+      process.env.NODE_ENV === "test"
+    ) {
       console.log("-----------------------------------------");
       console.log(`[MOCK EMAIL] To: ${to}`);
       console.log(`[MOCK EMAIL] Subject: ${subject}`);
@@ -23,7 +32,9 @@ export async function sendEmail({ to, subject, html, replyTo }: SendEmailOptions
       console.log("-----------------------------------------");
       return { success: true, data: { messageId: "mock-email-id" } };
     }
-    console.error("SMTP configuration missing (SMTP_HOST, SMTP_USER, SMTP_PASSWORD)");
+    console.error(
+      "SMTP configuration missing (SMTP_HOST, SMTP_USER, SMTP_PASSWORD)"
+    );
     return { success: false, error: "Email configuration missing" };
   }
 
@@ -37,8 +48,8 @@ export async function sendEmail({ to, subject, html, replyTo }: SendEmailOptions
         pass: SMTP_PASSWORD,
       },
       tls: {
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: false,
+      },
     });
 
     console.log(`[Email] Attempting to send email from ${SMTP_USER} to ${to}`);
