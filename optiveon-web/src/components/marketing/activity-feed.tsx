@@ -48,9 +48,8 @@ function formatActivity(action: string, metadata?: Record<string, unknown>) {
     case AuditActions.REGISTER:
       return "New account created";
     case AuditActions.SUBSCRIPTION_UPDATED:
-      return `Subscription updated${
-        metadata?.plan ? ` to ${metadata.plan}` : ""
-      }`;
+      return `Subscription updated${metadata?.plan ? ` to ${metadata.plan}` : ""
+        }`;
     case AuditActions.SUBSCRIPTION_CANCELED:
       return "Subscription canceled";
     case AuditActions.CONTACT_CREATED:
@@ -114,7 +113,7 @@ export async function ActivityFeed() {
     logs = [];
   }
 
-  const items: ActivityItem[] = logs.map((log) => {
+  const items: ActivityItem[] = logs.map((log: any) => {
     let metadata: Record<string, unknown> | undefined;
     if (log.metadata) {
       try {
