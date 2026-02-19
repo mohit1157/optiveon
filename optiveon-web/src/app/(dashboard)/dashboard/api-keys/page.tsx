@@ -100,7 +100,7 @@ export default async function ApiKeysPage() {
             </div>
           ) : (
             <div className="space-y-md">
-              {user.apiKeys.map((key) => {
+              {user.apiKeys.map((key: any) => {
                 const isExpired =
                   key.expiresAt && new Date(key.expiresAt) < new Date();
 
