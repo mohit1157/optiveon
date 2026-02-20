@@ -22,9 +22,14 @@ jobs:
             git pull origin main
             sudo docker build -t optiveon .
             sudo docker rm -f optiveon-app || true
-            sudo docker run -d \
-              -p 3000:3000 \
-              --env-file .env \
-              --name optiveon-app \
-              --restart always \
-              optiveon
+            sudo docker run -d -p 3000:3000 --env-file .env --name optiveon-app --restart always optiveon
+
+      - name: Send Slack Notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_CHANNEL: deployments
+          SLACK_TITLE: "Optiveon Deployment: ${{ job.status }}"
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || 'danger' }}
+          SLACK_MESSAGE: "The latest version of Optiveon.com is now live! :rocket:"
