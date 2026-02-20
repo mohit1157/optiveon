@@ -6,7 +6,7 @@ export const technologyFeatures: TechFeature[] = [
     icon: Activity,
     title: "Ultra-Low Latency",
     description:
-      "Sub-10ms response times with optimized data pipelines and edge computing.",
+      "Median Signal-to-Execution Pipeline Latency: 12ms via optimized data pipelines.",
   },
   {
     icon: Layers,
