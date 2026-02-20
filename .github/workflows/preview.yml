@@ -18,14 +18,27 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /var/www/html
-            # Fetch, checkout and pull develop to ensure we're up to date
-            git fetch origin develop
-            git checkout develop
-            git pull origin develop
+            # Use a dedicated directory for the preview environment
+            mkdir -p /var/www/preview
+            cd /var/www/preview
+            
+            # If it's a git repo, fetch and reset. If not, clone it.
+            if [ -d .git ]; then
+              git fetch origin develop
+              git reset --hard origin/develop
+            else
+              git clone -b develop https://github.com/mohit1157/optiveon.git .
+            fi
+            
+            # Use the correct directory for building the Next.js app 
+            # (Assuming the main repo has optiveon-web subfolder or root)
+            if [ -d "optiveon-web" ]; then
+              cd optiveon-web
+            fi
+
             sudo docker build -t optiveon-preview .
             sudo docker rm -f optiveon-preview || true
-            sudo docker run -d -p 3001:3000 --env-file .env --name optiveon-preview --restart always optiveon-preview
+            sudo docker run -d -p 3001:3000 --env-file /var/www/html/.env --name optiveon-preview --restart always optiveon-preview
 
       - name: Send Slack Notification
         if: always()
