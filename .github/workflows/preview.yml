@@ -1,0 +1,38 @@
+name: Deploy Preview
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy Preview to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /var/www/html
+            # Fetch, checkout and pull develop to ensure we're up to date
+            git fetch origin develop
+            git checkout develop
+            git pull origin develop
+            sudo docker build -t optiveon-preview .
+            sudo docker rm -f optiveon-preview || true
+            sudo docker run -d -p 3001:3000 --env-file .env --name optiveon-preview --restart always optiveon-preview
+
+      - name: Send Slack Notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_CHANNEL: deployments
+          SLACK_TITLE: "Optiveon Preview Deployment: ${{ job.status }}"
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || 'danger' }}
+          SLACK_MESSAGE: "The preview environment of Optiveon is now live on port 3001! :rocket:"
