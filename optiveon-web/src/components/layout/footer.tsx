@@ -47,9 +47,9 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="pt-2xl">
           {/* Risk Disclaimer */}
-          <div className="bg-background-dark border border-border rounded-lg p-lg mb-xl">
-            <p className="text-[0.8125rem] text-foreground-muted leading-relaxed">
-              <strong className="text-foreground-secondary">
+          <div className="bg-background-dark/50 border border-border/50 rounded-lg p-md mb-xl">
+            <p className="text-[0.7rem] text-foreground-muted/70 leading-relaxed text-balance">
+              <strong className="text-foreground-muted">
                 Risk Disclaimer:
               </strong>{" "}
               {riskDisclaimer}
