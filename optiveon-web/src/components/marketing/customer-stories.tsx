@@ -8,36 +8,36 @@ import { Button } from "@/components/ui/button";
 
 const stories = [
   {
-    company: "R. Mehta",
-    role: "Quant Research Lead, Multi-Asset Fund (Client)",
+    name: "Mohit Ojha",
+    role: "Manager / Software Developer",
     quote:
-      "We moved research notebooks, validation checks, and deployment approvals into one workflow. The biggest win is fewer handoffs between teams.",
+      "Building Optiveon allowed us to seamlessly merge fast-paced software engineering with rigorous financial modeling. The platform's architecture ensures our execution engines operate with unmatched reliability and minimal latency.",
     impact: [
-      { label: "Research Cycle", value: "~2 days faster" },
-      { label: "Handoff Friction", value: "noticeably lower" },
-      { label: "Production Confidence", value: "materially improved" },
+      { label: "System Reliability", value: "Highly Robust" },
+      { label: "Execution Latency", value: "Ultra-low" },
+      { label: "Development Cycle", value: "Streamlined" },
     ],
   },
   {
-    company: "S. Carter",
-    role: "Portfolio Operations Manager, Family Office (Client)",
+    name: "Balmiki Padhyaya",
+    role: "Quant Researcher / Software Engineer",
     quote:
-      "Auditability was the deciding factor for us. Parameter changes and approvals are visible, which made governance reviews much more straightforward.",
+      "Optiveon's infrastructure empowers us to backtest complex trading models and transition them to live environments effortlessly. Bridging the gap between research and production has never been more efficient.",
     impact: [
-      { label: "Review Preparation", value: "hours to minutes" },
-      { label: "Change Traceability", value: "end-to-end" },
-      { label: "Compliance Workflow", value: "more consistent" },
+      { label: "Research to Prod", value: "Seamless" },
+      { label: "Model Validation", value: "Accelerated" },
+      { label: "Strategy iteration", value: "Optimized" },
     ],
   },
   {
-    company: "A. Kim",
-    role: "Systematic Trader, Prop Desk (Client)",
+    name: "",
+    role: "",
     quote:
-      "Monitoring is practical and fast. When market behavior shifts, we can pause, validate, and adjust before a small issue becomes a larger one.",
+      "Working on the core systems of Optiveon has been a game changer. The ability to innovate rapidly while maintaining institutional-grade security and compliance gives us a significant edge in the market.",
     impact: [
-      { label: "Signal Monitoring", value: "24/5 active coverage" },
-      { label: "Intervention Speed", value: "meaningfully faster" },
-      { label: "Manual Escalations", value: "less frequent" },
+      { label: "Platform Security", value: "Enterprise-grade" },
+      { label: "Feature Velocity", value: "Rapid" },
+      { label: "System Architecture", value: "Future-proof" },
     ],
   },
 ];
@@ -73,10 +73,10 @@ export function CustomerStories() {
 
       <div className="container">
         <SectionHeader
-          tag="Customer Stories"
-          title="Proof from"
-          highlightedText="Production Teams"
-          subtitle="Anonymized feedback from clients using Optiveon in live research and execution workflows."
+          tag="Our Team"
+          title="Voices from"
+          highlightedText="Our Team"
+          subtitle="Insights and perspectives from the engineers and researchers building Optiveon."
         />
 
         <div className="motion-card rounded-2xl border border-border bg-background-card p-2xl">
@@ -87,8 +87,8 @@ export function CustomerStories() {
                 {story.quote}
               </p>
               <div>
-                <p className="text-base font-semibold">{story.company}</p>
-                <p className="text-sm text-foreground-muted">{story.role}</p>
+                <p className="text-base font-semibold">{story.name || "\u00A0"}</p>
+                <p className="text-sm text-foreground-muted">{story.role || "\u00A0"}</p>
               </div>
 
               <div className="flex items-center gap-md">
