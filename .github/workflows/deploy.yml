@@ -19,6 +19,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /var/www/html
+            git checkout main
             git pull origin main
             sudo docker build -t optiveon .
             sudo docker rm -f optiveon-app || true
