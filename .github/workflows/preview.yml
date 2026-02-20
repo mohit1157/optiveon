@@ -2,7 +2,7 @@ name: Deploy Preview
 
 on:
   push:
-    branches: [ develop ]
+    branches: [develop]
 
 jobs:
   deploy:
@@ -21,7 +21,7 @@ jobs:
             # Use a dedicated directory for the preview environment
             mkdir -p /var/www/preview
             cd /var/www/preview
-            
+
             # If it's a git repo, fetch and reset. If not, clone it.
             if [ -d .git ]; then
               git fetch origin develop
@@ -29,7 +29,7 @@ jobs:
             else
               git clone -b develop https://github.com/mohit1157/optiveon.git .
             fi
-            
+
             # Use the correct directory for building the Next.js app 
             # (Assuming the main repo has optiveon-web subfolder or root)
             if [ -d "optiveon-web" ]; then
@@ -39,6 +39,7 @@ jobs:
             sudo docker build -t optiveon-preview .
             sudo docker rm -f optiveon-preview || true
             sudo docker run -d -p 3001:3000 --env-file /var/www/html/.env --name optiveon-preview --restart always optiveon-preview
+            sudo docker system prune -af --volumes
 
       - name: Send Slack Notification
         if: always()
