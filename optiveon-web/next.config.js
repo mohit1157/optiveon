@@ -3,7 +3,7 @@ const isStaticExport = process.env.NEXT_OUTPUT_EXPORT === "true";
 
 const nextConfig = {
   reactStrictMode: true,
-  ...(isStaticExport ? { output: "export" } : {}),
+  output: isStaticExport ? "export" : "standalone",
   images: {
     unoptimized: true,
   },
