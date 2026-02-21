@@ -58,6 +58,8 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
                   className="text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
                 >
                   {item.title}
@@ -103,6 +105,8 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
                   className="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
                   onClick={closeMobileMenu}
                 >
