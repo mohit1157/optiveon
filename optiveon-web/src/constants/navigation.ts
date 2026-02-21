@@ -11,7 +11,7 @@ export const mainNavItems: NavItem[] = [
   },
   {
     title: "Payment",
-    href: "https://buy.stripe.com/test_14k3ex5Zqb2Sgrm288", // Example URL as none was provided; can be changed later
+    href: "https://buy.stripe.com/test_bJe8wQ7SfcME6V637r8N200",
     external: true,
   },
   {
