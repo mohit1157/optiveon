@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { maskApiKey } from "@/lib/utils";
+import { SubscriptionPlan } from "@prisma/client";
 
 export default async function ApiKeysPage() {
   const session = await getServerSession(authOptions);
@@ -36,8 +37,8 @@ export default async function ApiKeysPage() {
   }
 
   const canCreateKeys =
-    user.subscription?.plan === "PROFESSIONAL" ||
-    user.subscription?.plan === "ENTERPRISE";
+    user.subscription?.plan === SubscriptionPlan.PROFESSIONAL ||
+    user.subscription?.plan === SubscriptionPlan.ENTERPRISE;
 
   return (
     <div className="space-y-xl max-w-4xl">
