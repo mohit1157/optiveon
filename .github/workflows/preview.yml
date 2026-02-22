@@ -39,7 +39,7 @@ jobs:
             # Securely inject the Application Secrets from GitHub into the preview environment
             echo "${{ secrets.PRODUCTION_ENV_FILE }}" > .env
 
-            sudo docker build -t optiveon-preview .
+            sudo docker build --no-cache -t optiveon-preview .
             sudo docker rm -f optiveon-preview || true
             sudo docker run -d -p 3001:3000 --env-file .env --name optiveon-preview --restart always optiveon-preview
             sudo docker system prune -af --volumes
