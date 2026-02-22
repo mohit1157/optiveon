@@ -4,6 +4,10 @@ on:
   push:
     branches: [main] # Only deploys when you push to the main branch
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
