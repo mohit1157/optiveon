@@ -44,6 +44,10 @@ jobs:
             sudo docker run -d -p 3001:3000 --env-file .env --name optiveon-preview --restart always optiveon-preview
             sudo docker system prune -af --volumes
 
+            # Purge nginx cache and reload to serve fresh content
+            sudo rm -rf /var/cache/nginx/* 2>/dev/null || true
+            sudo nginx -s reload 2>/dev/null || true
+
       - name: Send Slack Notification
         if: always()
         uses: rtCamp/action-slack-notify@v2
