@@ -27,8 +27,8 @@ jobs:
               cd optiveon-web
             fi
 
-            # Securely pull all secrets from AWS Vault and format them as a .env file
-            aws ssm get-parameters-by-path --region us-east-1 --path "/optiveon/prod/" --with-decryption --query "Parameters[*].[Name,Value]" --output text | awk -F'\t' '{gsub("/optiveon/prod/", "", $1); print $1"="$2}' > .env
+            # Securely inject the Application Secrets from GitHub into the EC2 environment
+            echo "${{ secrets.PRODUCTION_ENV_FILE }}" > .env
 
             sudo docker build -t optiveon .
             sudo docker rm -f optiveon-app || true
