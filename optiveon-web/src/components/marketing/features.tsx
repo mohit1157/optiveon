@@ -21,7 +21,7 @@ function FeatureCard({
       <div
         ref={ref}
         className={cn(
-          "md:col-span-2 lg:col-span-3 motion-card p-xl md:p-2xl bg-background-card border border-border rounded-xl transition-all duration-slow",
+          "md:col-span-2 lg:col-span-3 motion-card p-xl md:p-2xl glass-card rounded-xl transition-all duration-slow",
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
         )}
         style={{ transitionDelay: `${index * 100}ms` }}
@@ -72,8 +72,7 @@ function FeatureCard({
     <div
       ref={ref}
       className={cn(
-        "motion-card relative p-2xl bg-background-card border border-border rounded-xl transition-all duration-slow overflow-hidden group",
-        "hover:bg-background-card-hover hover:border-border-hover hover:shadow-lg",
+        "motion-card relative p-2xl glass-card rounded-xl transition-all duration-slow overflow-hidden group",
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       )}
       style={{

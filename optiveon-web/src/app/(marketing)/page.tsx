@@ -8,12 +8,14 @@ import {
   Technology,
   ReleaseRadar,
   Contact,
+  TrustStrip,
 } from "@/components/marketing";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
+      <TrustStrip />
       <ProductTour />
       <ValidationLab />
       <Features />

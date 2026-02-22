@@ -14,3 +14,4 @@ export { StackBand } from "./stack-band";
 export { Pricing } from "./pricing";
 export { CommonQuestions } from "./common-questions";
 export { Contact } from "./contact";
+export { TrustStrip } from "./trust-strip";
