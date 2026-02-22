@@ -81,6 +81,7 @@ export default function RootLayout({
     >
       <head>
         <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+        <meta name="format-detection" content="telephone=no" />
       </head>
       <body className="font-sans">
         {children}

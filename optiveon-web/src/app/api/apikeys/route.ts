@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { encryptData } from "@/lib/encryption";
 import { createAuditLog, AuditActions, AuditEntities } from "@/lib/audit";
+import { rateLimit } from "@/lib/rate-limit";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
@@ -20,6 +21,19 @@ export async function POST(request: NextRequest) {
 
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
+        }
+
+        // Rate limit: 5 key creations per user per hour
+        const { success: rlSuccess } = rateLimit(`apikey_${session.user.id}`, {
+            maxRequests: 5,
+            windowMs: 3600000,
+        });
+
+        if (!rlSuccess) {
+            return NextResponse.json(
+                { error: "Too many API key creation requests. Please try again later." },
+                { status: 429 }
+            );
         }
 
         // Only allow Pro/Enterprise users to generate API keys
