@@ -41,94 +41,103 @@ export function Navbar() {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 py-md transition-all duration-slow",
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-slow",
           isScrolled
-            ? "bg-background/90 backdrop-blur-xl border-b border-border shadow-sm"
-            : "bg-transparent",
+            ? "py-2 px-4"
+            : "py-md",
           isHidden ? "-translate-y-full" : "translate-y-0"
         )}
       >
-        <div className="container flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Logo collapsed={isScrolled} />
-          </div>
-
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center gap-xl">
-            {navLinks.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  target={item.external ? "_blank" : undefined}
-                  rel={item.external ? "noopener noreferrer" : undefined}
-                  className="text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
-                >
-                  {item.title}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-normal group-hover:w-full" />
-                </Link>
-              </li>
-            ))}
-            <li>
-              <PaymentDropdown />
-            </li>
-          </ul>
-
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-md">
-            <Button variant="primary" asChild>
-              <Link href="/#contact">Request Demo</Link>
-            </Button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden flex flex-col gap-1.5 p-2"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6 text-foreground" />
-            ) : (
-              <Menu className="w-6 h-6 text-foreground" />
-            )}
-          </button>
-        </div>
-
-        {/* Mobile Navigation */}
         <div
           className={cn(
-            "md:hidden absolute top-full left-0 right-0 bg-background-card border-b border-border transition-all duration-normal",
-            isMobileMenuOpen
-              ? "opacity-100 visible"
-              : "opacity-0 invisible pointer-events-none"
+            "transition-all duration-slow",
+            isScrolled
+              ? "container max-w-3xl mx-auto bg-background-card/80 backdrop-blur-2xl border border-border/60 rounded-full shadow-lg shadow-black/10 px-6 py-2"
+              : "container"
           )}
         >
-          <ul className="flex flex-col p-xl gap-lg">
-            {navLinks.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  target={item.external ? "_blank" : undefined}
-                  rel={item.external ? "noopener noreferrer" : undefined}
-                  className="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
-                  onClick={closeMobileMenu}
-                >
-                  {item.title}
-                </Link>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Logo collapsed={isScrolled} />
+            </div>
+
+            {/* Desktop Navigation */}
+            <ul className="hidden md:flex items-center gap-xl">
+              {navLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    target={item.external ? "_blank" : undefined}
+                    rel={item.external ? "noopener noreferrer" : undefined}
+                    className="text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
+                  >
+                    {item.title}
+                    <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-normal group-hover:w-full" />
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <PaymentDropdown />
               </li>
-            ))}
-            <li>
-              <PaymentDropdown mobile />
-            </li>
-            <li className="pt-md">
-              <Button variant="primary" className="w-full" asChild>
-                <Link href="/#contact" onClick={closeMobileMenu}>
-                  Request Demo
-                </Link>
+            </ul>
+
+            {/* Desktop CTA */}
+            <div className="hidden md:flex items-center gap-md">
+              <Button variant="primary" asChild>
+                <Link href="/#contact">Request Demo</Link>
               </Button>
-            </li>
-          </ul>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden flex flex-col gap-1.5 p-2"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6 text-foreground" />
+              ) : (
+                <Menu className="w-6 h-6 text-foreground" />
+              )}
+            </button>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div
+            className={cn(
+              "md:hidden absolute top-full left-0 right-0 bg-background-card border-b border-border transition-all duration-normal",
+              isMobileMenuOpen
+                ? "opacity-100 visible"
+                : "opacity-0 invisible pointer-events-none"
+            )}
+          >
+            <ul className="flex flex-col p-xl gap-lg">
+              {navLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    target={item.external ? "_blank" : undefined}
+                    rel={item.external ? "noopener noreferrer" : undefined}
+                    className="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <PaymentDropdown mobile />
+              </li>
+              <li className="pt-md">
+                <Button variant="primary" className="w-full" asChild>
+                  <Link href="/#contact" onClick={closeMobileMenu}>
+                    Request Demo
+                  </Link>
+                </Button>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
 
