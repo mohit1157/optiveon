@@ -2,10 +2,10 @@ name: Deploy Optiveon
 
 on:
   push:
-    branches: [main] # Only deploys when you push to the main branch
+    branches: [main]
 
 concurrency:
-  group: deploy-production
+  group: deploy-ec2
   cancel-in-progress: true
 
 jobs:
@@ -35,10 +35,12 @@ jobs:
             # Securely inject the Application Secrets from GitHub into the EC2 environment
             echo "${{ secrets.PRODUCTION_ENV_FILE }}" > .env
 
-            sudo docker build --no-cache -t optiveon .
+            # Clean up old images to free disk/memory before building
+            sudo docker system prune -af 2>/dev/null || true
+
+            sudo docker build -t optiveon .
             sudo docker rm -f optiveon-app || true
             sudo docker run -d -p 3000:3000 --env-file .env --name optiveon-app --restart always optiveon
-            sudo docker system prune -af --volumes
 
             # Purge nginx cache and reload to serve fresh content
             sudo rm -rf /var/cache/nginx/* 2>/dev/null || true
