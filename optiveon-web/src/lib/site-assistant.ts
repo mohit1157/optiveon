@@ -120,7 +120,7 @@ const TOPICS: SiteTopic[] = [
       "annually", "free trial", "free",
     ],
     answer: () =>
-      `Optiveon offers three subscription tiers:\n\n• Starter ($99/mo) — For individual researchers. Includes core analytics, backtesting, and smart alerts.\n• Professional ($299/mo) — For growing teams. Adds API access, multi-user collaboration, and priority support.\n• Enterprise (Custom pricing) — For institutional firms. Full API throughput, dedicated support, custom integrations, and SLA guarantees.\n\nYou can subscribe directly through the Payment option in the navigation bar, or request a demo for a guided walkthrough.`,
+      `Optiveon offers three subscription tiers:\n\n• Starter ($299/mo) — For individual researchers. Includes core analytics, backtesting, and smart alerts.\n• Professional ($899/mo) — For growing teams. Adds API access, multi-user collaboration, and priority support.\n• Enterprise (Custom pricing) — For institutional firms. Full API throughput, dedicated support, custom integrations, and SLA guarantees.\n\nYou can subscribe directly through the Payment option in the navigation bar, or request a demo for a guided walkthrough.`,
     suggestions: [
       { label: "View payment options", href: "/#" },
       { label: "Request demo", href: "/#contact" },

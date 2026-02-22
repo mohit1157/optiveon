@@ -8,7 +8,7 @@ const paymentPlans = [
     {
         name: "Starter",
         description: "For individual researchers",
-        price: "$99/mo",
+        price: "$299/mo",
         icon: Zap,
         href: process.env.NEXT_PUBLIC_STRIPE_STARTER_LINK || "#",
         color: "from-blue-500/20 to-blue-600/5",
@@ -17,7 +17,7 @@ const paymentPlans = [
     {
         name: "Professional",
         description: "For growing teams",
-        price: "$299/mo",
+        price: "$899/mo",
         icon: Building2,
         href: process.env.NEXT_PUBLIC_STRIPE_PROFESSIONAL_LINK || "#",
         color: "from-amber-500/20 to-amber-600/5",
