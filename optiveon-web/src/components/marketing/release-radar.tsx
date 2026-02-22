@@ -59,7 +59,7 @@ export function ReleaseRadar() {
   );
 
   return (
-    <section id="roadmap" className="py-[120px] relative overflow-hidden">
+    <section id="roadmap" className="py-16 md:py-[120px] relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-dark">
         <div
           className="absolute inset-0"

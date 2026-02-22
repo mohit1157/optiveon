@@ -61,7 +61,7 @@ export function RoiCalculator() {
   ]);
 
   return (
-    <section id="roi" className="py-[120px] relative overflow-hidden">
+    <section id="roi" className="py-16 md:py-[120px] relative overflow-hidden">
       <div className="absolute inset-0 -z-10">
         <div
           className="absolute inset-0"

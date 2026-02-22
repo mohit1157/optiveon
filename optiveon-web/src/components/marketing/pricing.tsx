@@ -229,7 +229,7 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      className="py-[120px] relative overflow-hidden bg-background-dark"
+      className="py-16 md:py-[120px] relative overflow-hidden bg-background-dark"
     >
       {/* Background */}
       <div

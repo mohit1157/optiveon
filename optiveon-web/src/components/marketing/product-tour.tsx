@@ -56,7 +56,7 @@ export function ProductTour() {
   return (
     <section
       id="tour"
-      className="py-[120px] relative overflow-hidden bg-background"
+      className="py-16 md:py-[120px] relative overflow-hidden bg-background"
     >
       <div className="absolute inset-0 -z-10">
         <div
