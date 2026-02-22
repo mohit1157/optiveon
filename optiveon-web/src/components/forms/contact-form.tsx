@@ -39,16 +39,25 @@ export function ContactForm() {
     setErrorMessage("");
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
+          subject: `Optiveon Contact: ${data.interest}`,
+          from_name: data.name,
+          name: data.name,
+          email: data.email,
+          company: data.company || "N/A",
+          interest: data.interest,
+          message: data.message,
+        }),
       });
 
       const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to send message");
+      if (!result.success) {
+        throw new Error(result.message || "Failed to send message");
       }
 
       setStatus("success");
