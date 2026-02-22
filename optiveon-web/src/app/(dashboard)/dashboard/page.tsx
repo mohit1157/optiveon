@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { BarChart3, TrendingUp, Activity, Key } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -32,7 +33,7 @@ export default async function DashboardPage() {
   const stats = [
     {
       title: "Current Plan",
-      value: user.subscription?.plan || "FREE",
+      value: user.subscription?.plan || SubscriptionPlan.FREE,
       icon: TrendingUp,
       description: "Your subscription tier",
     },
@@ -44,7 +45,7 @@ export default async function DashboardPage() {
     },
     {
       title: "Status",
-      value: user.subscription?.status || "ACTIVE",
+      value: user.subscription?.status || SubscriptionStatus.ACTIVE,
       icon: Activity,
       description: "Subscription status",
     },
@@ -131,13 +132,12 @@ export default async function DashboardPage() {
               </Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-foreground-secondary">Subscription</span>
               <Badge
                 variant={
-                  user.subscription?.status === "ACTIVE" ? "success" : "muted"
+                  user.subscription?.status === SubscriptionStatus.ACTIVE ? "success" : "muted"
                 }
               >
-                {user.subscription?.status || "ACTIVE"}
+                {user.subscription?.status || SubscriptionStatus.ACTIVE}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
@@ -152,6 +152,6 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </div >
   );
 }

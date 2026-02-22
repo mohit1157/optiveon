@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { createAuditLog, AuditActions, AuditEntities } from "@/lib/audit";
+import { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 import type Stripe from "stripe";
 
 export async function POST(request: NextRequest) {
@@ -92,32 +93,31 @@ async function handleSubscriptionChange(subscription: Stripe.Subscription) {
 
   // Determine plan based on price ID
   const priceId = subscription.items.data[0]?.price.id;
-  let plan: "STARTER" | "PROFESSIONAL" | "ENTERPRISE" = "STARTER";
+  let plan: SubscriptionPlan = SubscriptionPlan.STARTER;
 
   if (priceId === process.env.STRIPE_PROFESSIONAL_PRICE_ID) {
-    plan = "PROFESSIONAL";
+    plan = SubscriptionPlan.PROFESSIONAL;
   } else if (priceId === process.env.STRIPE_ENTERPRISE_PRICE_ID) {
-    plan = "ENTERPRISE";
+    plan = SubscriptionPlan.ENTERPRISE;
   }
 
   // Map Stripe status to our status
-  let status: "ACTIVE" | "CANCELED" | "PAST_DUE" | "TRIALING" | "PAUSED" =
-    "ACTIVE";
+  let status: SubscriptionStatus = SubscriptionStatus.ACTIVE;
   switch (subscription.status) {
     case "active":
-      status = "ACTIVE";
+      status = SubscriptionStatus.ACTIVE;
       break;
     case "canceled":
-      status = "CANCELED";
+      status = SubscriptionStatus.CANCELED;
       break;
     case "past_due":
-      status = "PAST_DUE";
+      status = SubscriptionStatus.PAST_DUE;
       break;
     case "trialing":
-      status = "TRIALING";
+      status = SubscriptionStatus.TRIALING;
       break;
     case "paused":
-      status = "PAUSED";
+      status = SubscriptionStatus.PAUSED;
       break;
   }
 
@@ -156,8 +156,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   await db.subscription.update({
     where: { id: existingSubscription.id },
     data: {
-      status: "CANCELED",
-      plan: "FREE",
+      status: SubscriptionStatus.CANCELED,
+      plan: SubscriptionPlan.FREE,
     },
   });
 
@@ -183,7 +183,7 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
   await db.subscription.update({
     where: { id: existingSubscription.id },
     data: {
-      status: "PAST_DUE",
+      status: SubscriptionStatus.PAST_DUE,
     },
   });
 }

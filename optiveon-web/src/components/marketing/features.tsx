@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SectionHeader } from "@/components/layout/section-header";
 import { features } from "@/constants/features";
@@ -14,6 +15,58 @@ function FeatureCard({
 }) {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
   const Icon = feature.icon;
+
+  if (feature.title === "System Architecture") {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "md:col-span-2 lg:col-span-3 motion-card p-xl md:p-2xl bg-background-card border border-border rounded-xl transition-all duration-slow",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+        )}
+        style={{ transitionDelay: `${index * 100}ms` }}
+      >
+        <div className="flex flex-col lg:flex-row gap-xl items-center">
+          <div className="lg:w-1/3 space-y-md">
+            <div className="w-14 h-14 flex items-center justify-center bg-gradient-primary rounded-lg mb-lg shadow-md">
+              <Icon className="w-6 h-6 text-accent" />
+            </div>
+            <h3 className="text-xl font-semibold mb-xs">{feature.title}</h3>
+            <p className="text-[0.9375rem] text-foreground-secondary leading-relaxed">
+              {feature.description}
+            </p>
+          </div>
+
+          <div className="lg:w-2/3 w-full border border-border/50 rounded-xl bg-background-dark/50 p-lg relative overflow-hidden flex flex-col sm:flex-row gap-md items-center justify-between">
+            {/* Background effects */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/5 to-transparent animate-pulse" />
+
+            {/* Node 1 */}
+            <div className="relative z-10 text-center flex-1 w-full bg-background-elevated border border-border/70 rounded-lg py-md px-sm shadow-md">
+              <p className="text-xs uppercase tracking-widest text-foreground-muted mb-xs">Ingestion</p>
+              <p className="text-sm font-semibold text-accent">Sub-ms Feeds</p>
+            </div>
+
+            <div className="relative z-10 hidden sm:flex text-accent/40"><ArrowRight className="w-5 h-5" /></div>
+
+            {/* Node 2 */}
+            <div className="relative z-10 text-center flex-1 w-full bg-background-elevated border border-accent/30 rounded-lg py-md px-sm shadow-accent-lg">
+              <p className="text-xs uppercase tracking-widest text-foreground-muted mb-xs">Execution</p>
+              <p className="text-sm font-semibold text-foreground">Core Engines</p>
+            </div>
+
+            <div className="relative z-10 hidden sm:flex text-accent/40"><ArrowRight className="w-5 h-5" /></div>
+
+            {/* Node 3 */}
+            <div className="relative z-10 text-center flex-1 w-full bg-background-elevated border border-border/70 rounded-lg py-md px-sm shadow-md">
+              <p className="text-xs uppercase tracking-widest text-foreground-muted mb-xs">Access Layer</p>
+              <p className="text-sm font-semibold text-primary-light">Prisma / Next.js</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

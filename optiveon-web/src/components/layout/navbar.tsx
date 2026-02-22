@@ -45,7 +45,12 @@ export function Navbar() {
         )}
       >
         <div className="container flex items-center justify-between">
-          <Logo collapsed={isScrolled} />
+          <div className="flex items-center gap-4">
+            <Logo collapsed={isScrolled} />
+            <span className="hidden md:inline-flex items-center rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent border border-accent/20">
+              Preview Environment
+            </span>
+          </div>
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-xl">
@@ -53,6 +58,8 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
                   className="text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
                 >
                   {item.title}
@@ -98,6 +105,8 @@ export function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
                   className="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
                   onClick={closeMobileMenu}
                 >

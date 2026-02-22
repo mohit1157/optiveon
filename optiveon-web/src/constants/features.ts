@@ -6,7 +6,7 @@ export const features: Feature[] = [
     icon: BarChart3,
     title: "Real-Time Analytics",
     description:
-      "Monitor market movements with sub-millisecond data feeds and advanced visualization tools.",
+      "Monitor market movements with institutional-grade data feeds and advanced visualization tools.",
   },
   {
     icon: Sun,
@@ -22,9 +22,9 @@ export const features: Feature[] = [
   },
   {
     icon: Shield,
-    title: "Secure Infrastructure",
+    title: "System Architecture",
     description:
-      "Enterprise-grade security with encrypted data transmission and secure API endpoints.",
+      "End-to-end resilience from sub-millisecond market data feeds through our proprietary execution engines to your secure Prisma/Next.js data layer.",
   },
   {
     icon: Wrench,

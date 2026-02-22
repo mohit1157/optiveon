@@ -1,19 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import {
   JetBrains_Mono,
-  Plus_Jakarta_Sans,
-  Space_Grotesk,
+  Inter,
 } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const sans = Plus_Jakarta_Sans({
+const sans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const heading = Space_Grotesk({
+const heading = Inter({
   subsets: ["latin"],
   variable: "--font-heading",
   display: "swap",

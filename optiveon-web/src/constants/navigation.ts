@@ -10,6 +10,11 @@ export const mainNavItems: NavItem[] = [
     href: "/#validation",
   },
   {
+    title: "Payment",
+    href: "https://buy.stripe.com/test_bJe8wQ7SfcME6V637r8N200",
+    external: true,
+  },
+  {
     title: "Contact",
     href: "/#contact",
   },

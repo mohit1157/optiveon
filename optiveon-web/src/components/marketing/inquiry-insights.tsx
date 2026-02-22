@@ -75,10 +75,10 @@ export async function InquiryInsights() {
     const contacts = await db.contact.findMany({
       select: { interest: true },
     });
-    grouped = contacts.reduce<Record<string, number>>((acc, contact) => {
+    grouped = contacts.reduce((acc: Record<string, number>, contact: { interest: string }) => {
       acc[contact.interest] = (acc[contact.interest] || 0) + 1;
       return acc;
-    }, {});
+    }, {} as Record<string, number>);
   } catch {
     grouped = {};
   }

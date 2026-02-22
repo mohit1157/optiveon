@@ -43,8 +43,8 @@ export function Hero() {
             </Badge>
 
             <h1 className="text-hero-title mb-lg text-balance">
-              Algorithmic Trading Software for Clients,{" "}
-              <span className="gradient-text">Validated in Live Markets</span>
+              Institutional-Grade Strategy Validation and{" "}
+              <span className="gradient-text">Execution Infrastructure</span>
             </h1>
 
             <p className="text-[1.1rem] text-foreground-secondary mb-xl max-w-[680px] leading-relaxed lg:mx-0 mx-auto text-balance">

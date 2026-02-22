@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { pricingTiers } from "@/constants/pricing";
+import { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 
 export default async function BillingPage() {
   const session = await getServerSession(authOptions);
@@ -31,8 +32,8 @@ export default async function BillingPage() {
     redirect("/login");
   }
 
-  const currentPlan = user.subscription?.plan || "FREE";
-  const status = user.subscription?.status || "ACTIVE";
+  const currentPlan = user.subscription?.plan || SubscriptionPlan.FREE;
+  const status = user.subscription?.status || SubscriptionStatus.ACTIVE;
 
   return (
     <div className="space-y-xl max-w-4xl">
@@ -54,7 +55,7 @@ export default async function BillingPage() {
             <div>
               <div className="flex items-center gap-md">
                 <h3 className="text-xl font-bold">{currentPlan}</h3>
-                <Badge variant={status === "ACTIVE" ? "success" : "warning"}>
+                <Badge variant={status === SubscriptionStatus.ACTIVE ? "success" : "warning"}>
                   {status}
                 </Badge>
               </div>
@@ -92,7 +93,7 @@ export default async function BillingPage() {
           {pricingTiers.map((tier) => {
             const isCurrentPlan = tier.plan === currentPlan;
             const checkoutHref =
-              tier.plan === "ENTERPRISE"
+              tier.plan === SubscriptionPlan.ENTERPRISE
                 ? `/checkout?plan=${tier.slug}`
                 : `/api/billing/checkout?plan=${tier.slug}`;
 
