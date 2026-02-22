@@ -3,10 +3,24 @@ import { hash } from "bcryptjs";
 import { db } from "@/lib/db";
 import { registerSchema } from "@/lib/validations";
 import { createAuditLog, AuditActions, AuditEntities } from "@/lib/audit";
-import { getClientIp } from "@/lib/rate-limit";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: 3 registrations per IP per minute
+    const ip = getClientIp(request);
+    const { success } = rateLimit(`register_${ip}`, {
+      maxRequests: 3,
+      windowMs: 60000,
+    });
+
+    if (!success) {
+      return NextResponse.json(
+        { error: "Too many registration attempts. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
 
     // Validate input
