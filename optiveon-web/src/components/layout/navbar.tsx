@@ -9,6 +9,7 @@ import { mainNavItems } from "@/constants/navigation";
 import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
 import { SiteChatbot } from "./site-chatbot";
+import { PaymentDropdown } from "./payment-dropdown";
 
 export function Navbar() {
   // Fix hydration mismatch by only rendering after mount
@@ -33,6 +34,9 @@ export function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  // Filter out Payment from regular nav items — it gets its own dropdown
+  const navLinks = mainNavItems.filter((item) => item.title !== "Payment");
+
   return (
     <>
       <nav
@@ -51,7 +55,7 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-xl">
-            {mainNavItems.map((item) => (
+            {navLinks.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -64,6 +68,9 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
+            <li>
+              <PaymentDropdown />
+            </li>
           </ul>
 
           {/* Desktop CTA */}
@@ -98,7 +105,7 @@ export function Navbar() {
           )}
         >
           <ul className="flex flex-col p-xl gap-lg">
-            {mainNavItems.map((item) => (
+            {navLinks.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -111,6 +118,9 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
+            <li>
+              <PaymentDropdown />
+            </li>
             <li className="pt-md">
               <Button variant="primary" className="w-full" asChild>
                 <Link href="/#contact" onClick={closeMobileMenu}>
