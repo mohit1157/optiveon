@@ -34,7 +34,46 @@ const paymentPlans = [
     },
 ];
 
-export function PaymentDropdown() {
+function PlanCard({ plan, onClick }: { plan: (typeof paymentPlans)[0]; onClick?: () => void }) {
+    return (
+        <a
+            href={plan.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClick}
+            className={cn(
+                "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200",
+                "hover:bg-gradient-to-r",
+                plan.color,
+                "group/item"
+            )}
+        >
+            <div
+                className={cn(
+                    "flex items-center justify-center w-10 h-10 rounded-lg bg-background/50 border border-border/50 transition-colors",
+                    "group-hover/item:border-accent/30"
+                )}
+            >
+                <plan.icon className={cn("w-5 h-5", plan.iconColor)} />
+            </div>
+            <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-foreground">
+                        {plan.name}
+                    </span>
+                    <span className="text-xs font-medium text-accent">
+                        {plan.price}
+                    </span>
+                </div>
+                <p className="text-xs text-foreground-secondary mt-0.5">
+                    {plan.description}
+                </p>
+            </div>
+        </a>
+    );
+}
+
+export function PaymentDropdown({ mobile = false }: { mobile?: boolean }) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -51,6 +90,43 @@ export function PaymentDropdown() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    // Mobile: expand inline instead of floating dropdown
+    if (mobile) {
+        return (
+            <div>
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center gap-1 text-base font-medium text-foreground-secondary transition-colors hover:text-foreground"
+                >
+                    Payment
+                    <ChevronDown
+                        className={cn(
+                            "w-3.5 h-3.5 transition-transform duration-200",
+                            isOpen && "rotate-180"
+                        )}
+                    />
+                </button>
+
+                <div
+                    className={cn(
+                        "overflow-hidden transition-all duration-200",
+                        isOpen ? "max-h-[400px] opacity-100 mt-2" : "max-h-0 opacity-0"
+                    )}
+                >
+                    <div className="rounded-xl border border-border bg-background-dark/50 p-2">
+                        <p className="px-3 pt-1 pb-2 text-xs font-medium text-foreground-secondary uppercase tracking-wider">
+                            Choose a Plan
+                        </p>
+                        {paymentPlans.map((plan) => (
+                            <PlanCard key={plan.name} plan={plan} />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Desktop: floating dropdown
     return (
         <div ref={dropdownRef} className="relative">
             <button
@@ -69,7 +145,7 @@ export function PaymentDropdown() {
 
             <div
                 className={cn(
-                    "absolute top-full right-0 mt-3 w-72 rounded-xl border border-border bg-background-card/95 backdrop-blur-xl shadow-2xl shadow-black/20 transition-all duration-200 origin-top-right",
+                    "absolute top-full right-0 mt-3 w-72 rounded-xl border border-border bg-background-card/95 backdrop-blur-xl shadow-2xl shadow-black/20 transition-all duration-200 origin-top-right z-50",
                     isOpen
                         ? "opacity-100 scale-100 visible translate-y-0"
                         : "opacity-0 scale-95 invisible -translate-y-2"
@@ -80,41 +156,7 @@ export function PaymentDropdown() {
                         Choose a Plan
                     </p>
                     {paymentPlans.map((plan) => (
-                        <a
-                            key={plan.name}
-                            href={plan.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => setIsOpen(false)}
-                            className={cn(
-                                "flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200",
-                                "hover:bg-gradient-to-r",
-                                plan.color,
-                                "group/item"
-                            )}
-                        >
-                            <div
-                                className={cn(
-                                    "flex items-center justify-center w-10 h-10 rounded-lg bg-background/50 border border-border/50 transition-colors",
-                                    "group-hover/item:border-accent/30"
-                                )}
-                            >
-                                <plan.icon className={cn("w-5 h-5", plan.iconColor)} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm font-semibold text-foreground">
-                                        {plan.name}
-                                    </span>
-                                    <span className="text-xs font-medium text-accent">
-                                        {plan.price}
-                                    </span>
-                                </div>
-                                <p className="text-xs text-foreground-secondary mt-0.5">
-                                    {plan.description}
-                                </p>
-                            </div>
-                        </a>
+                        <PlanCard key={plan.name} plan={plan} onClick={() => setIsOpen(false)} />
                     ))}
                 </div>
             </div>

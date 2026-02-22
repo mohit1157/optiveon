@@ -119,7 +119,7 @@ export function Navbar() {
               </li>
             ))}
             <li>
-              <PaymentDropdown />
+              <PaymentDropdown mobile />
             </li>
             <li className="pt-md">
               <Button variant="primary" className="w-full" asChild>
