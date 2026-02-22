@@ -8,7 +8,7 @@ import { heroStats } from "@/constants/content";
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center py-[132px] md:py-[96px] overflow-hidden">
+    <section className="relative min-h-screen flex items-center py-24 md:py-[96px] overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10">
         {/* Gradient background */}
@@ -29,8 +29,8 @@ export function Hero() {
         <div className="noise-overlay absolute inset-0" />
 
         {/* Floating orbs */}
-        <div className="absolute w-[900px] h-[900px] rounded-full bg-gradient-to-br from-primary to-primary-dark -top-[400px] -right-[300px] opacity-15 blur-[120px] animate-orb-float-1" />
-        <div className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-br from-accent to-accent-dark -bottom-[200px] -left-[150px] opacity-[0.08] blur-[120px] animate-orb-float-2" />
+        <div className="absolute w-[400px] h-[400px] md:w-[900px] md:h-[900px] rounded-full bg-gradient-to-br from-primary to-primary-dark -top-[200px] md:-top-[400px] -right-[150px] md:-right-[300px] opacity-15 blur-[120px] animate-orb-float-1" />
+        <div className="absolute w-[300px] h-[300px] md:w-[600px] md:h-[600px] rounded-full bg-gradient-to-br from-accent to-accent-dark -bottom-[100px] md:-bottom-[200px] -left-[75px] md:-left-[150px] opacity-[0.08] blur-[120px] animate-orb-float-2" />
       </div>
 
       <div className="container">
@@ -97,7 +97,7 @@ export function Hero() {
           </div>
 
           {/* Terminal Visual */}
-          <div className="flex justify-center lg:justify-end lg:order-none order-first animate-fade-in-up-delay">
+          <div className="hidden sm:flex justify-center lg:justify-end lg:order-none order-first animate-fade-in-up-delay">
             <div className="w-full max-w-[560px]">
               <div className="bg-background-card border border-border rounded-xl overflow-hidden shadow-lg shadow-glow">
                 {/* Terminal Header */}
@@ -113,8 +113,8 @@ export function Hero() {
                 </div>
 
                 {/* Terminal Content */}
-                <div className="p-xl">
-                  <pre className="font-mono text-sm leading-relaxed overflow-x-auto">
+                <div className="p-lg md:p-xl">
+                  <pre className="font-mono text-xs md:text-sm leading-relaxed overflow-x-auto">
                     <code>
                       <span className="code-keyword">from</span> optiveon{" "}
                       <span className="code-keyword">import</span>{" "}

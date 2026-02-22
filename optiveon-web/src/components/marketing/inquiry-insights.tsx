@@ -19,7 +19,7 @@ const sampleInsights: InsightItem[] = [
 export async function InquiryInsights() {
   if (!process.env.DATABASE_URL) {
     return (
-      <section className="py-[120px] relative overflow-hidden">
+      <section className="py-16 md:py-[120px] relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-gradient-dark">
           <div
             className="absolute inset-0"
@@ -95,7 +95,7 @@ export async function InquiryInsights() {
   });
 
   return (
-    <section className="py-[120px] relative overflow-hidden">
+    <section className="py-16 md:py-[120px] relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-dark">
         <div
           className="absolute inset-0"

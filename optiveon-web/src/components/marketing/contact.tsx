@@ -7,7 +7,7 @@ import { ContactForm } from "@/components/forms/contact-form";
 
 export function Contact() {
   return (
-    <section id="contact" className="py-[120px] relative">
+    <section id="contact" className="py-16 md:py-[120px] relative">
       {/* Background */}
       <div className="absolute inset-0 -z-10 bg-gradient-dark">
         <div

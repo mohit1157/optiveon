@@ -99,7 +99,7 @@ function FeatureCard({
 
 export function Features() {
   return (
-    <section id="features" className="py-[120px] relative overflow-hidden">
+    <section id="features" className="py-16 md:py-[120px] relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10 bg-gradient-dark">
         <div

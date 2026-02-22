@@ -57,7 +57,7 @@ export function CustomerStories() {
   return (
     <section
       id="proof"
-      className="py-[120px] relative overflow-hidden bg-background-dark"
+      className="py-16 md:py-[120px] relative overflow-hidden bg-background-dark"
     >
       <div className="absolute inset-0 -z-10">
         <div

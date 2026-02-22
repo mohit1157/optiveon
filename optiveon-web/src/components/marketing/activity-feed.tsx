@@ -66,7 +66,7 @@ function formatActivity(action: string, metadata?: Record<string, unknown>) {
 export async function ActivityFeed() {
   if (!process.env.DATABASE_URL) {
     return (
-      <section className="py-[120px] relative overflow-hidden bg-background-dark">
+      <section className="py-16 md:py-[120px] relative overflow-hidden bg-background-dark">
         <div className="container">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-4xl items-start">
             <div className="max-w-[620px] lg:mb-0 mb-2xl">
@@ -130,7 +130,7 @@ export async function ActivityFeed() {
   });
 
   return (
-    <section className="py-[120px] relative overflow-hidden bg-background-dark">
+    <section className="py-16 md:py-[120px] relative overflow-hidden bg-background-dark">
       <div className="container">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-4xl items-start">
           <div className="max-w-[620px] lg:mb-0 mb-2xl">

@@ -121,7 +121,7 @@ function TechDiagram() {
 
 export function Technology() {
   return (
-    <section id="technology" className="py-[120px] relative overflow-hidden">
+    <section id="technology" className="py-16 md:py-[120px] relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10 bg-gradient-dark">
         <div
