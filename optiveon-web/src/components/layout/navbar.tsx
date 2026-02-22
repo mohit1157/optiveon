@@ -47,9 +47,6 @@ export function Navbar() {
         <div className="container flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Logo collapsed={isScrolled} />
-            <span className="hidden md:inline-flex items-center rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent border border-accent/20">
-              Preview Environment
-            </span>
           </div>
 
           {/* Desktop Navigation */}
