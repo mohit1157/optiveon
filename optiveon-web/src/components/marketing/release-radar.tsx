@@ -14,39 +14,39 @@ const updates: Array<{
   status: Status;
   icon: React.ComponentType<{ className?: string }>;
 }> = [
-  {
-    quarter: "Q1 2026",
-    title: "Adaptive Strategy Workbench",
-    description:
-      "Visual strategy layer with live versioning, scenario compare, and one-click deployment profiles.",
-    status: "Live",
-    icon: Rocket,
-  },
-  {
-    quarter: "Q2 2026",
-    title: "Institutional Risk Profiles",
-    description:
-      "Portfolio guardrails with pre-trade policy checks and deterministic approval logs.",
-    status: "In Progress",
-    icon: ShieldCheck,
-  },
-  {
-    quarter: "Q2 2026",
-    title: "Execution Co-Pilot",
-    description:
-      "Context-aware runbooks with anomaly detection and rollback-aware alerts.",
-    status: "In Progress",
-    icon: Sparkles,
-  },
-  {
-    quarter: "Q3 2026",
-    title: "Latency Intelligence Layer",
-    description:
-      "System-wide latency attribution mapped to data sources, queues, and execution paths.",
-    status: "Planned",
-    icon: CalendarClock,
-  },
-];
+    {
+      quarter: "Q1 2026",
+      title: "Adaptive Strategy Workbench",
+      description:
+        "Visual strategy layer with live versioning, scenario compare, and one-click deployment profiles.",
+      status: "Live",
+      icon: Rocket,
+    },
+    {
+      quarter: "Q2 2026",
+      title: "Institutional Risk Profiles",
+      description:
+        "Portfolio guardrails with pre-trade policy checks and deterministic approval logs.",
+      status: "In Progress",
+      icon: ShieldCheck,
+    },
+    {
+      quarter: "Q2 2026",
+      title: "Execution Co-Pilot",
+      description:
+        "Context-aware runbooks with anomaly detection and rollback-aware alerts.",
+      status: "In Progress",
+      icon: Sparkles,
+    },
+    {
+      quarter: "Q3 2026",
+      title: "Latency Intelligence Layer",
+      description:
+        "System-wide latency attribution mapped to data sources, queues, and execution paths.",
+      status: "Planned",
+      icon: CalendarClock,
+    },
+  ];
 
 const filters: Status[] = ["Live", "In Progress", "Planned"];
 
@@ -97,13 +97,13 @@ export function ReleaseRadar() {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-lg">
+        <div className="flex flex-wrap justify-center gap-lg">
           {filtered.map((item) => {
             const Icon = item.icon;
             return (
               <article
                 key={`${item.title}-${item.status}`}
-                className="rounded-2xl border border-border bg-background-card p-xl transition-all duration-normal hover:-translate-y-1 hover:border-border-hover hover:shadow-lg"
+                className="w-full md:w-[calc(50%-0.75rem)] rounded-2xl border border-border bg-background-card p-xl transition-all duration-normal hover:-translate-y-1 hover:border-border-hover hover:shadow-lg"
               >
                 <div className="flex items-center justify-between mb-lg">
                   <div className="flex items-center gap-md">
@@ -121,11 +121,11 @@ export function ReleaseRadar() {
                     className={cn(
                       "text-xs rounded-full px-md py-xs border",
                       item.status === "Live" &&
-                        "text-success border-success/25 bg-success/10",
+                      "text-success border-success/25 bg-success/10",
                       item.status === "In Progress" &&
-                        "text-warning border-warning/25 bg-warning/10",
+                      "text-warning border-warning/25 bg-warning/10",
                       item.status === "Planned" &&
-                        "text-foreground-secondary border-border bg-background-elevated"
+                      "text-foreground-secondary border-border bg-background-elevated"
                     )}
                   >
                     {item.status}
