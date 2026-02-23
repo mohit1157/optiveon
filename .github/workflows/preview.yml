@@ -46,9 +46,36 @@ jobs:
             # Clean up old images to free disk/memory before building
             sudo docker system prune -af 2>/dev/null || true
 
+            # Create a shared Docker network for inter-container communication
+            sudo docker network create optiveon-preview-net 2>/dev/null || true
+
+            # --- Build & Deploy Preview Options Bot ---
+            cd /var/www/preview/options-bot 2>/dev/null || cd /var/www/html/options-bot 2>/dev/null || true
+            if [ -f "Dockerfile" ]; then
+              echo "${{ secrets.OPTIONS_BOT_ENV_FILE }}" > .env 2>/dev/null || true
+              sudo docker build -t options-bot-preview . 2>/dev/null || true
+              sudo docker rm -f options-bot-preview || true
+              sudo docker run -d \
+                --name options-bot-preview \
+                --network optiveon-preview-net \
+                --env-file .env \
+                --restart always \
+                options-bot-preview 2>/dev/null || true
+            fi
+
+            # --- Build & Deploy Preview Web App ---
+            cd /var/www/preview/optiveon-web 2>/dev/null || cd /var/www/html/optiveon-web 2>/dev/null || true
+            echo "${{ secrets.PRODUCTION_ENV_FILE }}" > .env
             sudo docker build -t optiveon-preview .
             sudo docker rm -f optiveon-preview || true
-            sudo docker run -d -p 3001:3000 --env-file .env --name optiveon-preview --restart always optiveon-preview
+            sudo docker run -d \
+              -p 3001:3000 \
+              --name optiveon-preview \
+              --network optiveon-preview-net \
+              --env-file .env \
+              -e OPTIONS_BOT_API_URL=http://options-bot-preview:8001 \
+              --restart always \
+              optiveon-preview
 
             # Purge nginx cache and reload to serve fresh content
             sudo rm -rf /var/cache/nginx/* 2>/dev/null || true

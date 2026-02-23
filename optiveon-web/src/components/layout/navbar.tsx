@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNavbarScroll } from "@/hooks/use-navbar-scroll";
 import { mainNavItems } from "@/constants/navigation";
@@ -10,6 +10,148 @@ import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
 import { SiteChatbot } from "./site-chatbot";
 import { PaymentDropdown } from "./payment-dropdown";
+import { Badge } from "@/components/ui/badge";
+import type { NavItem } from "@/types";
+
+/* ── Products Dropdown (Desktop) ── */
+function ProductsDropdown({ item }: { item: NavItem }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const timeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleEnter = () => {
+    if (timeout.current) clearTimeout(timeout.current);
+    setOpen(true);
+  };
+  const handleLeave = () => {
+    timeout.current = setTimeout(() => setOpen(false), 200);
+  };
+
+  return (
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+    >
+      <button
+        className="text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group flex items-center gap-1"
+        onClick={() => setOpen((v) => !v)}
+      >
+        {item.title}
+        <ChevronDown
+          className={cn(
+            "w-3.5 h-3.5 transition-transform duration-200",
+            open && "rotate-180"
+          )}
+        />
+        <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-normal group-hover:w-full" />
+      </button>
+
+      <div
+        className={cn(
+          "absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-200",
+          open
+            ? "opacity-100 visible translate-y-0"
+            : "opacity-0 invisible -translate-y-2 pointer-events-none"
+        )}
+      >
+        <div className="w-64 rounded-xl border border-border bg-background-card/95 backdrop-blur-xl shadow-lg p-2">
+          {item.children?.map((child) => (
+            <Link
+              key={child.href}
+              href={child.comingSoon ? "#" : child.href}
+              onClick={(e) => {
+                if (child.comingSoon) e.preventDefault();
+                else setOpen(false);
+              }}
+              className={cn(
+                "flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors",
+                child.comingSoon
+                  ? "cursor-default opacity-50"
+                  : "hover:bg-background-elevated"
+              )}
+            >
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  {child.title}
+                </p>
+                {child.description && (
+                  <p className="text-xs text-foreground-muted mt-0.5">
+                    {child.description}
+                  </p>
+                )}
+              </div>
+              {child.comingSoon && (
+                <Badge variant="muted" className="text-[0.6rem] ml-2 flex-shrink-0">
+                  Soon
+                </Badge>
+              )}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Products Dropdown (Mobile) ── */
+function ProductsDropdownMobile({
+  item,
+  onNavigate,
+}: {
+  item: NavItem;
+  onNavigate: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        className="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors flex items-center gap-1 w-full"
+        onClick={() => setOpen((v) => !v)}
+      >
+        {item.title}
+        <ChevronDown
+          className={cn(
+            "w-4 h-4 transition-transform duration-200",
+            open && "rotate-180"
+          )}
+        />
+      </button>
+      {open && (
+        <div className="mt-2 ml-3 flex flex-col gap-1 border-l border-border pl-3">
+          {item.children?.map((child) => (
+            <Link
+              key={child.href}
+              href={child.comingSoon ? "#" : child.href}
+              onClick={(e) => {
+                if (child.comingSoon) {
+                  e.preventDefault();
+                } else {
+                  onNavigate();
+                }
+              }}
+              className={cn(
+                "flex items-center justify-between py-1.5 text-sm transition-colors",
+                child.comingSoon
+                  ? "cursor-default opacity-50 text-foreground-muted"
+                  : "text-foreground-secondary hover:text-foreground"
+              )}
+            >
+              {child.title}
+              {child.comingSoon && (
+                <Badge variant="muted" className="text-[0.55rem]">
+                  Soon
+                </Badge>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Navbar() {
   // Fix hydration mismatch by only rendering after mount
@@ -63,19 +205,25 @@ export function Navbar() {
 
             {/* Desktop Navigation */}
             <ul className="hidden md:flex items-center gap-xl">
-              {navLinks.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    target={item.external ? "_blank" : undefined}
-                    rel={item.external ? "noopener noreferrer" : undefined}
-                    className="text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
-                  >
-                    {item.title}
-                    <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-normal group-hover:w-full" />
-                  </Link>
-                </li>
-              ))}
+              {navLinks.map((item) =>
+                item.children ? (
+                  <li key={item.href}>
+                    <ProductsDropdown item={item} />
+                  </li>
+                ) : (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      target={item.external ? "_blank" : undefined}
+                      rel={item.external ? "noopener noreferrer" : undefined}
+                      className="text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
+                    >
+                      {item.title}
+                      <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-normal group-hover:w-full" />
+                    </Link>
+                  </li>
+                )
+              )}
               <li>
                 <PaymentDropdown />
               </li>
@@ -113,19 +261,28 @@ export function Navbar() {
             )}
           >
             <ul className="flex flex-col p-xl gap-lg">
-              {navLinks.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    target={item.external ? "_blank" : undefined}
-                    rel={item.external ? "noopener noreferrer" : undefined}
-                    className="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
-                    onClick={closeMobileMenu}
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
+              {navLinks.map((item) =>
+                item.children ? (
+                  <li key={item.href}>
+                    <ProductsDropdownMobile
+                      item={item}
+                      onNavigate={closeMobileMenu}
+                    />
+                  </li>
+                ) : (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      target={item.external ? "_blank" : undefined}
+                      rel={item.external ? "noopener noreferrer" : undefined}
+                      className="text-base font-medium text-foreground-secondary hover:text-foreground transition-colors"
+                      onClick={closeMobileMenu}
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                )
+              )}
               <li>
                 <PaymentDropdown mobile />
               </li>

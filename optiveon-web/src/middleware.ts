@@ -15,8 +15,11 @@ export default withAuth(
     }
 
     // Admin-only routes
-    if (pathname.startsWith("/admin") && token?.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+    if (
+      (pathname.startsWith("/admin") || pathname.startsWith("/products/options")) &&
+      token?.role !== "ADMIN"
+    ) {
+      return NextResponse.redirect(new URL("/login", req.url));
     }
 
     return NextResponse.next();
@@ -37,6 +40,10 @@ export default withAuth(
           "/privacy",
           "/terms",
           "/disclaimer",
+          "/products/stocks",
+          "/products/polymarket",
+          "/products/futes",
+          "/products/forex",
         ];
 
         // API routes that don't need auth

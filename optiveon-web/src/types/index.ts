@@ -49,6 +49,8 @@ export interface NavItem {
   icon?: React.ComponentType<{ className?: string }>;
   disabled?: boolean;
   external?: boolean;
+  comingSoon?: boolean;
+  children?: NavItem[];
 }
 
 export interface NavSection {
