@@ -133,7 +133,7 @@ const config: Config = {
         "orb-float-1": "orbFloat1 15s ease-in-out infinite",
         "orb-float-2": "orbFloat2 12s ease-in-out infinite",
         spin: "spin 0.8s linear infinite",
-        marquee: "marquee 30s linear infinite",
+        marquee: "marquee 18s linear infinite",
       },
       keyframes: {
         fadeInUp: {
