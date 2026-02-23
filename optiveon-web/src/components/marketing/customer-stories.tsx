@@ -5,11 +5,13 @@ import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const stories = [
   {
     name: "Mohit Ojha",
     role: "Manager / Systems Engineer",
+    avatar: null,
     quote:
       "Building Optiveon allowed us to seamlessly merge fast-paced software engineering with rigorous financial modeling. The platform's architecture ensures our execution engines operate with unmatched reliability and minimal latency.",
     impact: [
@@ -21,6 +23,7 @@ const stories = [
   {
     name: "Balmiki Padhyaya",
     role: "Quant Researcher / Software Engineer",
+    avatar: "/images/balmiki-headshot.png",
     quote:
       "Optiveon's infrastructure empowers us to backtest complex trading models and transition them to live environments effortlessly. Bridging the gap between research and production has never been more efficient.",
     impact: [
@@ -32,6 +35,7 @@ const stories = [
   {
     name: "Prakash Ghimire",
     role: "Chief AI Officer / Lead Software Engineer",
+    avatar: null,
     quote:
       "Working on the core systems of Optiveon has been a game changer. The ability to innovate rapidly while maintaining institutional-grade security and compliance gives us a significant edge in the market.",
     impact: [
@@ -86,9 +90,27 @@ export function CustomerStories() {
               <p className="text-xl leading-relaxed text-foreground text-balance">
                 {story.quote}
               </p>
-              <div>
-                <p className="text-base font-semibold">{story.name || "\u00A0"}</p>
-                <p className="text-sm text-foreground-muted">{story.role || "\u00A0"}</p>
+              <div className="flex items-center gap-md">
+                {/* Avatar */}
+                <div className="w-12 h-12 rounded-full overflow-hidden bg-background-elevated border border-border flex items-center justify-center flex-shrink-0">
+                  {story.avatar ? (
+                    <Image
+                      src={story.avatar}
+                      alt={story.name}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <svg viewBox="0 0 24 24" className="w-6 h-6 text-foreground-muted" fill="currentColor">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                  )}
+                </div>
+                <div>
+                  <p className="text-base font-semibold">{story.name}</p>
+                  <p className="text-sm text-foreground-muted">{story.role}</p>
+                </div>
               </div>
 
               <div className="flex items-center gap-md">
