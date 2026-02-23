@@ -4,42 +4,44 @@ import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { Badge } from "@/components/ui/badge";
 
-/* ── Grain / Laurel SVG in site's accent gold ── */
+/* ── Curved grain / laurel wreath SVGs in site's accent gold ── */
 
 function GrainLeft() {
     return (
-        <svg viewBox="0 0 60 80" className="h-16 md:h-20 w-auto flex-shrink-0" fill="none">
-            {/* Left laurel branch */}
-            <path d="M30 75 C30 60, 28 50, 30 40" stroke="#d6b36a" strokeWidth="2" strokeLinecap="round" />
-            <ellipse cx="22" cy="56" rx="8" ry="5" transform="rotate(-30 22 56)" fill="#d6b36a" opacity="0.7" />
-            <ellipse cx="20" cy="44" rx="8" ry="5" transform="rotate(-40 20 44)" fill="#d6b36a" opacity="0.6" />
-            <ellipse cx="22" cy="32" rx="7" ry="4.5" transform="rotate(-50 22 32)" fill="#d6b36a" opacity="0.5" />
-            <ellipse cx="25" cy="22" rx="6" ry="4" transform="rotate(-60 25 22)" fill="#d6b36a" opacity="0.4" />
-            <ellipse cx="28" cy="14" rx="5" ry="3.5" transform="rotate(-70 28 14)" fill="#d6b36a" opacity="0.3" />
-            {/* Right side of branch */}
-            <ellipse cx="38" cy="56" rx="8" ry="5" transform="rotate(30 38 56)" fill="#d6b36a" opacity="0.7" />
-            <ellipse cx="40" cy="44" rx="8" ry="5" transform="rotate(40 40 44)" fill="#d6b36a" opacity="0.6" />
-            <ellipse cx="38" cy="32" rx="7" ry="4.5" transform="rotate(50 38 32)" fill="#d6b36a" opacity="0.5" />
-            <ellipse cx="35" cy="22" rx="6" ry="4" transform="rotate(60 35 22)" fill="#d6b36a" opacity="0.4" />
-            <ellipse cx="32" cy="14" rx="5" ry="3.5" transform="rotate(70 32 14)" fill="#d6b36a" opacity="0.3" />
+        <svg viewBox="0 0 50 90" className="h-14 md:h-16 w-auto flex-shrink-0" fill="none">
+            {/* Curved stem */}
+            <path d="M38 82 C36 70, 32 55, 34 40, 38 25, 42 15" stroke="#d6b36a" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+            {/* Left leaves curving inward */}
+            <ellipse cx="28" cy="68" rx="9" ry="4" transform="rotate(-55 28 68)" fill="#d6b36a" opacity="0.75" />
+            <ellipse cx="24" cy="56" rx="9" ry="4" transform="rotate(-50 24 56)" fill="#d6b36a" opacity="0.65" />
+            <ellipse cx="23" cy="44" rx="8" ry="3.5" transform="rotate(-40 23 44)" fill="#d6b36a" opacity="0.55" />
+            <ellipse cx="26" cy="33" rx="7" ry="3" transform="rotate(-30 26 33)" fill="#d6b36a" opacity="0.45" />
+            <ellipse cx="30" cy="23" rx="6" ry="2.5" transform="rotate(-20 30 23)" fill="#d6b36a" opacity="0.35" />
+            {/* Right leaves curving outward */}
+            <ellipse cx="44" cy="65" rx="7" ry="3.5" transform="rotate(40 44 65)" fill="#d6b36a" opacity="0.6" />
+            <ellipse cx="43" cy="53" rx="7" ry="3.5" transform="rotate(35 43 53)" fill="#d6b36a" opacity="0.5" />
+            <ellipse cx="42" cy="41" rx="6" ry="3" transform="rotate(25 42 41)" fill="#d6b36a" opacity="0.4" />
+            <ellipse cx="42" cy="30" rx="5" ry="2.5" transform="rotate(15 42 30)" fill="#d6b36a" opacity="0.3" />
         </svg>
     );
 }
 
 function GrainRight() {
     return (
-        <svg viewBox="0 0 60 80" className="h-16 md:h-20 w-auto flex-shrink-0" fill="none">
-            <path d="M30 75 C30 60, 32 50, 30 40" stroke="#d6b36a" strokeWidth="2" strokeLinecap="round" />
-            <ellipse cx="22" cy="56" rx="8" ry="5" transform="rotate(-30 22 56)" fill="#d6b36a" opacity="0.7" />
-            <ellipse cx="20" cy="44" rx="8" ry="5" transform="rotate(-40 20 44)" fill="#d6b36a" opacity="0.6" />
-            <ellipse cx="22" cy="32" rx="7" ry="4.5" transform="rotate(-50 22 32)" fill="#d6b36a" opacity="0.5" />
-            <ellipse cx="25" cy="22" rx="6" ry="4" transform="rotate(-60 25 22)" fill="#d6b36a" opacity="0.4" />
-            <ellipse cx="28" cy="14" rx="5" ry="3.5" transform="rotate(-70 28 14)" fill="#d6b36a" opacity="0.3" />
-            <ellipse cx="38" cy="56" rx="8" ry="5" transform="rotate(30 38 56)" fill="#d6b36a" opacity="0.7" />
-            <ellipse cx="40" cy="44" rx="8" ry="5" transform="rotate(40 40 44)" fill="#d6b36a" opacity="0.6" />
-            <ellipse cx="38" cy="32" rx="7" ry="4.5" transform="rotate(50 38 32)" fill="#d6b36a" opacity="0.5" />
-            <ellipse cx="35" cy="22" rx="6" ry="4" transform="rotate(60 35 22)" fill="#d6b36a" opacity="0.4" />
-            <ellipse cx="32" cy="14" rx="5" ry="3.5" transform="rotate(70 32 14)" fill="#d6b36a" opacity="0.3" />
+        <svg viewBox="0 0 50 90" className="h-14 md:h-16 w-auto flex-shrink-0" fill="none">
+            {/* Curved stem (mirrored) */}
+            <path d="M12 82 C14 70, 18 55, 16 40, 12 25, 8 15" stroke="#d6b36a" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+            {/* Right leaves curving inward */}
+            <ellipse cx="22" cy="68" rx="9" ry="4" transform="rotate(55 22 68)" fill="#d6b36a" opacity="0.75" />
+            <ellipse cx="26" cy="56" rx="9" ry="4" transform="rotate(50 26 56)" fill="#d6b36a" opacity="0.65" />
+            <ellipse cx="27" cy="44" rx="8" ry="3.5" transform="rotate(40 27 44)" fill="#d6b36a" opacity="0.55" />
+            <ellipse cx="24" cy="33" rx="7" ry="3" transform="rotate(30 24 33)" fill="#d6b36a" opacity="0.45" />
+            <ellipse cx="20" cy="23" rx="6" ry="2.5" transform="rotate(20 20 23)" fill="#d6b36a" opacity="0.35" />
+            {/* Left leaves curving outward */}
+            <ellipse cx="6" cy="65" rx="7" ry="3.5" transform="rotate(-40 6 65)" fill="#d6b36a" opacity="0.6" />
+            <ellipse cx="7" cy="53" rx="7" ry="3.5" transform="rotate(-35 7 53)" fill="#d6b36a" opacity="0.5" />
+            <ellipse cx="8" cy="41" rx="6" ry="3" transform="rotate(-25 8 41)" fill="#d6b36a" opacity="0.4" />
+            <ellipse cx="8" cy="30" rx="5" ry="2.5" transform="rotate(-15 8 30)" fill="#d6b36a" opacity="0.3" />
         </svg>
     );
 }
@@ -169,31 +171,26 @@ export function TrustStrip() {
                     </Badge>
                 </div>
 
-                {/* Layout: Grain — Scrolling Logos — Grain */}
-                <div className="container flex items-center gap-4 md:gap-8">
-                    {/* Left grain */}
+                {/* Layout: Grain — Wide Scrolling Logos — Grain */}
+                <div className="container flex items-center gap-2 md:gap-4">
+                    {/* Left curved grain */}
                     <div className="flex-shrink-0 hidden sm:block">
                         <GrainLeft />
                     </div>
 
-                    {/* Center: scrolling logos in contained space */}
+                    {/* Center: wide scrolling logos */}
                     <div className="relative flex-1 overflow-hidden min-w-0">
-                        {/* Left fade into background */}
+                        {/* Left fade */}
                         <div
-                            className="absolute left-0 top-0 bottom-0 w-12 md:w-20 z-10 pointer-events-none"
-                            style={{
-                                background: "linear-gradient(to right, #0b111b, transparent)",
-                            }}
+                            className="absolute left-0 top-0 bottom-0 w-8 md:w-14 z-10 pointer-events-none"
+                            style={{ background: "linear-gradient(to right, #0b111b, transparent)" }}
                         />
-                        {/* Right fade into background */}
+                        {/* Right fade */}
                         <div
-                            className="absolute right-0 top-0 bottom-0 w-12 md:w-20 z-10 pointer-events-none"
-                            style={{
-                                background: "linear-gradient(to left, #0b111b, transparent)",
-                            }}
+                            className="absolute right-0 top-0 bottom-0 w-8 md:w-14 z-10 pointer-events-none"
+                            style={{ background: "linear-gradient(to left, #0b111b, transparent)" }}
                         />
 
-                        {/* Scrolling track */}
                         <div className="flex animate-marquee hover:[animation-play-state:paused]">
                             {logoSet.map((logo, i) => (
                                 <LogoItem key={`${logo.name}-${i}`} Component={logo.Component} name={logo.name} />
@@ -201,7 +198,7 @@ export function TrustStrip() {
                         </div>
                     </div>
 
-                    {/* Right grain */}
+                    {/* Right curved grain */}
                     <div className="flex-shrink-0 hidden sm:block">
                         <GrainRight />
                     </div>
