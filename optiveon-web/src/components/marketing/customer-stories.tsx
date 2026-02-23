@@ -101,7 +101,7 @@ export function CustomerStories() {
                       height={128}
                       quality={100}
                       unoptimized
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top"
                     />
                   ) : (
                     <svg viewBox="0 0 24 24" className="w-6 h-6 text-foreground-muted" fill="currentColor">
