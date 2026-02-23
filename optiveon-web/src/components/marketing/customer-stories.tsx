@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 const stories = [
   {
     name: "Mohit Ojha",
-    role: "Manager / Software Developer",
+    role: "Manager / Systems Engineer",
     quote:
       "Building Optiveon allowed us to seamlessly merge fast-paced software engineering with rigorous financial modeling. The platform's architecture ensures our execution engines operate with unmatched reliability and minimal latency.",
     impact: [
@@ -30,8 +30,8 @@ const stories = [
     ],
   },
   {
-    name: "",
-    role: "",
+    name: "Prakash Ghimire",
+    role: "Chief AI Officer / Lead Software Engineer",
     quote:
       "Working on the core systems of Optiveon has been a game changer. The ability to innovate rapidly while maintaining institutional-grade security and compliance gives us a significant edge in the market.",
     impact: [
