@@ -97,8 +97,8 @@ export function CustomerStories() {
                     <Image
                       src={story.avatar}
                       alt={story.name}
-                      width={48}
-                      height={48}
+                      width={128}
+                      height={128}
                       className="w-full h-full object-cover"
                     />
                   ) : (
