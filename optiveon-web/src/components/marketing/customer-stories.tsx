@@ -5,7 +5,6 @@ import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 const stories = [
   {
@@ -94,13 +93,9 @@ export function CustomerStories() {
                 {/* Avatar */}
                 <div className="w-12 h-12 rounded-full overflow-hidden bg-background-elevated border border-border flex items-center justify-center flex-shrink-0">
                   {story.avatar ? (
-                    <Image
+                    <img
                       src={story.avatar}
                       alt={story.name}
-                      width={128}
-                      height={128}
-                      quality={100}
-                      unoptimized
                       className="w-full h-full object-cover object-top"
                     />
                   ) : (
