@@ -134,6 +134,10 @@ const config: Config = {
         "orb-float-2": "orbFloat2 12s ease-in-out infinite",
         spin: "spin 0.8s linear infinite",
         marquee: "marquee 18s linear infinite",
+        "blob-1": "blobDrift1 20s ease-in-out infinite",
+        "blob-2": "blobDrift2 25s ease-in-out infinite",
+        "blob-3": "blobDrift3 18s ease-in-out infinite",
+        "blob-4": "blobDrift4 22s ease-in-out infinite",
       },
       keyframes: {
         fadeInUp: {
@@ -166,6 +170,26 @@ const config: Config = {
         marquee: {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
+        },
+        blobDrift1: {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "33%": { transform: "translate(40px, 30px) scale(1.05)" },
+          "66%": { transform: "translate(-20px, 50px) scale(0.95)" },
+        },
+        blobDrift2: {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "25%": { transform: "translate(-30px, 40px) scale(1.08)" },
+          "50%": { transform: "translate(-50px, 20px) scale(0.96)" },
+          "75%": { transform: "translate(-20px, 60px) scale(1.03)" },
+        },
+        blobDrift3: {
+          "0%, 100%": { transform: "translate(-50%, 0) scale(1)" },
+          "40%": { transform: "translate(-48%, 20px) scale(1.1)" },
+          "70%": { transform: "translate(-52%, -10px) scale(0.94)" },
+        },
+        blobDrift4: {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "50%": { transform: "translate(30px, -25px) scale(1.06)" },
         },
       },
     },

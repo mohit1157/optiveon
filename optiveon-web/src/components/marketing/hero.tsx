@@ -11,26 +11,37 @@ export function Hero() {
     <section className="relative min-h-screen flex items-center py-24 md:py-[96px] overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        {/* Gradient background */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(ellipse 80% 50% at 50% -20%, rgba(27, 53, 89, 0.45) 0%, transparent 50%),
-              radial-gradient(ellipse 60% 40% at 100% 50%, rgba(214, 179, 106, 0.08) 0%, transparent 50%),
-              radial-gradient(ellipse 50% 50% at 0% 80%, rgba(27, 53, 89, 0.2) 0%, transparent 50%),
-              #0b111b
-            `,
-          }}
-        />
+        {/* Base background */}
+        <div className="absolute inset-0 bg-background" />
 
         {/* Grid lines */}
         <div className="grid-lines absolute inset-0 animate-grid-pulse" />
         <div className="noise-overlay absolute inset-0" />
 
-        {/* Floating orbs */}
-        <div className="absolute w-[400px] h-[400px] md:w-[900px] md:h-[900px] rounded-full bg-gradient-to-br from-primary to-primary-dark -top-[200px] md:-top-[400px] -right-[150px] md:-right-[300px] opacity-15 blur-[120px] animate-orb-float-1" />
-        <div className="absolute w-[300px] h-[300px] md:w-[600px] md:h-[600px] rounded-full bg-gradient-to-br from-accent to-accent-dark -bottom-[100px] md:-bottom-[200px] -left-[75px] md:-left-[150px] opacity-[0.08] blur-[120px] animate-orb-float-2" />
+        {/* Animated gradient blobs — Ametrix-inspired flowing effect */}
+        {/* Top-left: large gold glow drifting slowly */}
+        <div
+          className="absolute -top-[200px] -left-[200px] w-[500px] h-[600px] md:w-[800px] md:h-[900px] rounded-full opacity-[0.12] blur-[120px] md:blur-[140px] animate-blob-1"
+          style={{ background: "radial-gradient(circle, #d6b36a 0%, #b19045 40%, transparent 70%)" }}
+        />
+
+        {/* Top-right: navy glow flowing down */}
+        <div
+          className="absolute -top-[150px] -right-[200px] w-[400px] h-[500px] md:w-[700px] md:h-[800px] rounded-full opacity-[0.18] blur-[100px] md:blur-[130px] animate-blob-2"
+          style={{ background: "radial-gradient(circle, #1b3559 0%, #2b4a76 40%, transparent 70%)" }}
+        />
+
+        {/* Center: soft warm gold pulse behind the text */}
+        <div
+          className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[300px] md:w-[900px] md:h-[500px] rounded-full opacity-[0.07] blur-[130px] md:blur-[160px] animate-blob-3"
+          style={{ background: "radial-gradient(ellipse, #e3c98a 0%, #d6b36a 30%, transparent 65%)" }}
+        />
+
+        {/* Bottom-left: secondary navy accent */}
+        <div
+          className="absolute -bottom-[100px] -left-[100px] w-[350px] h-[350px] md:w-[600px] md:h-[600px] rounded-full opacity-[0.10] blur-[110px] md:blur-[140px] animate-blob-4"
+          style={{ background: "radial-gradient(circle, #1b3559 0%, #0f1f36 50%, transparent 70%)" }}
+        />
       </div>
 
       <div className="container">
