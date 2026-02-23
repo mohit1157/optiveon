@@ -38,9 +38,34 @@ jobs:
             # Clean up old images to free disk/memory before building
             sudo docker system prune -af 2>/dev/null || true
 
+            # Create a shared Docker network for inter-container communication
+            sudo docker network create optiveon-net 2>/dev/null || true
+
+            # --- Build & Deploy Options Bot ---
+            cd /var/www/html/options-bot
+            echo "${{ secrets.OPTIONS_BOT_ENV_FILE }}" > .env
+            sudo docker build -t options-bot .
+            sudo docker rm -f options-bot-app || true
+            sudo docker run -d \
+              --name options-bot-app \
+              --network optiveon-net \
+              --env-file .env \
+              --restart always \
+              options-bot
+
+            # --- Build & Deploy Web App ---
+            cd /var/www/html/optiveon-web
+            echo "${{ secrets.PRODUCTION_ENV_FILE }}" > .env
             sudo docker build -t optiveon .
             sudo docker rm -f optiveon-app || true
-            sudo docker run -d -p 3000:3000 --env-file .env --name optiveon-app --restart always optiveon
+            sudo docker run -d \
+              -p 3000:3000 \
+              --name optiveon-app \
+              --network optiveon-net \
+              --env-file .env \
+              -e OPTIONS_BOT_API_URL=http://options-bot-app:8001 \
+              --restart always \
+              optiveon
 
             # Purge nginx cache and reload to serve fresh content
             sudo rm -rf /var/cache/nginx/* 2>/dev/null || true

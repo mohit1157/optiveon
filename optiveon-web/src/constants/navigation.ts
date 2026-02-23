@@ -6,6 +6,17 @@ export const mainNavItems: NavItem[] = [
     href: "/#features",
   },
   {
+    title: "Products",
+    href: "/products",
+    children: [
+      { title: "Options Trade", href: "/products/options", description: "AI-powered options trading bot" },
+      { title: "Stocks", href: "/products/stocks", comingSoon: true, description: "Automated stock trading" },
+      { title: "Polymarket BTC", href: "/products/polymarket", comingSoon: true, description: "Prediction market strategies" },
+      { title: "Futes", href: "/products/futes", comingSoon: true, description: "Futures trading automation" },
+      { title: "Forex", href: "/products/forex", comingSoon: true, description: "FX pair trading bot" },
+    ],
+  },
+  {
     title: "Validation",
     href: "/#validation",
   },
