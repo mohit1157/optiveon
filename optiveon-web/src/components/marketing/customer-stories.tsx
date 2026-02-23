@@ -99,6 +99,8 @@ export function CustomerStories() {
                       alt={story.name}
                       width={128}
                       height={128}
+                      quality={100}
+                      unoptimized
                       className="w-full h-full object-cover"
                     />
                   ) : (
