@@ -69,10 +69,24 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id;
         token.role = user.role as "USER" | "ADMIN";
+      }
+      // Refresh role from DB periodically (supports multi-device + role changes)
+      if (trigger === "update" || (!user && token.id)) {
+        try {
+          const dbUser = await db.user.findUnique({
+            where: { id: token.id as string },
+            select: { role: true },
+          });
+          if (dbUser) {
+            token.role = dbUser.role;
+          }
+        } catch {
+          // Keep existing token if DB lookup fails
+        }
       }
       return token;
     },

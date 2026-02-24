@@ -29,7 +29,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
       {/* Right side */}
       <div className="flex items-center gap-md">
         {/* Notifications (placeholder) */}
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative flex items-center justify-center">
           <Bell className="w-5 h-5" />
           <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full" />
         </Button>
