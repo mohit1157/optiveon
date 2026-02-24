@@ -56,7 +56,7 @@ function ProductsDropdown({ item }: { item: NavItem }) {
             : "opacity-0 invisible -translate-y-2 pointer-events-none"
         )}
       >
-        <div className="w-64 rounded-xl border border-border bg-background-card/95 backdrop-blur-xl shadow-lg p-2">
+        <div className="w-72 rounded-xl border border-border bg-background-card/95 backdrop-blur-xl shadow-lg p-2">
           {item.children?.map((child) => (
             <Link
               key={child.href}
@@ -66,13 +66,18 @@ function ProductsDropdown({ item }: { item: NavItem }) {
                 else setOpen(false);
               }}
               className={cn(
-                "flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors",
                 child.comingSoon
                   ? "cursor-default opacity-50"
                   : "hover:bg-background-elevated"
               )}
             >
-              <div>
+              {child.icon && (
+                <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0">
+                  <child.icon className="w-4 h-4 text-accent" />
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground">
                   {child.title}
                 </p>

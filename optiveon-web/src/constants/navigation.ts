@@ -1,4 +1,5 @@
 import { NavItem, NavSection } from "@/types";
+import { Sliders, BarChart3, Bitcoin, Flame, Globe } from "lucide-react";
 
 export const mainNavItems: NavItem[] = [
   {
@@ -9,11 +10,11 @@ export const mainNavItems: NavItem[] = [
     title: "Products",
     href: "/products",
     children: [
-      { title: "Options Trade", href: "/products/options", description: "AI-powered options trading bot" },
-      { title: "Stocks", href: "/products/stocks", comingSoon: true, description: "Automated stock trading" },
-      { title: "Polymarket BTC", href: "/products/polymarket", comingSoon: true, description: "Prediction market strategies" },
-      { title: "Futes", href: "/products/futes", comingSoon: true, description: "Futures trading automation" },
-      { title: "Forex", href: "/products/forex", comingSoon: true, description: "FX pair trading bot" },
+      { title: "Options Trade", href: "/products/options", description: "AI-powered options trading bot", icon: Sliders },
+      { title: "Stocks", href: "/products/stocks", comingSoon: true, description: "Automated stock trading", icon: BarChart3 },
+      { title: "Polymarket BTC", href: "/products/polymarket", comingSoon: true, description: "Prediction market strategies", icon: Bitcoin },
+      { title: "Futes", href: "/products/futes", comingSoon: true, description: "Futures trading automation", icon: Flame },
+      { title: "Forex", href: "/products/forex", comingSoon: true, description: "FX pair trading bot", icon: Globe },
     ],
   },
   {
