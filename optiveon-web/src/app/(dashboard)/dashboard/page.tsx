@@ -122,7 +122,7 @@ export default async function DashboardPage() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-md">
-            <div className="flex items-center justify-between p-md rounded-lg bg-background-dark border border-border">
+            <Link href="/dashboard/billing" className="flex items-center justify-between p-md rounded-lg bg-background-dark border border-border hover:bg-background-elevated transition-colors">
               <div>
                 <p className="font-medium">Upgrade Plan</p>
                 <p className="text-sm text-foreground-secondary">
@@ -130,8 +130,8 @@ export default async function DashboardPage() {
                 </p>
               </div>
               <Badge>Upgrade</Badge>
-            </div>
-            <div className="flex items-center justify-between p-md rounded-lg bg-background-dark border border-border">
+            </Link>
+            <Link href="/dashboard/api-keys" className="flex items-center justify-between p-md rounded-lg bg-background-dark border border-border hover:bg-background-elevated transition-colors">
               <div>
                 <p className="font-medium">Create API Key</p>
                 <p className="text-sm text-foreground-secondary">
@@ -139,7 +139,7 @@ export default async function DashboardPage() {
                 </p>
               </div>
               <Badge variant="outline">Create</Badge>
-            </div>
+            </Link>
           </CardContent>
         </Card>
 
