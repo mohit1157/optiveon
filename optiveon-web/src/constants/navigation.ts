@@ -10,11 +10,11 @@ export const mainNavItems: NavItem[] = [
     title: "Products",
     href: "/products",
     children: [
-      { title: "Options Trade", href: "/products/options", description: "AI-powered options trading bot", icon: Sliders },
-      { title: "Stocks", href: "/products/stocks", comingSoon: true, description: "Automated stock trading", icon: BarChart3 },
-      { title: "Polymarket BTC", href: "/products/polymarket", comingSoon: true, description: "Prediction market strategies", icon: Bitcoin },
-      { title: "Futes", href: "/products/futes", comingSoon: true, description: "Futures trading automation", icon: Flame },
-      { title: "Forex", href: "/products/forex", comingSoon: true, description: "FX pair trading bot", icon: Globe },
+      { title: "Options Trade", href: "/products/options", description: "AI-powered options trading bot", icon: Sliders, iconColor: "text-emerald-400", color: "from-emerald-500/20 to-emerald-600/5" },
+      { title: "Stocks", href: "/products/stocks", comingSoon: true, description: "Automated stock trading", icon: BarChart3, iconColor: "text-blue-400", color: "from-blue-500/20 to-blue-600/5" },
+      { title: "Polymarket BTC", href: "/products/polymarket", comingSoon: true, description: "Prediction market strategies", icon: Bitcoin, iconColor: "text-amber-400", color: "from-amber-500/20 to-amber-600/5" },
+      { title: "Futes", href: "/products/futes", comingSoon: true, description: "Futures trading automation", icon: Flame, iconColor: "text-orange-400", color: "from-orange-500/20 to-orange-600/5" },
+      { title: "Forex", href: "/products/forex", comingSoon: true, description: "FX pair trading bot", icon: Globe, iconColor: "text-violet-400", color: "from-violet-500/20 to-violet-600/5" },
     ],
   },
   {

@@ -66,23 +66,26 @@ function ProductsDropdown({ item }: { item: NavItem }) {
                 else setOpen(false);
               }}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-200 group/item",
                 child.comingSoon
                   ? "cursor-default opacity-50"
-                  : "hover:bg-background-elevated"
+                  : cn("hover:bg-gradient-to-r", child.color)
               )}
             >
               {child.icon && (
-                <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0">
-                  <child.icon className="w-4 h-4 text-accent" />
+                <div className={cn(
+                  "w-9 h-9 rounded-lg bg-background/50 border border-border/50 flex items-center justify-center flex-shrink-0 transition-colors",
+                  !child.comingSoon && "group-hover/item:border-accent/30"
+                )}>
+                  <child.icon className={cn("w-[18px] h-[18px]", child.iconColor || "text-accent")} />
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-sm font-semibold text-foreground">
                   {child.title}
                 </p>
                 {child.description && (
-                  <p className="text-xs text-foreground-muted mt-0.5">
+                  <p className="text-xs text-foreground-secondary mt-0.5">
                     {child.description}
                   </p>
                 )}

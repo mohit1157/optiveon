@@ -126,9 +126,23 @@ export function PaymentDropdown({ mobile = false }: { mobile?: boolean }) {
         );
     }
 
-    // Desktop: floating dropdown
+    // Desktop: floating dropdown with hover
+    const timeout = useRef<NodeJS.Timeout | null>(null);
+    const handleEnter = () => {
+        if (timeout.current) clearTimeout(timeout.current);
+        setIsOpen(true);
+    };
+    const handleLeave = () => {
+        timeout.current = setTimeout(() => setIsOpen(false), 200);
+    };
+
     return (
-        <div ref={dropdownRef} className="relative">
+        <div
+            ref={dropdownRef}
+            className="relative"
+            onMouseEnter={handleEnter}
+            onMouseLeave={handleLeave}
+        >
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-1 text-sm font-medium text-foreground-secondary transition-colors duration-fast hover:text-foreground relative group"
@@ -145,13 +159,13 @@ export function PaymentDropdown({ mobile = false }: { mobile?: boolean }) {
 
             <div
                 className={cn(
-                    "absolute top-full right-0 mt-3 w-72 rounded-xl border border-border bg-background-card/95 backdrop-blur-xl shadow-2xl shadow-black/20 transition-all duration-200 origin-top-right z-50",
+                    "absolute top-full right-0 pt-3 w-72 transition-all duration-200 origin-top-right z-50",
                     isOpen
-                        ? "opacity-100 scale-100 visible translate-y-0"
-                        : "opacity-0 scale-95 invisible -translate-y-2"
+                        ? "opacity-100 visible translate-y-0"
+                        : "opacity-0 invisible -translate-y-2 pointer-events-none"
                 )}
             >
-                <div className="p-2">
+                <div className="rounded-xl border border-border bg-background-card/95 backdrop-blur-xl shadow-2xl shadow-black/20 p-2">
                     <p className="px-3 pt-2 pb-3 text-xs font-medium text-foreground-secondary uppercase tracking-wider">
                         Choose a Plan
                     </p>

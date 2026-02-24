@@ -47,6 +47,8 @@ export interface NavItem {
   href: string;
   description?: string;
   icon?: React.ComponentType<{ className?: string }>;
+  iconColor?: string;
+  color?: string;
   disabled?: boolean;
   external?: boolean;
   comingSoon?: boolean;
