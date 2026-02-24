@@ -127,8 +127,13 @@ function ProductsDropdownMobile({
           )}
         />
       </button>
-      {open && (
-        <div className="mt-2 ml-3 flex flex-col gap-1 border-l border-border pl-3">
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-200",
+          open ? "max-h-[500px] opacity-100 mt-2" : "max-h-0 opacity-0"
+        )}
+      >
+        <div className="rounded-xl border border-border bg-background-dark/50 p-2">
           {item.children?.map((child) => (
             <Link
               key={child.href}
@@ -141,22 +146,39 @@ function ProductsDropdownMobile({
                 }
               }}
               className={cn(
-                "flex items-center justify-between py-1.5 text-sm transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-200 group/item",
                 child.comingSoon
-                  ? "cursor-default opacity-50 text-foreground-muted"
-                  : "text-foreground-secondary hover:text-foreground"
+                  ? "cursor-default opacity-50"
+                  : cn("hover:bg-gradient-to-r", child.color)
               )}
             >
-              {child.title}
+              {child.icon && (
+                <div className={cn(
+                  "w-9 h-9 rounded-lg bg-background/50 border border-border/50 flex items-center justify-center flex-shrink-0 transition-colors",
+                  !child.comingSoon && "group-hover/item:border-accent/30"
+                )}>
+                  <child.icon className={cn("w-[18px] h-[18px]", child.iconColor || "text-accent")} />
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground">
+                  {child.title}
+                </p>
+                {child.description && (
+                  <p className="text-xs text-foreground-secondary mt-0.5">
+                    {child.description}
+                  </p>
+                )}
+              </div>
               {child.comingSoon && (
-                <Badge variant="muted" className="text-[0.55rem]">
+                <Badge variant="muted" className="text-[0.6rem] ml-2 flex-shrink-0">
                   Soon
                 </Badge>
               )}
             </Link>
           ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }
