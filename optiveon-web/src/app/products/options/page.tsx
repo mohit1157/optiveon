@@ -132,7 +132,7 @@ export default function OptionsPage() {
                 {/* Header */}
                 <div className="flex items-center gap-md mb-xl">
                     <Button variant="outline" size="icon" asChild>
-                        <Link href="/">
+                        <Link href="/dashboard">
                             <ArrowLeft className="w-4 h-4" />
                         </Link>
                     </Button>

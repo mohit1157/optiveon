@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { Bell, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DashboardHeaderProps {
@@ -28,11 +28,6 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
       {/* Right side */}
       <div className="flex items-center gap-md">
-        {/* Notifications */}
-        <div className="w-9 h-9 flex items-center justify-center text-foreground-muted">
-          <Bell className="w-5 h-5" />
-        </div>
-
         {/* User info */}
         <div className="flex items-center gap-md">
           <div className="text-right hidden sm:block">
