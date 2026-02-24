@@ -94,7 +94,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Admin: Options Trade Bot */}
-      {session.user.role === "ADMIN" && (
+      {user.role === "ADMIN" && (
         <Link href="/products/options" className="block">
           <Card className="border-accent/30 bg-accent/5 hover:bg-accent/10 transition-colors cursor-pointer">
             <CardContent className="flex items-center justify-between p-xl">

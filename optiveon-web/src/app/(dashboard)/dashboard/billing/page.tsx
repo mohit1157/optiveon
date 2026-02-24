@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { Check, ExternalLink } from "lucide-react";
+import { Check, ExternalLink, Zap, Building2, Rocket } from "lucide-react";
 import Link from "next/link";
 import {
   Card,
@@ -13,8 +13,62 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { pricingTiers } from "@/constants/pricing";
 import { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
+
+const billingPlans = [
+  {
+    plan: "STARTER" as const,
+    name: "Starter",
+    description: "For individual researchers",
+    price: "$299",
+    period: "/month",
+    icon: Zap,
+    href: process.env.NEXT_PUBLIC_STRIPE_STARTER_LINK || "/checkout?plan=starter",
+    features: [
+      "Real-time market data",
+      "50+ technical indicators",
+      "Basic signal alerts",
+      "Email support",
+    ],
+    cta: "Get Started",
+  },
+  {
+    plan: "PROFESSIONAL" as const,
+    name: "Professional",
+    description: "For growing teams",
+    price: "$899",
+    period: "/month",
+    icon: Building2,
+    href: process.env.NEXT_PUBLIC_STRIPE_PROFESSIONAL_LINK || "/checkout?plan=professional",
+    features: [
+      "Everything in Starter",
+      "Advanced signal generation",
+      "Backtesting suite",
+      "API access (10K calls/day)",
+      "Priority support",
+    ],
+    cta: "Get Started",
+    featured: true,
+    badge: "Recommended",
+  },
+  {
+    plan: "ENTERPRISE" as const,
+    name: "Enterprise",
+    description: "For institutional firms",
+    price: "Custom",
+    period: "",
+    icon: Rocket,
+    href: process.env.NEXT_PUBLIC_STRIPE_ENTERPRISE_LINK || "/checkout?plan=enterprise",
+    features: [
+      "Everything in Professional",
+      "Unlimited API access",
+      "Custom integrations",
+      "Dedicated account manager",
+      "SLA guarantee",
+    ],
+    cta: "Contact Sales",
+  },
+];
 
 export default async function BillingPage() {
   const session = await getServerSession(authOptions);
@@ -90,12 +144,8 @@ export default async function BillingPage() {
       <div>
         <h2 className="text-xl font-semibold mb-lg">Available Plans</h2>
         <div className="grid gap-lg md:grid-cols-3">
-          {pricingTiers.map((tier) => {
+          {billingPlans.map((tier) => {
             const isCurrentPlan = tier.plan === currentPlan;
-            const checkoutHref =
-              tier.plan === SubscriptionPlan.ENTERPRISE
-                ? `/checkout?plan=${tier.slug}`
-                : `/api/billing/checkout?plan=${tier.slug}`;
 
             return (
               <Card
@@ -111,7 +161,7 @@ export default async function BillingPage() {
                   <CardDescription>{tier.description}</CardDescription>
                   <div className="pt-md">
                     <span className="text-3xl font-bold">
-                      {tier.priceLabel || `$${tier.price}`}
+                      {tier.price}
                     </span>
                     {tier.period && (
                       <span className="text-foreground-secondary">
@@ -141,7 +191,9 @@ export default async function BillingPage() {
                     {isCurrentPlan ? (
                       "Current Plan"
                     ) : (
-                      <Link href={checkoutHref}>{tier.cta}</Link>
+                      <a href={tier.href} target="_blank" rel="noopener noreferrer">
+                        {tier.cta}
+                      </a>
                     )}
                   </Button>
                 </CardContent>

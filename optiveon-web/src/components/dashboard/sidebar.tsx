@@ -44,8 +44,8 @@ export function DashboardSidebar() {
   return (
     <aside className="flex flex-col h-full w-64 bg-background-card border-r border-border">
       {/* Logo */}
-      <div className="p-lg border-b border-border">
-        <Logo href="/" />
+      <div className="p-lg border-b border-border overflow-hidden">
+        <Logo href="/" className="scale-[0.85] origin-left" />
       </div>
 
       {/* Navigation */}
