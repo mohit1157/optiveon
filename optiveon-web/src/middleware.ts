@@ -14,12 +14,18 @@ export default withAuth(
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    // Admin-only routes
-    if (
-      (pathname.startsWith("/admin") || pathname.startsWith("/products/options")) &&
-      token?.role !== "ADMIN"
-    ) {
-      return NextResponse.redirect(new URL("/login", req.url));
+    // Strict admin-only routes — requires ADMIN role AND email in allowlist
+    const ADMIN_EMAILS = ["admin@optiveon.com", "mohit@optiveon.com", "balmiki@optiveon.com"];
+    if (pathname.startsWith("/products/options")) {
+      const email = token?.email as string | undefined;
+      if (token?.role !== "ADMIN" || !email || !ADMIN_EMAILS.includes(email)) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+    }
+
+    // Admin-only routes (general)
+    if (pathname.startsWith("/admin") && token?.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/", req.url));
     }
 
     return NextResponse.next();

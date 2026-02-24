@@ -13,8 +13,24 @@ import {
     TrendingUp,
     Shield,
     AlertTriangle,
+    Clock,
+    ServerOff,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+interface TradePosition {
+    symbol: string;
+    type: "call" | "put" | "stock";
+    side: "long" | "short";
+    qty: number;
+    entryPrice: number;
+    currentPrice: number;
+    pnl: number;
+    pnlPct: number;
+    expDate?: string;
+    strikePrice?: number;
+    timestamp: string;
+}
 
 interface BotStatus {
     running: boolean;
@@ -25,6 +41,9 @@ interface BotStatus {
     totalTrades: number;
     symbols: string[];
     lastUpdate?: string;
+    trades?: TradePosition[];
+    recentActivity?: string[];
+    error?: string;
 }
 
 const DEFAULT_STATUS: BotStatus = {
@@ -34,6 +53,8 @@ const DEFAULT_STATUS: BotStatus = {
     todayPnl: "$0.00",
     totalTrades: 0,
     symbols: [],
+    trades: [],
+    recentActivity: [],
 };
 
 export default function OptionsPage() {
@@ -41,6 +62,7 @@ export default function OptionsPage() {
     const [loading, setLoading] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [botDeployed, setBotDeployed] = useState(true);
 
     const fetchStatus = useCallback(async () => {
         try {
@@ -49,12 +71,16 @@ export default function OptionsPage() {
             if (res.ok) {
                 const data = await res.json();
                 setStatus(data);
+                setBotDeployed(true);
+                setError(null);
+            } else if (res.status === 503) {
+                setBotDeployed(false);
                 setError(null);
             } else {
                 setError("Failed to fetch bot status");
             }
         } catch {
-            setError("Bot API unreachable — it may not be deployed yet");
+            setBotDeployed(false);
         } finally {
             setLoading(false);
         }
@@ -62,22 +88,23 @@ export default function OptionsPage() {
 
     useEffect(() => {
         fetchStatus();
-        const interval = setInterval(fetchStatus, 10000); // Poll every 10s
+        const interval = setInterval(fetchStatus, 10000);
         return () => clearInterval(interval);
     }, [fetchStatus]);
 
     const handleAction = async (action: "start" | "stop") => {
         try {
             setActionLoading(true);
+            setError(null);
             const res = await fetch(`/api/bot/options/${action}`, { method: "POST" });
+            const data = await res.json();
             if (res.ok) {
                 await fetchStatus();
             } else {
-                const data = await res.json();
                 setError(data.error || `Failed to ${action} bot`);
             }
         } catch {
-            setError(`Failed to ${action} bot`);
+            setError(`Failed to ${action} bot — server may be unreachable`);
         } finally {
             setActionLoading(false);
         }
@@ -87,7 +114,7 @@ export default function OptionsPage() {
         <section className="min-h-screen py-24 relative overflow-hidden">
             <div className="absolute inset-0 -z-10 bg-background" />
 
-            <div className="container max-w-5xl">
+            <div className="container max-w-6xl">
                 {/* Header */}
                 <div className="flex items-center gap-md mb-xl">
                     <Button variant="outline" size="icon" asChild>
@@ -96,7 +123,7 @@ export default function OptionsPage() {
                         </Link>
                     </Button>
                     <div>
-                        <div className="flex items-center gap-md">
+                        <div className="flex items-center gap-md flex-wrap">
                             <h1 className="text-2xl font-bold">Options Trade Bot</h1>
                             <Badge
                                 variant={status.running ? "success" : "muted"}
@@ -105,8 +132,13 @@ export default function OptionsPage() {
                                 {status.running ? "Running" : "Stopped"}
                             </Badge>
                             <Badge variant="outline" className="text-xs">
-                                {status.mode === "paper" ? "Paper Trading" : "Live Trading"}
+                                {status.mode === "paper" ? "📝 Paper Trading" : "🔴 Live Trading"}
                             </Badge>
+                            {!botDeployed && (
+                                <Badge variant="destructive" className="text-xs">
+                                    Not Deployed
+                                </Badge>
+                            )}
                         </div>
                         <p className="text-sm text-foreground-muted mt-1">
                             3-min EMA pop-pullback-hold options strategy via Alpaca
@@ -114,14 +146,32 @@ export default function OptionsPage() {
                     </div>
                 </div>
 
+                {/* Deployment Warning */}
+                {!botDeployed && (
+                    <div className="rounded-xl border border-warning/30 bg-warning/5 p-lg mb-xl flex items-start gap-md">
+                        <ServerOff className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+                        <div>
+                            <p className="text-sm font-semibold text-foreground mb-1">Bot Container Not Deployed</p>
+                            <p className="text-sm text-foreground-secondary leading-relaxed">
+                                The options bot is not running on the server yet. To deploy it:
+                            </p>
+                            <ol className="text-sm text-foreground-secondary mt-2 space-y-1 list-decimal list-inside">
+                                <li>Add <code className="text-xs bg-background-elevated px-1 py-0.5 rounded">OPTIONS_BOT_ENV_FILE</code> secret to GitHub repo settings</li>
+                                <li>Push to main branch to trigger deployment</li>
+                                <li>Wait for the Docker build to complete on EC2</li>
+                            </ol>
+                        </div>
+                    </div>
+                )}
+
                 {/* Error Banner */}
                 {error && (
-                    <div className="rounded-xl border border-warning/30 bg-warning/10 p-lg mb-xl flex items-center gap-md">
-                        <AlertTriangle className="w-5 h-5 text-warning flex-shrink-0" />
-                        <p className="text-sm text-foreground-secondary">{error}</p>
+                    <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-lg mb-xl flex items-center gap-md">
+                        <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                        <p className="text-sm text-foreground-secondary flex-1">{error}</p>
                         <button
                             onClick={() => setError(null)}
-                            className="ml-auto text-foreground-muted hover:text-foreground text-sm"
+                            className="text-foreground-muted hover:text-foreground text-sm"
                         >
                             Dismiss
                         </button>
@@ -138,11 +188,11 @@ export default function OptionsPage() {
                             <Button
                                 variant="primary"
                                 onClick={() => handleAction("start")}
-                                disabled={status.running || actionLoading}
+                                disabled={status.running || actionLoading || !botDeployed}
                                 className="gap-2"
                             >
                                 <Play className="w-4 h-4" />
-                                Start Bot
+                                {actionLoading ? "Starting..." : "Start Bot"}
                             </Button>
                             <Button
                                 variant="outline"
@@ -151,7 +201,7 @@ export default function OptionsPage() {
                                 className="gap-2"
                             >
                                 <Square className="w-4 h-4" />
-                                Stop Bot
+                                {actionLoading ? "Stopping..." : "Stop Bot"}
                             </Button>
                             <Button
                                 variant="outline"
@@ -166,7 +216,8 @@ export default function OptionsPage() {
                             </Button>
                         </div>
                         {status.uptime && (
-                            <p className="text-xs text-foreground-muted mt-lg">
+                            <p className="text-xs text-foreground-muted mt-lg flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
                                 Uptime: {status.uptime}
                             </p>
                         )}
@@ -179,7 +230,7 @@ export default function OptionsPage() {
                         <div className="flex flex-wrap gap-sm">
                             {(status.symbols.length > 0
                                 ? status.symbols
-                                : ["SPY", "QQQ", "AAPL", "TSLA"]
+                                : ["QQQ", "TSLA", "AAPL", "NVDA", "PLTR", "AMD", "AMZN", "HOOD", "GOOGL"]
                             ).map((sym) => (
                                 <span
                                     key={sym}
@@ -233,7 +284,87 @@ export default function OptionsPage() {
                     </div>
                 </div>
 
-                {/* Info Banner */}
+                {/* Positions Table */}
+                <div className="rounded-2xl border border-border bg-background-card p-xl mb-xl">
+                    <h2 className="text-sm uppercase tracking-[0.15em] text-foreground-muted mb-lg">
+                        Positions &amp; Trade History
+                    </h2>
+                    {(status.trades && status.trades.length > 0) ? (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead>
+                                    <tr className="border-b border-border text-left">
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">Symbol</th>
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">Type</th>
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">Side</th>
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">Qty</th>
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">Strike</th>
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">Exp Date</th>
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">Entry</th>
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">Current</th>
+                                        <th className="pb-3 pr-4 text-xs uppercase tracking-wider text-foreground-muted font-medium">P&amp;L</th>
+                                        <th className="pb-3 text-xs uppercase tracking-wider text-foreground-muted font-medium">Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {status.trades.map((trade, i) => (
+                                        <tr key={i} className="border-b border-border/50 last:border-0">
+                                            <td className="py-3 pr-4 font-mono font-semibold">{trade.symbol}</td>
+                                            <td className="py-3 pr-4">
+                                                <Badge
+                                                    variant={trade.type === "call" ? "success" : trade.type === "put" ? "destructive" : "outline"}
+                                                    className="text-[0.65rem]"
+                                                >
+                                                    {trade.type.toUpperCase()}
+                                                </Badge>
+                                            </td>
+                                            <td className="py-3 pr-4 text-foreground-secondary">{trade.side}</td>
+                                            <td className="py-3 pr-4 font-mono">{trade.qty}</td>
+                                            <td className="py-3 pr-4 font-mono">
+                                                {trade.strikePrice ? `$${trade.strikePrice.toFixed(2)}` : "—"}
+                                            </td>
+                                            <td className="py-3 pr-4 text-foreground-secondary">{trade.expDate || "—"}</td>
+                                            <td className="py-3 pr-4 font-mono">${trade.entryPrice.toFixed(2)}</td>
+                                            <td className="py-3 pr-4 font-mono">${trade.currentPrice.toFixed(2)}</td>
+                                            <td className={cn("py-3 pr-4 font-mono font-semibold", trade.pnl >= 0 ? "text-green-400" : "text-red-400")}>
+                                                {trade.pnl >= 0 ? "+" : ""}${trade.pnl.toFixed(2)} ({trade.pnlPct >= 0 ? "+" : ""}{trade.pnlPct.toFixed(1)}%)
+                                            </td>
+                                            <td className="py-3 text-xs text-foreground-muted whitespace-nowrap">{trade.timestamp}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <div className="text-center py-12">
+                            <Activity className="w-8 h-8 text-foreground-muted mx-auto mb-md" />
+                            <p className="text-sm text-foreground-muted">
+                                {status.running
+                                    ? "No positions yet — bot is scanning for signals..."
+                                    : "Start the bot to begin trading"}
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Recent Activity */}
+                {status.recentActivity && status.recentActivity.length > 0 && (
+                    <div className="rounded-2xl border border-border bg-background-card p-xl mb-xl">
+                        <h2 className="text-sm uppercase tracking-[0.15em] text-foreground-muted mb-lg">
+                            Recent Activity
+                        </h2>
+                        <div className="space-y-2">
+                            {status.recentActivity.map((activity, i) => (
+                                <div key={i} className="flex items-center gap-md text-sm">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+                                    <span className="text-foreground-secondary">{activity}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Strategy Info */}
                 <div className="rounded-2xl border border-accent/20 bg-accent/5 p-xl">
                     <h3 className="text-sm font-semibold mb-sm">
                         Strategy: Pop-Pullback-Hold (3-Min EMA)
