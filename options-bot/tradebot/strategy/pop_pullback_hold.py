@@ -687,7 +687,7 @@ class EmaPopPullbackHoldOptionsStrategy:
                 log.warning(f"Invalid quote for {contract.symbol}: Bid={bid}, Ask={ask}. Skipping.")
                 return
 
-            premium = (bid + ask) / 2.0
+            premium = ask
             limit_price = round(ask * (1 + self.settings.option_limit_buffer_pct), 2)
         else:
             # Fallback: use mid-price endpoint when quote API returns nothing
@@ -953,24 +953,16 @@ class EmaPopPullbackHoldOptionsStrategy:
             self._exit_full(trade, reason="zone_stop", estimated_price=current_price)
             return
 
-        # Partial profit target
+        # Partial profit target (always based on option premium)
         if not trade.trimmed:
-            profit_on_underlying = self.settings.pop_pullback_profit_calc_on_underlying
-            if profit_on_underlying:
-                target_price = close_now
-                entry_price = trade.entry_underlying
-            else:
-                target_price = current_price
-                entry_price = trade.entry_option
-
             hit = zone_target
             hit = hit or self._profit_target_hit(
                 direction=trade.direction,
-                current_price=target_price,
-                entry_price=entry_price,
+                current_price=current_price,
+                entry_price=trade.entry_option,
                 target_pct=target_pct,
                 qty=trade.original_qty,
-                profit_on_underlying=profit_on_underlying,
+                profit_on_underlying=False,
             )
 
             if hit:
@@ -988,21 +980,13 @@ class EmaPopPullbackHoldOptionsStrategy:
 
         # Runner exit for remaining position: 11% target or EMA fallback.
         if trade.trimmed:
-            profit_on_underlying = self.settings.pop_pullback_profit_calc_on_underlying
-            if profit_on_underlying:
-                runner_price = close_now
-                runner_entry_price = trade.entry_underlying
-            else:
-                runner_price = current_price
-                runner_entry_price = trade.entry_option
-
             runner_hit = self._profit_target_hit(
                 direction=trade.direction,
-                current_price=runner_price,
-                entry_price=runner_entry_price,
+                current_price=current_price,
+                entry_price=trade.entry_option,
                 target_pct=runner_pct,
                 qty=max(1, trade.remaining_qty),
-                profit_on_underlying=profit_on_underlying,
+                profit_on_underlying=False,
             )
             if runner_hit:
                 self._exit_full(trade, reason="runner_target", estimated_price=current_price)
@@ -1059,12 +1043,12 @@ class EmaPopPullbackHoldOptionsStrategy:
 
         exit_price = estimated_price if estimated_price is not None else self._get_option_price(trade.option_symbol)
 
-        # Use limit order on exit: bid * (1 - buffer) to cap slippage
+        # Use limit order on exit at bid price
         exit_limit = None
         try:
             exit_quote = self._get_contracts_client().get_latest_option_quote(trade.option_symbol)
             if exit_quote and exit_quote.get("bid") and exit_quote["bid"] > 0:
-                exit_limit = round(exit_quote["bid"] * (1 - self.settings.option_limit_buffer_pct), 2)
+                exit_limit = round(exit_quote["bid"], 2)
         except Exception:
             pass
 
@@ -1117,12 +1101,12 @@ class EmaPopPullbackHoldOptionsStrategy:
 
         exit_price = estimated_price if estimated_price is not None else self._get_option_price(trade.option_symbol)
 
-        # Use limit order on exit: bid * (1 - buffer)
+        # Use limit order on exit at bid price
         exit_limit = None
         try:
             exit_quote = self._get_contracts_client().get_latest_option_quote(trade.option_symbol)
             if exit_quote and exit_quote.get("bid") and exit_quote["bid"] > 0:
-                exit_limit = round(exit_quote["bid"] * (1 - self.settings.option_limit_buffer_pct), 2)
+                exit_limit = round(exit_quote["bid"], 2)
         except Exception:
             pass
 
