@@ -5,6 +5,7 @@ Exposes /health, /start, /stop, /status endpoints for the Next.js frontend.
 
 from __future__ import annotations
 
+import collections
 import os
 import signal
 import subprocess
@@ -33,6 +34,24 @@ _bot_start_time: Optional[float] = None
 _bot_mode: str = "paper"
 _lock = threading.Lock()
 
+# Rolling log buffer — keeps last 50 lines of bot output
+_LOG_BUFFER_SIZE = 50
+_bot_log: collections.deque[str] = collections.deque(maxlen=_LOG_BUFFER_SIZE)
+_log_thread: Optional[threading.Thread] = None
+
+
+def _drain_output(proc: subprocess.Popen) -> None:
+    """Read subprocess stdout in a background thread to prevent pipe deadlock
+    and capture log output for diagnostics."""
+    try:
+        for raw_line in iter(proc.stdout.readline, b""):
+            line = raw_line.decode("utf-8", errors="replace").rstrip()
+            if line:
+                _bot_log.append(line)
+    except (ValueError, OSError):
+        # Pipe closed
+        pass
+
 
 class StatusResponse(BaseModel):
     running: bool
@@ -43,6 +62,8 @@ class StatusResponse(BaseModel):
     totalTrades: int = 0
     symbols: list[str] = []
     lastUpdate: Optional[str] = None
+    error: Optional[str] = None
+    recentLogs: list[str] = []
 
 
 class ActionResponse(BaseModel):
@@ -66,6 +87,11 @@ def _get_symbols() -> list[str]:
     return [s.strip() for s in symbols_env.split(",") if s.strip()]
 
 
+def _get_recent_logs(n: int = 10) -> list[str]:
+    """Return the last n lines from the bot log buffer."""
+    return list(_bot_log)[-n:]
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -78,10 +104,16 @@ def get_status():
     with _lock:
         running = _bot_process is not None and _bot_process.poll() is None
 
+        error_msg = None
         if not running and _bot_process is not None:
-            # Process exited
+            # Process exited — capture exit code for diagnostics
+            exit_code = _bot_process.returncode
             _bot_process = None
             _bot_start_time = None
+            if exit_code and exit_code != 0:
+                recent = _get_recent_logs(5)
+                log_snippet = "; ".join(recent) if recent else "no output captured"
+                error_msg = f"Bot exited with code {exit_code}: {log_snippet}"
 
         uptime = None
         if running and _bot_start_time:
@@ -96,12 +128,14 @@ def get_status():
             totalTrades=0,  # TODO: query from SQLite store
             symbols=_get_symbols(),
             lastUpdate=time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime()),
+            error=error_msg,
+            recentLogs=_get_recent_logs(10),
         )
 
 
 @app.post("/start", response_model=ActionResponse)
 def start_bot():
-    global _bot_process, _bot_start_time, _bot_mode
+    global _bot_process, _bot_start_time, _bot_mode, _log_thread
 
     with _lock:
         if _bot_process is not None and _bot_process.poll() is None:
@@ -109,20 +143,35 @@ def start_bot():
 
         try:
             _bot_mode = "paper"
+            _bot_log.clear()
+
             _bot_process = subprocess.Popen(
                 [sys.executable, "-m", "tradebot.app", "run", "--paper"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
-                env={**os.environ, "PYTHONPATH": "/app/tradebot"},
             )
             _bot_start_time = time.time()
 
-            # Wait briefly to check for immediate crash
-            time.sleep(1)
+            # Start background thread to drain stdout (prevents pipe deadlock)
+            _log_thread = threading.Thread(
+                target=_drain_output, args=(_bot_process,), daemon=True
+            )
+            _log_thread.start()
+
+            # Wait to check for immediate crash (config errors, import errors, etc.)
+            time.sleep(3)
             if _bot_process.poll() is not None:
+                exit_code = _bot_process.returncode
+                # Give the drain thread a moment to capture remaining output
+                time.sleep(0.5)
+                recent = _get_recent_logs(5)
+                log_snippet = "; ".join(recent) if recent else "no output captured"
                 _bot_process = None
                 _bot_start_time = None
-                raise HTTPException(status_code=500, detail="Bot crashed on startup")
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Bot crashed on startup (exit code {exit_code}): {log_snippet}",
+                )
 
             return ActionResponse(success=True, message="Bot started in paper mode")
         except HTTPException:

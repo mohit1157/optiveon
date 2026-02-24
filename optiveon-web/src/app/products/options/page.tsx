@@ -15,6 +15,7 @@ import {
     AlertTriangle,
     Clock,
     ServerOff,
+    Terminal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +44,7 @@ interface BotStatus {
     lastUpdate?: string;
     trades?: TradePosition[];
     recentActivity?: string[];
+    recentLogs?: string[];
     error?: string;
 }
 
@@ -72,7 +74,12 @@ export default function OptionsPage() {
                 const data = await res.json();
                 setStatus(data);
                 setBotDeployed(true);
-                setError(null);
+                // Surface crash errors from the status endpoint
+                if (data.error) {
+                    setError(data.error);
+                } else {
+                    setError(null);
+                }
             } else if (res.status === 503) {
                 setBotDeployed(false);
                 setError(null);
@@ -99,9 +106,14 @@ export default function OptionsPage() {
             const res = await fetch(`/api/bot/options/${action}`, { method: "POST" });
             const data = await res.json();
             if (res.ok) {
+                // Small delay before status check so the bot has time to
+                // either stabilise or crash (crash output needs time to flush)
+                await new Promise((r) => setTimeout(r, 2000));
                 await fetchStatus();
             } else {
-                setError(data.error || `Failed to ${action} bot`);
+                // Parse FastAPI error detail if present
+                const msg = data.detail || data.error || `Failed to ${action} bot`;
+                setError(msg);
             }
         } catch {
             setError(`Failed to ${action} bot — server may be unreachable`);
@@ -360,6 +372,21 @@ export default function OptionsPage() {
                                     <span className="text-foreground-secondary">{activity}</span>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Bot Logs */}
+                {status.recentLogs && status.recentLogs.length > 0 && (
+                    <div className="rounded-2xl border border-border bg-background-card p-xl mb-xl">
+                        <h2 className="text-sm uppercase tracking-[0.15em] text-foreground-muted mb-lg flex items-center gap-2">
+                            <Terminal className="w-4 h-4" />
+                            Bot Logs
+                        </h2>
+                        <div className="bg-background rounded-lg border border-border p-md overflow-x-auto max-h-64 overflow-y-auto">
+                            <pre className="text-xs font-mono text-foreground-secondary leading-relaxed whitespace-pre-wrap">
+                                {status.recentLogs.join("\n")}
+                            </pre>
                         </div>
                     </div>
                 )}

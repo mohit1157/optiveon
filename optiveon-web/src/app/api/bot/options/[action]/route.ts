@@ -17,6 +17,8 @@ const OFFLINE_STATUS = {
     todayPnl: "$0.00",
     totalTrades: 0,
     symbols: [],
+    error: null,
+    recentLogs: [],
 };
 
 async function verifyAdmin() {
@@ -77,7 +79,7 @@ export async function POST(
     if (action === "start" || action === "stop") {
         try {
             const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 10000);
+            const timeout = setTimeout(() => controller.abort(), 15000);
             const res = await fetch(`${BOT_API_URL}/${action}`, {
                 method: "POST",
                 cache: "no-store",
