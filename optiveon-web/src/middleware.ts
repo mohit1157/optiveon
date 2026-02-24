@@ -46,6 +46,7 @@ export default withAuth(
           "/privacy",
           "/terms",
           "/disclaimer",
+          "/careers",
           "/products/stocks",
           "/products/polymarket",
           "/products/futes",

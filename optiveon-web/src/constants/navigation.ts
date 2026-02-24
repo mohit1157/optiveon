@@ -48,6 +48,7 @@ export const footerNavSections: NavSection[] = [
     items: [
       { title: "Technology", href: "/#technology" },
       { title: "Release Radar", href: "/#roadmap" },
+      { title: "Careers", href: "/careers" },
       { title: "Contact", href: "/#contact" },
     ],
   },

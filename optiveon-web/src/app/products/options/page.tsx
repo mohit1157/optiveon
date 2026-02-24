@@ -62,7 +62,7 @@ const DEFAULT_STATUS: BotStatus = {
 export default function OptionsPage() {
     const [status, setStatus] = useState<BotStatus>(DEFAULT_STATUS);
     const [loading, setLoading] = useState(false);
-    const [actionLoading, setActionLoading] = useState(false);
+    const [actionLoading, setActionLoading] = useState<"start" | "stop" | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [botDeployed, setBotDeployed] = useState(true);
 
@@ -101,7 +101,7 @@ export default function OptionsPage() {
 
     const handleAction = async (action: "start" | "stop") => {
         try {
-            setActionLoading(true);
+            setActionLoading(action);
             setError(null);
             const res = await fetch(`/api/bot/options/${action}`, { method: "POST" });
             const data = await res.json();
@@ -118,7 +118,7 @@ export default function OptionsPage() {
         } catch {
             setError(`Failed to ${action} bot — server may be unreachable`);
         } finally {
-            setActionLoading(false);
+            setActionLoading(null);
         }
     };
 
@@ -147,7 +147,7 @@ export default function OptionsPage() {
                                 {status.mode === "paper" ? "📝 Paper Trading" : "🔴 Live Trading"}
                             </Badge>
                             {!botDeployed && (
-                                <Badge variant="destructive" className="text-xs">
+                                <Badge variant="error" className="text-xs">
                                     Not Deployed
                                 </Badge>
                             )}
@@ -200,20 +200,20 @@ export default function OptionsPage() {
                             <Button
                                 variant="primary"
                                 onClick={() => handleAction("start")}
-                                disabled={status.running || actionLoading || !botDeployed}
+                                disabled={status.running || !!actionLoading || !botDeployed}
                                 className="gap-2"
                             >
                                 <Play className="w-4 h-4" />
-                                {actionLoading ? "Starting..." : "Start Bot"}
+                                {actionLoading === "start" ? "Starting..." : "Start Bot"}
                             </Button>
                             <Button
                                 variant="outline"
                                 onClick={() => handleAction("stop")}
-                                disabled={!status.running || actionLoading}
+                                disabled={!status.running || !!actionLoading}
                                 className="gap-2"
                             >
                                 <Square className="w-4 h-4" />
-                                {actionLoading ? "Stopping..." : "Stop Bot"}
+                                {actionLoading === "stop" ? "Stopping..." : "Stop Bot"}
                             </Button>
                             <Button
                                 variant="outline"
@@ -324,7 +324,7 @@ export default function OptionsPage() {
                                             <td className="py-3 pr-4 font-mono font-semibold">{trade.symbol}</td>
                                             <td className="py-3 pr-4">
                                                 <Badge
-                                                    variant={trade.type === "call" ? "success" : trade.type === "put" ? "destructive" : "outline"}
+                                                    variant={trade.type === "call" ? "success" : trade.type === "put" ? "error" : "outline"}
                                                     className="text-[0.65rem]"
                                                 >
                                                     {trade.type.toUpperCase()}
