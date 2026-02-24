@@ -2,7 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { BarChart3, TrendingUp, Activity, Key } from "lucide-react";
+import Link from "next/link";
+import { BarChart3, TrendingUp, Activity, Key, Bot, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
@@ -91,6 +92,28 @@ export default async function DashboardPage() {
           );
         })}
       </div>
+
+      {/* Admin: Options Trade Bot */}
+      {session.user.role === "ADMIN" && (
+        <Link href="/products/options" className="block">
+          <Card className="border-accent/30 bg-accent/5 hover:bg-accent/10 transition-colors cursor-pointer">
+            <CardContent className="flex items-center justify-between p-xl">
+              <div className="flex items-center gap-lg">
+                <div className="w-12 h-12 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center">
+                  <Bot className="w-6 h-6 text-accent" />
+                </div>
+                <div>
+                  <p className="text-lg font-semibold">Options Trade Bot</p>
+                  <p className="text-sm text-foreground-secondary">
+                    Manage and monitor the options trading bot
+                  </p>
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-foreground-muted" />
+            </CardContent>
+          </Card>
+        </Link>
+      )}
 
       {/* Quick Actions */}
       <div className="grid gap-lg md:grid-cols-2">

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import {
     ArrowLeft,
     Play,
@@ -16,6 +17,7 @@ import {
     Clock,
     ServerOff,
     Terminal,
+    LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -134,7 +136,7 @@ export default function OptionsPage() {
                             <ArrowLeft className="w-4 h-4" />
                         </Link>
                     </Button>
-                    <div>
+                    <div className="flex-1">
                         <div className="flex items-center gap-md flex-wrap">
                             <h1 className="text-2xl font-bold">Options Trade Bot</h1>
                             <Badge
@@ -156,6 +158,14 @@ export default function OptionsPage() {
                             3-min EMA pop-pullback-hold options strategy via Alpaca
                         </p>
                     </div>
+                    <Button
+                        variant="outline"
+                        onClick={() => signOut({ callbackUrl: "/" })}
+                        className="gap-2 flex-shrink-0"
+                    >
+                        <LogOut className="w-4 h-4" />
+                        Sign Out
+                    </Button>
                 </div>
 
                 {/* Deployment Warning */}
