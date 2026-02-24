@@ -18,6 +18,16 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    @model_validator(mode="before")
+    @classmethod
+    def strip_inline_comments(cls, values: dict) -> dict:
+        """Strip inline comments from .env values (e.g. '0.20 # comment' -> '0.20')."""
+        if isinstance(values, dict):
+            for key, value in values.items():
+                if isinstance(value, str) and "#" in value:
+                    values[key] = value.split("#")[0].strip()
+        return values
+
     # Alpaca credentials
     alpaca_api_key: str = ""
     alpaca_api_secret: str = ""
