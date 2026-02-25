@@ -157,36 +157,39 @@ class AlpacaOptionsContractsClient:
         return None
 
     def _fetch_quote_from_quotes_endpoint(self, symbol: str) -> Optional[dict]:
-        """Fetch quote from the /v1beta1/options/quotes endpoint."""
-        url = f"{self.DATA_API_URL}/v1beta1/options/quotes"
+        """Fetch quote from the /v1beta1/options/quotes/latest endpoint."""
+        url = f"{self.DATA_API_URL}/v1beta1/options/quotes/latest"
         params = {
             "symbols": symbol,
-            "limit": 1,
+            "feed": "indicative",
         }
 
-        r = self.client.get(url, params=params)
-
-        if r.status_code in (404, 422):
-            return None
-
-        r.raise_for_status()
-        data = r.json()
-        quotes = data.get("quotes", {})
-        sym_quotes = quotes.get(symbol) or quotes.get(symbol.upper())
-
-        if not sym_quotes:
-            return None
-
-        q = sym_quotes[-1]
-        bid = q.get("bp") or q.get("bid_price") or q.get("bid")
-        ask = q.get("ap") or q.get("ask_price") or q.get("ask")
-
-        if bid is None or ask is None:
-            return None
-
         try:
-            return {"bid": float(bid), "ask": float(ask)}
-        except (TypeError, ValueError):
+            r = self.client.get(url, params=params)
+
+            if r.status_code in (400, 404, 422):
+                return None
+
+            r.raise_for_status()
+            data = r.json()
+            # /quotes/latest returns {"quotes": {"SYMBOL": {quote_obj}}}
+            q = data.get("quotes", {}).get(symbol) or data.get("quotes", {}).get(symbol.upper())
+
+            if not q:
+                return None
+
+            bid = q.get("bp") or q.get("bid_price") or q.get("bid")
+            ask = q.get("ap") or q.get("ask_price") or q.get("ask")
+
+            if bid is None or ask is None:
+                return None
+
+            try:
+                return {"bid": float(bid), "ask": float(ask)}
+            except (TypeError, ValueError):
+                return None
+        except Exception as e:
+            log.debug(f"Quotes endpoint failed for {symbol}: {e}")
             return None
 
     def _fetch_quote_from_snapshot(self, symbol: str) -> Optional[dict]:
