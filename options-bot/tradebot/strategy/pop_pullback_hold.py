@@ -668,42 +668,17 @@ class EmaPopPullbackHoldOptionsStrategy:
             log.warning(f"No suitable {preferred_type} contract for {symbol}")
             return
 
-        # Fetch quote for spread check and limit price
-        quote = contracts_client.get_latest_option_quote(contract.symbol)
-        if quote:
-            bid = quote["bid"]
-            ask = quote["ask"]
-
-            # Spread check
-            if ask > 0:
-                spread_pct = (ask - bid) / ask
-                if spread_pct > self.settings.option_max_spread_pct:
-                    log.warning(
-                        f"Spread too wide for {contract.symbol}: {spread_pct:.2%} "
-                        f"(>{self.settings.option_max_spread_pct:.2%}). Bid={bid}, Ask={ask}. Skipping."
-                    )
-                    return
-            else:
-                log.warning(f"Invalid quote for {contract.symbol}: Bid={bid}, Ask={ask}. Skipping.")
-                return
-
-            premium = ask
-            limit_price = round(ask * (1 + self.settings.option_limit_buffer_pct), 2)
+        # Quote fetching and spread checks are handled inside the fill loop below.
+        # We need premium estimate for qty calculation only.
+        contracts_client_for_qty = self._get_contracts_client()
+        initial_quote = contracts_client_for_qty.get_latest_option_quote(contract.symbol)
+        if initial_quote and initial_quote["ask"] > 0:
+            premium = initial_quote["ask"]
+            bid = initial_quote["bid"]
+            ask = initial_quote["ask"]
         else:
-            # Fallback: use mid-price endpoint when quote API returns nothing
-            mid = contracts_client.get_latest_option_mid_price(contract.symbol)
-            if not mid or mid <= 0:
-                log.warning(f"No quote AND no mid-price for {contract.symbol}, skipping entry")
-                return
-            log.info(
-                f"No quote for {contract.symbol}, using mid-price fallback: ${mid:.2f} "
-                f"(spread check skipped)"
-            )
-            premium = mid
-            # Use mid + buffer as limit price (conservative since we don't know the ask)
-            limit_price = round(mid * (1 + self.settings.option_limit_buffer_pct * 2), 2)
-            bid = None
-            ask = None
+            log.warning(f"No quote for {contract.symbol}, cannot determine ask price. Skipping entry.")
+            return
 
         if self.settings.option_use_dynamic_qty and premium > 0:
             qty = self.risk.calc_option_qty(
@@ -726,41 +701,87 @@ class EmaPopPullbackHoldOptionsStrategy:
             base_price = base_high if base_high is not None else entry_underlying
             stop_price = base_price + self._stop_buffer_amount(base_price)
 
-        try:
-            order_id = self.broker.place_order(
-                OrderRequest(
-                    symbol=contract.symbol, 
-                    side="buy", 
-                    qty=qty,
-                    limit_price=limit_price
-                )
-            )
-        except Exception as e:
-            log.error(f"Entry order failed for {contract.symbol}: {e}")
-            return
-
-        # Fill verification: wait for order to fill (up to 15 seconds)
+        # --- Smart fill logic: place at exact ask, retry once if chart still valid ---
         import time as _time
-        fill_price = None
-        for _attempt in range(15):
-            _time.sleep(1)
-            order_info = self.broker.get_order(order_id)
-            if order_info and order_info.get("status") in ("filled", "OrderStatus.FILLED"):
-                fill_price = order_info.get("filled_avg_price")
-                break
-            if order_info and order_info.get("status") in (
-                "canceled", "cancelled", "expired", "rejected",
-                "OrderStatus.CANCELED", "OrderStatus.EXPIRED", "OrderStatus.REJECTED",
-            ):
-                log.warning(f"Entry order {order_id} was {order_info['status']}, aborting trade")
+        max_entry_attempts = 2
+
+        for attempt in range(1, max_entry_attempts + 1):
+            # Fetch fresh ask price for each attempt
+            fresh_quote = contracts_client.get_latest_option_quote(contract.symbol)
+            if fresh_quote and fresh_quote["ask"] > 0:
+                ask = fresh_quote["ask"]
+                bid = fresh_quote["bid"]
+                premium = ask
+
+                # Spread check on each attempt
+                spread_pct = (ask - bid) / ask if ask > 0 else 999
+                if spread_pct > self.settings.option_max_spread_pct:
+                    log.warning(
+                        f"Attempt {attempt}: Spread too wide for {contract.symbol}: {spread_pct:.2%} "
+                        f"(>{self.settings.option_max_spread_pct:.2%}). Bid={bid}, Ask={ask}. Skipping."
+                    )
+                    return
+            else:
+                log.warning(f"Attempt {attempt}: No quote for {contract.symbol}, skipping entry")
                 return
-        else:
-            # Order did not fill in time — cancel it
-            log.warning(f"Entry order {order_id} not filled in 15s, cancelling")
+
+            limit_price = round(ask, 2)  # Exact ask price — no buffer
+            log.info(
+                f"Attempt {attempt}/{max_entry_attempts}: Placing BUY {contract.symbol} "
+                f"qty={qty} limit=${limit_price:.2f} (ask=${ask:.2f}, bid=${bid:.2f})"
+            )
+
+            try:
+                order_id = self.broker.place_order(
+                    OrderRequest(
+                        symbol=contract.symbol,
+                        side="buy",
+                        qty=qty,
+                        limit_price=limit_price,
+                    )
+                )
+            except Exception as e:
+                log.error(f"Entry order failed for {contract.symbol}: {e}")
+                return
+
+            # Wait 5 seconds for fill
+            fill_price = None
+            for _tick in range(5):
+                _time.sleep(1)
+                order_info = self.broker.get_order(order_id)
+                if order_info and order_info.get("status") in ("filled", "OrderStatus.FILLED"):
+                    fill_price = order_info.get("filled_avg_price")
+                    break
+                if order_info and order_info.get("status") in (
+                    "canceled", "cancelled", "expired", "rejected",
+                    "OrderStatus.CANCELED", "OrderStatus.EXPIRED", "OrderStatus.REJECTED",
+                ):
+                    log.warning(f"Entry order {order_id} was {order_info['status']}, aborting trade")
+                    return
+
+            if fill_price is not None:
+                # Filled — use actual fill price
+                premium = float(fill_price)
+                log.info(f"Order {order_id} FILLED at ${premium:.2f} (limit was ${limit_price:.2f})")
+                break
+
+            # Not filled within 5s — cancel
+            log.warning(f"Attempt {attempt}: Order {order_id} not filled in 5s, cancelling")
             try:
                 self.broker.cancel_order(order_id)
+                _time.sleep(0.5)  # Brief pause for cancel to process
             except Exception:
                 pass
+
+            if attempt < max_entry_attempts:
+                # Re-validate the chart: is the technical setup still valid?
+                if not self._is_entry_still_valid(symbol, direction):
+                    log.info(f"Chart no longer valid for {direction} {symbol} after attempt {attempt}, skipping")
+                    return
+                log.info(f"Chart still valid for {direction} {symbol}, retrying with fresh ask price")
+        else:
+            # Exhausted all attempts
+            log.warning(f"Entry for {contract.symbol} failed after {max_entry_attempts} attempts, skipping")
             return
 
         # Use actual fill price instead of pre-trade estimate
@@ -1012,6 +1033,46 @@ class EmaPopPullbackHoldOptionsStrategy:
         if crossed:
             self._exit_full(trade, reason="ema_exit", estimated_price=current_price)
 
+    def _is_entry_still_valid(self, symbol: str, direction: str) -> bool:
+        """Re-validate the technical setup after a failed fill attempt.
+
+        Fetches fresh bars and checks if the EMA relationship still supports
+        the trade direction (call: close > EMA, put: close < EMA).
+        """
+        try:
+            bars = fetch_bars(
+                self.settings.alpaca_api_key,
+                self.settings.alpaca_api_secret,
+                symbol=symbol,
+                timeframe="3Min",
+                limit=50,
+                feed=self.settings.alpaca_data_feed,
+            )
+            if bars.empty or len(bars) < 3:
+                return False
+
+            closes = bars["close"]
+            ema_series = ema(closes, self.settings.pop_pullback_ema_length)
+            if len(ema_series) < 1:
+                return False
+
+            close_now = float(closes.iloc[-1])
+            ema_now = float(ema_series.iloc[-1])
+
+            if direction == "call":
+                valid = close_now > ema_now
+            else:
+                valid = close_now < ema_now
+
+            log.info(
+                f"Re-validation {symbol} {direction}: close={close_now:.2f} "
+                f"ema={ema_now:.2f} valid={valid}"
+            )
+            return valid
+        except Exception as e:
+            log.warning(f"Re-validation failed for {symbol}: {e}")
+            return False
+
     def _get_option_price(self, symbol: str) -> Optional[float]:
         try:
             return self._get_contracts_client().get_latest_option_mid_price(symbol)
@@ -1041,51 +1102,103 @@ class EmaPopPullbackHoldOptionsStrategy:
         if qty <= 0:
             return False
 
-        exit_price = estimated_price if estimated_price is not None else self._get_option_price(trade.option_symbol)
+        import time as _time
+        contracts_client = self._get_contracts_client()
+        max_sell_attempts = 15  # 15 attempts × 2s = 30s max
 
-        # Use limit order on exit at bid price
-        exit_limit = None
-        try:
-            exit_quote = self._get_contracts_client().get_latest_option_quote(trade.option_symbol)
-            if exit_quote and exit_quote.get("bid") and exit_quote["bid"] > 0:
-                exit_limit = round(exit_quote["bid"], 2)
-        except Exception:
-            pass
+        for attempt in range(1, max_sell_attempts + 1):
+            # Fetch fresh bid price each attempt
+            exit_limit = None
+            try:
+                exit_quote = contracts_client.get_latest_option_quote(trade.option_symbol)
+                if exit_quote and exit_quote.get("bid") and exit_quote["bid"] > 0:
+                    exit_limit = round(exit_quote["bid"], 2)
+            except Exception:
+                pass
 
+            if exit_limit is None:
+                # No bid available — use market order
+                log.warning(f"Partial exit: no bid for {trade.option_symbol}, using market order")
+
+            log.info(
+                f"Partial exit attempt {attempt}: SELL {trade.option_symbol} "
+                f"qty={qty} limit=${exit_limit or 'MKT'} reason={reason}"
+            )
+
+            try:
+                order_id = self.broker.place_order(
+                    OrderRequest(
+                        symbol=trade.option_symbol,
+                        side="sell",
+                        qty=qty,
+                        limit_price=exit_limit,
+                    )
+                )
+            except Exception as e:
+                log.error(f"Partial exit order failed: {e}")
+                return False
+
+            # Wait 2 seconds for fill
+            for _ in range(2):
+                _time.sleep(1)
+                order_info = self.broker.get_order(order_id)
+                if order_info and order_info.get("status") in ("filled", "OrderStatus.FILLED"):
+                    fill_px = order_info.get("filled_avg_price")
+                    exit_price = float(fill_px) if fill_px else estimated_price
+                    self.store.log_trade(
+                        symbol=trade.option_symbol,
+                        side="sell",
+                        qty=qty,
+                        order_type="limit",
+                        status="filled",
+                        order_id=order_id,
+                        metadata={
+                            "underlying": trade.underlying,
+                            "reason": reason,
+                            "strategy": self.CALIBRATION_STRATEGY,
+                            "partial": True,
+                            "signal_id": trade.signal_id,
+                            "fill_price": exit_price,
+                            "attempts": attempt,
+                        },
+                    )
+                    trade.realized_pnl_usd += self._estimate_realized_pnl(
+                        entry_price=trade.entry_option,
+                        exit_price=exit_price,
+                        qty=qty,
+                    )
+                    log.info(f"Partial exit FILLED at ${exit_price} after {attempt} attempt(s)")
+                    return True
+
+            # Not filled — cancel and retry with fresh bid
+            try:
+                self.broker.cancel_order(order_id)
+                _time.sleep(0.3)
+            except Exception:
+                pass
+
+        # Exhausted all attempts — force market order
+        log.warning(f"Partial exit: {max_sell_attempts} bid attempts failed, forcing market order")
         try:
             order_id = self.broker.place_order(
                 OrderRequest(
                     symbol=trade.option_symbol,
                     side="sell",
                     qty=qty,
-                    limit_price=exit_limit,
+                    limit_price=None,  # Market order
                 )
             )
-            self.store.log_trade(
-                symbol=trade.option_symbol,
-                side="sell",
-                qty=qty,
-                order_type="market",
-                status="submitted",
-                order_id=order_id,
-                metadata={
-                    "underlying": trade.underlying,
-                    "reason": reason,
-                    "strategy": self.CALIBRATION_STRATEGY,
-                    "partial": True,
-                    "signal_id": trade.signal_id,
-                    "estimated_exit_price": exit_price,
-                },
-            )
+            _time.sleep(2)
+            order_info = self.broker.get_order(order_id)
+            fill_px = order_info.get("filled_avg_price") if order_info else None
+            exit_price = float(fill_px) if fill_px else estimated_price
             trade.realized_pnl_usd += self._estimate_realized_pnl(
-                entry_price=trade.entry_option,
-                exit_price=exit_price,
-                qty=qty,
+                entry_price=trade.entry_option, exit_price=exit_price, qty=qty,
             )
-            log.info(f"Partial exit {trade.option_symbol} qty={qty} reason={reason}")
+            log.info(f"Partial exit forced market fill at ${exit_price}")
             return True
         except Exception as e:
-            log.error(f"Partial exit failed for {trade.option_symbol}: {e}")
+            log.error(f"Partial exit market order failed: {e}")
             return False
 
     def _exit_full(
@@ -1099,89 +1212,143 @@ class EmaPopPullbackHoldOptionsStrategy:
             self._active_trades.pop(trade.option_symbol, None)
             return
 
-        exit_price = estimated_price if estimated_price is not None else self._get_option_price(trade.option_symbol)
+        import time as _time
+        contracts_client = self._get_contracts_client()
+        max_sell_attempts = 15  # 15 attempts × 2s = 30s max
+        filled = False
+        exit_price = estimated_price
 
-        # Use limit order on exit at bid price
-        exit_limit = None
-        try:
-            exit_quote = self._get_contracts_client().get_latest_option_quote(trade.option_symbol)
-            if exit_quote and exit_quote.get("bid") and exit_quote["bid"] > 0:
-                exit_limit = round(exit_quote["bid"], 2)
-        except Exception:
-            pass
+        for attempt in range(1, max_sell_attempts + 1):
+            # Fetch fresh bid price each attempt
+            exit_limit = None
+            try:
+                exit_quote = contracts_client.get_latest_option_quote(trade.option_symbol)
+                if exit_quote and exit_quote.get("bid") and exit_quote["bid"] > 0:
+                    exit_limit = round(exit_quote["bid"], 2)
+            except Exception:
+                pass
 
-        closed = False
-        try:
-            order_id = self.broker.place_order(
-                OrderRequest(
-                    symbol=trade.option_symbol,
-                    side="sell",
-                    qty=qty,
-                    limit_price=exit_limit,
-                )
+            if exit_limit is None:
+                log.warning(f"Full exit: no bid for {trade.option_symbol}, using market order")
+
+            log.info(
+                f"Full exit attempt {attempt}: SELL {trade.option_symbol} "
+                f"qty={qty} limit=${exit_limit or 'MKT'} reason={reason}"
             )
-            self.store.log_trade(
-                symbol=trade.option_symbol,
-                side="sell",
+
+            try:
+                order_id = self.broker.place_order(
+                    OrderRequest(
+                        symbol=trade.option_symbol,
+                        side="sell",
+                        qty=qty,
+                        limit_price=exit_limit,
+                    )
+                )
+            except Exception as e:
+                log.error(f"Full exit order failed: {e}")
+                break
+
+            # Wait 2 seconds for fill
+            for _ in range(2):
+                _time.sleep(1)
+                order_info = self.broker.get_order(order_id)
+                if order_info and order_info.get("status") in ("filled", "OrderStatus.FILLED"):
+                    fill_px = order_info.get("filled_avg_price")
+                    exit_price = float(fill_px) if fill_px else estimated_price
+                    self.store.log_trade(
+                        symbol=trade.option_symbol,
+                        side="sell",
+                        qty=qty,
+                        order_type="limit",
+                        status="filled",
+                        order_id=order_id,
+                        metadata={
+                            "underlying": trade.underlying,
+                            "reason": reason,
+                            "strategy": self.CALIBRATION_STRATEGY,
+                            "partial": False,
+                            "signal_id": trade.signal_id,
+                            "fill_price": exit_price,
+                            "attempts": attempt,
+                        },
+                    )
+                    filled = True
+                    log.info(f"Full exit FILLED at ${exit_price} after {attempt} attempt(s) reason={reason}")
+                    break
+
+            if filled:
+                break
+
+            # Not filled — cancel and retry with fresh bid
+            try:
+                self.broker.cancel_order(order_id)
+                _time.sleep(0.3)
+            except Exception:
+                pass
+
+        # Last resort: market order if bid-based exit failed
+        if not filled:
+            log.warning(f"Full exit: {max_sell_attempts} bid attempts failed, forcing market order")
+            try:
+                order_id = self.broker.place_order(
+                    OrderRequest(
+                        symbol=trade.option_symbol,
+                        side="sell",
+                        qty=qty,
+                        limit_price=None,
+                    )
+                )
+                _time.sleep(2)
+                order_info = self.broker.get_order(order_id)
+                fill_px = order_info.get("filled_avg_price") if order_info else None
+                exit_price = float(fill_px) if fill_px else estimated_price
+                filled = True
+                log.info(f"Full exit forced market fill at ${exit_price}")
+            except Exception as e:
+                log.error(f"Full exit market order failed: {e}")
+
+        if filled:
+            realized_final_leg = self._estimate_realized_pnl(
+                entry_price=trade.entry_option,
+                exit_price=exit_price,
                 qty=qty,
-                order_type="market",
-                status="submitted",
-                order_id=order_id,
+            )
+            realized_pnl_usd = trade.realized_pnl_usd + realized_final_leg
+            entry_notional = (
+                trade.entry_option * 100 * trade.original_qty
+                if trade.entry_option is not None and trade.original_qty > 0
+                else 0.0
+            )
+            pnl_pct = (realized_pnl_usd / entry_notional) if entry_notional > 0 else None
+            self.store.log_trade_outcome(
+                strategy=self.CALIBRATION_STRATEGY,
+                symbol=trade.option_symbol,
+                side="buy",
+                qty=trade.original_qty,
+                pnl_usd=realized_pnl_usd,
+                pnl_pct=pnl_pct,
+                is_win=realized_pnl_usd > 0,
+                signal_id=trade.signal_id,
+                entry_price=trade.entry_option,
+                exit_price=exit_price,
+                closed_at=datetime.now(timezone.utc),
                 metadata={
                     "underlying": trade.underlying,
+                    "direction": trade.direction,
                     "reason": reason,
-                    "strategy": self.CALIBRATION_STRATEGY,
-                    "partial": False,
-                    "signal_id": trade.signal_id,
-                    "estimated_exit_price": exit_price,
+                    "trimmed": trade.trimmed,
+                    "opened_at": trade.opened_at.isoformat(),
                 },
             )
-            closed = True
-            log.info(f"Full exit {trade.option_symbol} qty={qty} reason={reason}")
-        except Exception as e:
-            log.error(f"Full exit failed for {trade.option_symbol}: {e}")
-        finally:
-            if closed:
-                realized_final_leg = self._estimate_realized_pnl(
-                    entry_price=trade.entry_option,
-                    exit_price=exit_price,
-                    qty=qty,
-                )
-                realized_pnl_usd = trade.realized_pnl_usd + realized_final_leg
-                entry_notional = (
-                    trade.entry_option * 100 * trade.original_qty
-                    if trade.entry_option is not None and trade.original_qty > 0
-                    else 0.0
-                )
-                pnl_pct = (realized_pnl_usd / entry_notional) if entry_notional > 0 else None
-                self.store.log_trade_outcome(
-                    strategy=self.CALIBRATION_STRATEGY,
-                    symbol=trade.option_symbol,
-                    side="buy",
-                    qty=trade.original_qty,
-                    pnl_usd=realized_pnl_usd,
-                    pnl_pct=pnl_pct,
-                    is_win=realized_pnl_usd > 0,
-                    signal_id=trade.signal_id,
-                    entry_price=trade.entry_option,
-                    exit_price=exit_price,
-                    closed_at=datetime.now(timezone.utc),
-                    metadata={
-                        "underlying": trade.underlying,
-                        "direction": trade.direction,
-                        "reason": reason,
-                        "trimmed": trade.trimmed,
-                        "opened_at": trade.opened_at.isoformat(),
-                    },
-                )
-            if closed:
-                self._active_trades.pop(trade.option_symbol, None)
-                # Track stop-outs for cooldown
-                if "stop" in reason:
-                    self._stopped_today.add(trade.underlying)
-                    log.info(f"{trade.underlying} added to stop-out cooldown for today")
-            else:
-                log.error(
-                    f"ORPHANED POSITION: {trade.option_symbol} qty={trade.remaining_qty} "
-                    f"— exit failed, position still open. Will retry next tick."
-                )
+            self._active_trades.pop(trade.option_symbol, None)
+            # Track stop-outs for cooldown
+            if "stop" in reason:
+                self._stopped_today.add(trade.underlying)
+                log.info(f"{trade.underlying} added to stop-out cooldown for today")
+        else:
+            log.error(
+                f"ORPHANED POSITION: {trade.option_symbol} qty={trade.remaining_qty} "
+                f"— exit failed, position still open. Will retry next tick."
+            )
+
