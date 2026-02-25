@@ -139,7 +139,25 @@ class AlpacaOptionsContractsClient:
         return volumes
 
     def get_latest_option_quote(self, symbol: str) -> Optional[dict]:
-        """Fetch the latest quote for an option symbol."""
+        """Fetch the latest quote for an option symbol.
+        
+        Tries quotes endpoint first, then snapshot endpoint as fallback.
+        """
+        # Try quotes endpoint first
+        quote = self._fetch_quote_from_quotes_endpoint(symbol)
+        if quote:
+            return quote
+
+        # Fallback: try snapshot endpoint (better availability on IEX)
+        quote = self._fetch_quote_from_snapshot(symbol)
+        if quote:
+            log.info(f"Got quote for {symbol} from snapshot: bid={quote['bid']}, ask={quote['ask']}")
+            return quote
+
+        return None
+
+    def _fetch_quote_from_quotes_endpoint(self, symbol: str) -> Optional[dict]:
+        """Fetch quote from the /v1beta1/options/quotes endpoint."""
         url = f"{self.DATA_API_URL}/v1beta1/options/quotes"
         params = {
             "symbols": symbol,
@@ -170,6 +188,46 @@ class AlpacaOptionsContractsClient:
             return {"bid": float(bid), "ask": float(ask)}
         except (TypeError, ValueError):
             return None
+
+    def _fetch_quote_from_snapshot(self, symbol: str) -> Optional[dict]:
+        """Fetch quote from the /v1beta1/options/snapshots endpoint."""
+        url = f"{self.DATA_API_URL}/v1beta1/options/snapshots/{symbol}"
+
+        try:
+            r = self.client.get(url)
+            if r.status_code in (404, 422):
+                return None
+            r.raise_for_status()
+            data = r.json()
+            snap = data.get("snapshot") or data
+
+            # Extract quote from snapshot
+            q = snap.get("latestQuote") or snap.get("latest_quote") or {}
+            bid = q.get("bp") or q.get("bid_price") or q.get("bid")
+            ask = q.get("ap") or q.get("ask_price") or q.get("ask")
+
+            if bid is not None and ask is not None:
+                try:
+                    bid_f, ask_f = float(bid), float(ask)
+                    if bid_f > 0 and ask_f > 0:
+                        return {"bid": bid_f, "ask": ask_f}
+                except (TypeError, ValueError):
+                    pass
+
+            # Try getting from latest trade as last resort
+            trade = snap.get("latestTrade") or snap.get("latest_trade") or {}
+            price = trade.get("p") or trade.get("price")
+            if price:
+                try:
+                    p = float(price)
+                    # Use trade price as approximate ask (slightly conservative)
+                    return {"bid": p * 0.95, "ask": p}
+                except (TypeError, ValueError):
+                    pass
+        except Exception as e:
+            log.debug(f"Snapshot fallback failed for {symbol}: {e}")
+
+        return None
 
     def _get_latest_option_bar_close(self, symbol: str) -> Optional[float]:
         """Fetch the latest bar close for an option symbol."""
