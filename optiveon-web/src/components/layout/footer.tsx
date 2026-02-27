@@ -7,8 +7,14 @@ import { companyInfo, riskDisclaimer } from "@/constants/content";
 
 export function Footer() {
   return (
-    <footer className="bg-background-card border-t border-border py-4xl">
-      <div className="container">
+    <footer className="relative bg-background-card border-t border-border py-4xl overflow-hidden overflow-y-visible">
+      {/* 
+        Bottom Glow Gradient Effect 
+        This div is positioned absolutely at the bottom, creating a smooth radial fade upwards.
+      */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-[400px] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-accent/15 via-background/40 to-transparent mix-blend-screen opacity-90 blur-xl" />
+
+      <div className="container relative z-10">
         {/* Main Footer Content */}
         <div className="flex flex-col md:flex-row justify-between gap-4xl pb-2xl border-b border-border">
           {/* Brand */}
