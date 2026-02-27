@@ -133,7 +133,8 @@ const config: Config = {
         "orb-float-1": "orbFloat1 15s ease-in-out infinite",
         "orb-float-2": "orbFloat2 12s ease-in-out infinite",
         spin: "spin 0.8s linear infinite",
-        marquee: "marquee 18s linear infinite",
+        marquee: "marquee 40s linear infinite",
+        "marquee-reverse": "marquee-reverse 40s linear infinite",
         "blob-1": "blobDrift1 20s ease-in-out infinite",
         "blob-2": "blobDrift2 25s ease-in-out infinite",
         "blob-3": "blobDrift3 18s ease-in-out infinite",
@@ -171,7 +172,11 @@ const config: Config = {
         },
         marquee: {
           "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(-200%)" },
+        },
+        "marquee-reverse": {
+          "0%": { transform: "translateX(-200%)" },
+          "100%": { transform: "translateX(0)" },
         },
         blobDrift1: {
           "0%, 100%": { transform: "translate(0, 0) scale(1)" },

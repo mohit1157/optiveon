@@ -9,6 +9,7 @@ import {
   ReleaseRadar,
   Contact,
   TrustStrip,
+  CommonQuestions,
 } from "@/components/marketing";
 
 import { JsonLd } from "@/components/seo/json-ld";
@@ -42,6 +43,7 @@ export default function HomePage() {
       <Technology />
       <ReleaseRadar />
       <CustomerStories />
+      <CommonQuestions />
       <Contact />
     </>
   );

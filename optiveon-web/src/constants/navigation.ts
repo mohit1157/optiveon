@@ -22,6 +22,10 @@ export const mainNavItems: NavItem[] = [
     href: "/#validation",
   },
   {
+    title: "Insights",
+    href: "/insights",
+  },
+  {
     title: "Payment",
     href: "https://buy.stripe.com/test_bJe8wQ7SfcME6V637r8N200",
     external: true,
@@ -46,6 +50,7 @@ export const footerNavSections: NavSection[] = [
   {
     title: "Company",
     items: [
+      { title: "Insights", href: "/insights" },
       { title: "Technology", href: "/#technology" },
       { title: "Release Radar", href: "/#roadmap" },
       { title: "Careers", href: "/careers" },
