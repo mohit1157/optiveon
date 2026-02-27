@@ -191,12 +191,15 @@ export function ValidationLab() {
                     key={item.id}
                     onClick={() => setActiveStageId(item.id)}
                     className={cn(
-                      "motion-card group w-full rounded-xl border px-lg py-lg text-left transition-all duration-normal",
+                      "motion-card group w-full rounded-xl border px-lg py-lg text-left transition-all duration-normal relative overflow-hidden",
                       active
-                        ? "border-accent bg-accent/10 shadow-accent"
+                        ? "border-accent bg-accent/10 shadow-accent-lg ring-1 ring-accent/30"
                         : "border-border bg-background-dark/55 hover:border-border-hover hover:bg-background-card"
                     )}
                   >
+                    {active && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[sweep_3s_ease-in-out_infinite]" />
+                    )}
                     <div className="flex items-start justify-between gap-lg">
                       <div>
                         <p className="text-[0.62rem] uppercase tracking-[0.18em] text-foreground-muted">

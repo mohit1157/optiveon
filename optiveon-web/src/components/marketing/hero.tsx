@@ -21,25 +21,25 @@ export function Hero() {
         {/* Animated gradient blobs — Ametrix-inspired flowing effect */}
         {/* Top-left: large gold glow drifting slowly */}
         <div
-          className="absolute -top-[200px] -left-[200px] w-[500px] h-[600px] md:w-[800px] md:h-[900px] rounded-full opacity-[0.12] blur-[120px] md:blur-[140px] animate-blob-1"
+          className="absolute -top-[200px] -left-[200px] w-[500px] h-[600px] md:w-[800px] md:h-[900px] rounded-full opacity-[0.16] blur-[120px] md:blur-[140px] animate-blob-1 mix-blend-screen"
           style={{ background: "radial-gradient(circle, #d6b36a 0%, #b19045 40%, transparent 70%)" }}
         />
 
         {/* Top-right: navy glow flowing down */}
         <div
-          className="absolute -top-[150px] -right-[200px] w-[400px] h-[500px] md:w-[700px] md:h-[800px] rounded-full opacity-[0.18] blur-[100px] md:blur-[130px] animate-blob-2"
+          className="absolute -top-[150px] -right-[200px] w-[400px] h-[500px] md:w-[700px] md:h-[800px] rounded-full opacity-[0.22] blur-[100px] md:blur-[130px] animate-blob-2 mix-blend-screen"
           style={{ background: "radial-gradient(circle, #1b3559 0%, #2b4a76 40%, transparent 70%)" }}
         />
 
         {/* Center: soft warm gold pulse behind the text */}
         <div
-          className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[300px] md:w-[900px] md:h-[500px] rounded-full opacity-[0.07] blur-[130px] md:blur-[160px] animate-blob-3"
+          className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[300px] md:w-[900px] md:h-[500px] rounded-full opacity-[0.12] blur-[130px] md:blur-[160px] animate-blob-3 mix-blend-screen"
           style={{ background: "radial-gradient(ellipse, #e3c98a 0%, #d6b36a 30%, transparent 65%)" }}
         />
 
         {/* Bottom-left: secondary navy accent */}
         <div
-          className="absolute -bottom-[100px] -left-[100px] w-[350px] h-[350px] md:w-[600px] md:h-[600px] rounded-full opacity-[0.10] blur-[110px] md:blur-[140px] animate-blob-4"
+          className="absolute -bottom-[100px] -left-[100px] w-[350px] h-[350px] md:w-[600px] md:h-[600px] rounded-full opacity-[0.18] blur-[110px] md:blur-[140px] animate-blob-4 mix-blend-screen"
           style={{ background: "radial-gradient(circle, #1b3559 0%, #0f1f36 50%, transparent 70%)" }}
         />
       </div>
@@ -55,7 +55,7 @@ export function Hero() {
 
             <h1 className="text-hero-title mb-lg text-balance">
               Institutional-Grade Strategy Validation and{" "}
-              <span className="gradient-text">Execution Infrastructure</span>
+              <span className="text-shimmer bg-gradient-text inline-block">Execution Infrastructure</span>
             </h1>
 
             <p className="text-[1.1rem] text-foreground-secondary mb-xl max-w-[680px] leading-relaxed lg:mx-0 mx-auto text-balance">
@@ -108,9 +108,9 @@ export function Hero() {
           </div>
 
           {/* Terminal Visual */}
-          <div className="hidden sm:flex justify-center lg:justify-end lg:order-none order-first animate-fade-in-up-delay">
+          <div className="hidden sm:flex justify-center lg:justify-end lg:order-none order-first animate-fade-in-up-delay relative">
             <div className="w-full max-w-[560px]">
-              <div className="bg-background-card border border-border rounded-xl overflow-hidden shadow-lg shadow-glow">
+              <div className="bg-background-card border border-border/80 rounded-xl overflow-hidden shadow-lg shadow-glow glass-reflection ring-1 ring-white/5 relative z-10">
                 {/* Terminal Header */}
                 <div className="flex items-center gap-md px-lg py-md bg-black/40 border-b border-border">
                   <div className="flex gap-2">

@@ -111,6 +111,33 @@
     background-clip: text;
   }
 
+  /* Animated Shimmer Text */
+  .text-shimmer {
+    background: linear-gradient(to right,
+        var(--text-muted) 20%,
+        var(--text-primary) 40%,
+        var(--text-primary) 60%,
+        var(--text-muted) 80%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: text-shimmer 3s linear infinite;
+  }
+
+  .text-shimmer-accent {
+    background: linear-gradient(to right,
+        var(--color-accent-dark) 20%,
+        var(--color-accent-light) 40%,
+        var(--color-accent-light) 60%,
+        var(--color-accent-dark) 80%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: text-shimmer 3s linear infinite;
+  }
+
   /* Glassmorphism card */
   .glass-card {
     background: rgba(17, 27, 42, 0.55);
@@ -119,7 +146,8 @@
     border: 1px solid rgba(163, 177, 198, 0.12);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    /* Increased internal reflection */
   }
 
   .glass-card:hover {
@@ -127,7 +155,44 @@
     border-color: rgba(163, 177, 198, 0.22);
     box-shadow:
       0 12px 40px rgba(0, 0, 0, 0.18),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      inset 0 1px 1px rgba(255, 255, 255, 0.12);
+    /* Brighter inner edge on hover */
+  }
+
+  /* Sweeping glass reflection */
+  .glass-reflection {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-reflection::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.03) 50%,
+        rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    animation: sweep 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes sweep {
+    0% {
+      left: -100%;
+    }
+
+    20% {
+      left: 200%;
+    }
+
+    100% {
+      left: 200%;
+    }
   }
 
   /* Container */

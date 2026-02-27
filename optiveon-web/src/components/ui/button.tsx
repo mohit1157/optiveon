@@ -6,14 +6,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "motion-button relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-7 py-3.5 text-[0.9375rem] font-semibold tracking-[0.01em] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 overflow-hidden before:pointer-events-none before:absolute before:top-[16%] before:bottom-[16%] before:-left-[42%] before:z-0 before:w-[34%] before:rounded-full before:bg-[linear-gradient(90deg,transparent,rgba(214,179,106,0.18),transparent)] before:opacity-0 before:blur-[2px] before:transition-[transform,opacity] before:[transition-duration:1800ms] before:ease-out hover:before:translate-x-[360%] hover:before:opacity-100 [&>*]:relative [&>*]:z-[1]",
+  "motion-button relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-7 py-3.5 text-[0.9375rem] font-semibold tracking-[0.01em] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 overflow-hidden before:pointer-events-none before:absolute before:inset-0 before:z-0 before:bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.2)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:-100%_0,0_0] before:bg-no-repeat before:opacity-0 before:transition-[background-position,opacity] before:duration-700 hover:before:opacity-100 hover:before:bg-[position:200%_0,0_0] [&>*]:relative [&>*]:z-[1]",
   {
     variants: {
       variant: {
         primary:
-          "bg-gradient-accent text-background-dark shadow-md shadow-accent/20 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30",
+          "bg-gradient-accent text-background-dark shadow-md shadow-accent/20 hover:-translate-y-0.5 hover:shadow-accent-lg border border-accent/20 hover:border-accent/40",
         outline:
-          "border border-border bg-transparent text-foreground hover:bg-white/[0.04] hover:border-accent hover:text-accent",
+          "border border-border bg-transparent text-foreground hover:bg-white/[0.04] hover:border-accent hover:text-accent shadow-sm",
         ghost:
           "bg-white/[0.02] text-foreground border border-transparent hover:bg-white/[0.06] hover:border-border",
         link: "text-accent underline-offset-4 hover:underline",
@@ -35,8 +35,8 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
 }

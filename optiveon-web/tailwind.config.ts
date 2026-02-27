@@ -138,6 +138,8 @@ const config: Config = {
         "blob-2": "blobDrift2 25s ease-in-out infinite",
         "blob-3": "blobDrift3 18s ease-in-out infinite",
         "blob-4": "blobDrift4 22s ease-in-out infinite",
+        "text-shimmer": "text-shimmer 2.5s ease-out infinite alternate",
+        "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
       },
       keyframes: {
         fadeInUp: {
@@ -190,6 +192,21 @@ const config: Config = {
         blobDrift4: {
           "0%, 100%": { transform: "translate(0, 0) scale(1)" },
           "50%": { transform: "translate(30px, -25px) scale(1.06)" },
+        },
+        "text-shimmer": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center",
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center",
+          },
+        },
+        "border-beam": {
+          "100%": {
+            "transform": "translate(-50%, -50%) rotate(360deg)",
+          },
         },
       },
     },
