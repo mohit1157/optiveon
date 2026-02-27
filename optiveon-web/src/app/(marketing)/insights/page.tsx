@@ -84,7 +84,7 @@ export default function InsightsPage() {
     return (
         <main className="flex min-h-screen flex-col items-center bg-background pt-32 pb-32">
             <div className="container max-w-6xl">
-                <header className="mb-20 md:mb-32">
+                <header className="mb-16 md:mb-24">
                     <h1 className="text-4xl font-medium tracking-tight text-foreground md:text-6xl lg:text-[4.5rem]">
                         Insights
                     </h1>
@@ -92,7 +92,35 @@ export default function InsightsPage() {
                         Research, engineering updates, and market structure analyses from the Optiveon team.
                     </p>
                 </header>
+            </div>
 
+            {/* Horizontal Article Ticker (Claude Style) */}
+            <div className="w-full border-y border-border/40 bg-background-dark py-4 mb-20 md:mb-32 overflow-hidden relative">
+                {/* Left/Right Fade Gradients for smooth entrance/exit */}
+                <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[10vw] max-w-[100px] bg-gradient-to-r from-background-dark to-transparent" />
+                <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-[10vw] max-w-[100px] bg-gradient-to-l from-background-dark to-transparent" />
+
+                <div className="flex w-max animate-marquee items-center hover:[animation-play-state:paused]">
+                    {[...INSIGHT_ARTICLES, ...INSIGHT_ARTICLES].map((article, idx) => (
+                        <Link
+                            href={article.url}
+                            key={`ticker-${idx}`}
+                            className="group flex items-center px-8 border-r border-border/30 last:border-r-0 transition-opacity hover:opacity-80"
+                        >
+                            <div className="flex flex-col gap-1">
+                                <span className="text-[1.05rem] font-medium text-foreground transition-colors group-hover:text-accent whitespace-nowrap">
+                                    {article.title}
+                                </span>
+                                <span className="text-[0.85rem] text-foreground-muted">
+                                    {article.date}
+                                </span>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+            <div className="container max-w-6xl">
                 <section className="mb-24 md:mb-32">
                     <FeaturedArticle article={featuredArticle} />
                 </section>
