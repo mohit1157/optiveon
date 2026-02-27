@@ -5,6 +5,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { JsonLd } from "@/components/seo/json-ld";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -74,6 +75,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Global Organization Schema for Answer-Engines
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Optiveon LLC",
+    "url": "https://optiveon.com",
+    "logo": "https://optiveon.com/images/favicon.svg",
+    "description": "Advanced algorithmic trading research, validation infrastructure, and deployment software for trading teams.",
+    "sameAs": [
+      // Add social links here if needed
+      "https://github.com/mohit1157/optiveon"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "admin@optiveon.com",
+      "contactType": "customer support"
+    }
+  };
+
   return (
     <html
       lang="en"
@@ -82,6 +102,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
         <meta name="format-detection" content="telephone=no" />
+        <JsonLd data={organizationSchema} />
       </head>
       <body className="font-sans">
         {children}

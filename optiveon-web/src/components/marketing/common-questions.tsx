@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { JsonLd } from "@/components/seo/json-ld";
 
 const commonQuestions = [
   {
@@ -34,8 +35,22 @@ export function CommonQuestions() {
     setOpenFaqIndex((current) => (current === index ? null : index));
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": commonQuestions.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer,
+      },
+    })),
+  };
+
   return (
     <section id="faq" className="py-[88px] relative overflow-hidden">
+      <JsonLd data={faqSchema} />
       <div className="container">
         <div className="rounded-2xl border border-border/70 bg-[linear-gradient(165deg,rgba(13,20,32,0.95),rgba(9,14,23,0.92))] p-xl md:p-2xl">
           <h3 className="text-3xl md:text-[2.55rem] font-semibold leading-tight text-balance mb-xl">
