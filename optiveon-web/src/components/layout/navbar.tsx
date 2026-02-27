@@ -224,15 +224,15 @@ export function Navbar() {
           className={cn(
             "transition-all duration-slow",
             isScrolled
-              ? "container max-w-3xl mx-auto bg-background-card/60 backdrop-blur-3xl border border-border/60 rounded-full shadow-lg shadow-black/20 px-6 py-2 relative overflow-hidden"
+              ? "container max-w-fit mx-auto bg-background-card/60 backdrop-blur-3xl border border-border/60 rounded-full shadow-lg shadow-black/20 px-6 py-2 relative overflow-hidden"
               : "container relative"
           )}
         >
           {isScrolled && (
             <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent opacity-80" />
           )}
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between gap-x-6 md:gap-x-8 relative z-10">
+            <div className="flex items-center shrink-0">
               <Logo collapsed={isScrolled} />
             </div>
 
