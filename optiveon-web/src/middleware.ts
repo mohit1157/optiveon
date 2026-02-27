@@ -51,6 +51,7 @@ export default withAuth(
           "/products/polymarket",
           "/products/futes",
           "/products/forex",
+          "/insights",
         ];
 
         // API routes that don't need auth
