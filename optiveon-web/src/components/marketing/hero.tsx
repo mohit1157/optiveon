@@ -55,7 +55,7 @@ export function Hero() {
 
             <h1 className="text-hero-title mb-lg text-balance">
               Institutional-Grade Strategy Validation and{" "}
-              <span className="text-shimmer bg-gradient-text inline-block">Execution Infrastructure</span>
+              <span className="gradient-text">Execution Infrastructure</span>
             </h1>
 
             <p className="text-[1.1rem] text-foreground-secondary mb-xl max-w-[680px] leading-relaxed lg:mx-0 mx-auto text-balance">
