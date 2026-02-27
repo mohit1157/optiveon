@@ -16,7 +16,7 @@ export const INSIGHT_ARTICLES: Article[] = [
         category: "Research",
         readTime: "6 min read",
         date: "Feb 24, 2026",
-        url: "#"
+        url: "/insights/out-of-sample-testing"
     },
     {
         id: "options-pricing-models",
@@ -25,7 +25,7 @@ export const INSIGHT_ARTICLES: Article[] = [
         category: "Engineering",
         readTime: "8 min read",
         date: "Feb 18, 2026",
-        url: "#"
+        url: "/insights/options-pricing-models"
     },
     {
         id: "institutional-drawdown-limits",
@@ -34,7 +34,7 @@ export const INSIGHT_ARTICLES: Article[] = [
         category: "Market Analysis",
         readTime: "5 min read",
         date: "Feb 10, 2026",
-        url: "#"
+        url: "/insights/institutional-drawdown-limits"
     },
     {
         id: "latency-arbitrage",
@@ -43,7 +43,7 @@ export const INSIGHT_ARTICLES: Article[] = [
         category: "Research",
         readTime: "11 min read",
         date: "Jan 28, 2026",
-        url: "#"
+        url: "/insights/latency-arbitrage"
     },
     {
         id: "case-study-delta-neutral",
@@ -52,7 +52,7 @@ export const INSIGHT_ARTICLES: Article[] = [
         category: "Case Study",
         readTime: "7 min read",
         date: "Jan 15, 2026",
-        url: "#"
+        url: "/insights/case-study-delta-neutral"
     },
     {
         id: "data-quality-survivorship",
@@ -61,7 +61,7 @@ export const INSIGHT_ARTICLES: Article[] = [
         category: "Engineering",
         readTime: "9 min read",
         date: "Jan 03, 2026",
-        url: "#"
+        url: "/insights/data-quality-survivorship"
     },
     {
         id: "regime-detection",
@@ -70,7 +70,7 @@ export const INSIGHT_ARTICLES: Article[] = [
         category: "Research",
         readTime: "12 min read",
         date: "Dec 18, 2025",
-        url: "#"
+        url: "/insights/regime-detection"
     },
     {
         id: "execution-slippage",
@@ -79,6 +79,6 @@ export const INSIGHT_ARTICLES: Article[] = [
         category: "Market Analysis",
         readTime: "6 min read",
         date: "Dec 05, 2025",
-        url: "#"
+        url: "/insights/execution-slippage"
     }
 ];
