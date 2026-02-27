@@ -224,7 +224,7 @@ export function Navbar() {
           className={cn(
             "transition-all duration-slow",
             isScrolled
-              ? "container max-w-fit mx-auto bg-background-card/60 backdrop-blur-3xl border border-border/60 rounded-full shadow-lg shadow-black/20 px-6 py-2 relative overflow-hidden"
+              ? "container max-w-fit mx-auto bg-background-card/60 backdrop-blur-3xl border border-border/60 rounded-full shadow-lg shadow-black/20 px-6 py-2 relative"
               : "container relative"
           )}
         >
@@ -263,7 +263,7 @@ export function Navbar() {
             </ul>
 
             {/* Desktop CTA */}
-            <div className="hidden md:flex items-center gap-md">
+            <div className="hidden md:flex items-center ml-8">
               <Button variant="primary" asChild>
                 <Link href="/#contact">Request Demo</Link>
               </Button>
