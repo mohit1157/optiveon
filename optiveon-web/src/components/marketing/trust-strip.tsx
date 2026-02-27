@@ -153,7 +153,8 @@ function LogoItem({ Component, name }: { Component: React.FC; name: string }) {
 export function TrustStrip() {
     const { ref, isVisible } = useScrollAnimation<HTMLDivElement>();
 
-    const logoSet = [...LOGOS, ...LOGOS];
+    const baseLogos = [...LOGOS, ...LOGOS]; // Duplicate to ensure it's wider than the screen
+    const logoSet = [...baseLogos, ...baseLogos]; // Duplicate again for the -50% trick
 
     return (
         <section className="py-10 md:py-14 relative overflow-hidden">

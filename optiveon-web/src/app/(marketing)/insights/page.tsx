@@ -129,16 +129,21 @@ export default function InsightsPage() {
                     {[...INSIGHT_ARTICLES, ...INSIGHT_ARTICLES].map((article, idx) => (
                         <Link
                             href={article.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             key={`ticker-${idx}`}
-                            className="group flex items-center px-8 border-r border-border/30 last:border-r-0 transition-opacity hover:opacity-80"
+                            className="group flex items-center justify-between w-[320px] md:w-[420px] shrink-0 px-6 py-3 border-r border-border/30 last:border-r-0 transition-colors hover:bg-white/[0.02]"
                         >
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[1.05rem] font-medium text-foreground transition-colors group-hover:text-accent whitespace-nowrap">
+                            <div className="flex flex-col gap-1 pr-4 min-w-0">
+                                <span className="text-[1.05rem] font-medium text-foreground transition-colors group-hover:text-accent truncate">
                                     {article.title}
                                 </span>
-                                <span className="text-[0.85rem] text-foreground-muted">
-                                    {article.date}
+                                <span className="text-[0.85rem] text-foreground-muted whitespace-nowrap">
+                                    {article.category} &middot; {article.readTime}
                                 </span>
+                            </div>
+                            <div className="flex-shrink-0 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-accent opacity-0 transition-all duration-normal group-hover:opacity-100 translate-x-2 group-hover:translate-x-0">
+                                Read <ArrowRight className="h-3.5 w-3.5" />
                             </div>
                         </Link>
                     ))}
