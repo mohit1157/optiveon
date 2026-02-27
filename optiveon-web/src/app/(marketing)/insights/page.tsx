@@ -1,6 +1,7 @@
 import { INSIGHT_ARTICLES } from "@/constants/articles";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 // Deeply minimal, Claude-style article card
 function ArticleCard({ article }: { article: typeof INSIGHT_ARTICLES[0] }) {
@@ -11,6 +12,18 @@ function ArticleCard({ article }: { article: typeof INSIGHT_ARTICLES[0] }) {
             rel="noopener noreferrer"
             className="group flex flex-col items-start"
         >
+            <div className="mb-6 aspect-[1.8/1] w-full overflow-hidden rounded-xl bg-background-card/50 relative border border-border/30">
+                {article.imageUrl ? (
+                    <Image
+                        src={article.imageUrl}
+                        alt={article.title}
+                        fill
+                        className="object-cover transition-transform duration-slow group-hover:scale-105"
+                    />
+                ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-primary/10" />
+                )}
+            </div>
             <div className="mb-4">
                 <span className="text-xs font-semibold uppercase tracking-wider text-accent/80 transition-colors group-hover:text-accent">
                     {article.category}
@@ -59,11 +72,23 @@ function FeaturedArticle({ article }: { article: typeof INSIGHT_ARTICLES[0] }) {
             </div>
 
             {/* Abstract Thumbnail Area - mimicking a clean graphic */}
-            <div className="order-1 aspect-video w-full overflow-hidden rounded-xl border border-border/30 bg-background-card md:order-2 md:aspect-square lg:aspect-[4/3] relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-primary/10 transition-opacity duration-slow group-hover:opacity-60" />
-                <div className="absolute inset-0 flex items-center justify-center mix-blend-screen opacity-20">
-                    <div className="w-[150%] h-[150%] bg-[url('/images/noise.png')] opacity-30 animate-spin [animation-duration:120s]" />
-                </div>
+            <div className="relative order-1 aspect-video w-full overflow-hidden rounded-xl border border-border/30 bg-background-card md:order-2 md:aspect-square lg:aspect-[4/3]">
+                {article.imageUrl ? (
+                    <Image
+                        src={article.imageUrl}
+                        alt={article.title}
+                        fill
+                        className="object-cover transition-transform duration-slow group-hover:scale-105"
+                        priority
+                    />
+                ) : (
+                    <>
+                        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-primary/10 transition-opacity duration-slow group-hover:opacity-60" />
+                        <div className="absolute inset-0 flex items-center justify-center mix-blend-screen opacity-20">
+                            <div className="w-[150%] h-[150%] bg-[url('/images/noise.png')] opacity-30 animate-spin [animation-duration:120s]" />
+                        </div>
+                    </>
+                )}
             </div>
         </Link>
     );

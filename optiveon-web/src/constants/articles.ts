@@ -2,83 +2,72 @@ export interface Article {
     id: string;
     title: string;
     excerpt: string;
-    category: "Research" | "Engineering" | "Market Analysis" | "Case Study";
+    category: "Policy & Regulation" | "Market Structure" | "Quantitative Research" | "Industry News" | "Technology";
     readTime: string;
     date: string;
     url: string;
+    imageUrl?: string;
 }
 
 export const INSIGHT_ARTICLES: Article[] = [
     {
-        id: "out-of-sample-testing",
-        title: "Why In-Sample Backtesting is Breaking Your Trading Algorithms",
-        excerpt: "Exploring the dangers of curve-fitting and how structured out-of-sample validation prevents deployment disasters in volatile markets.",
-        category: "Research",
-        readTime: "6 min read",
-        date: "Feb 24, 2026",
-        url: "/insights/out-of-sample-testing"
+        id: "esma-supervision",
+        title: "ESMA pushes for consistent supervision of algorithmic trading",
+        excerpt: "The European Securities and Markets Authority (ESMA) emphasizes the need for consistent supervision to address risks associated with AI and ensure firms can fully explain their algorithms' decision-making processes.",
+        category: "Policy & Regulation",
+        readTime: "4 min read",
+        date: "Feb 25, 2026",
+        url: "https://www.investmentexecutive.com/news/industry-news/esma-pushes-for-consistent-supervision-of-algorithmic-trading/",
+        imageUrl: "/images/blog/esma.png"
     },
     {
-        id: "options-pricing-models",
-        title: "Modern Approaches to Real-Time Options Pricing",
-        excerpt: "How GPU-accelerated infrastructure is changing the way quant teams calculate the Greeks under zero-day expiration (0DTE) stress.",
-        category: "Engineering",
-        readTime: "8 min read",
+        id: "ai-liquidity-impact",
+        title: "AI-powered algorithms impact on stock market liquidity",
+        excerpt: "A look at how AI-powered algorithmic trading is heavily influencing stock market liquidity, optimizing order execution, and reducing market impact for large institutional players.",
+        category: "Market Structure",
+        readTime: "6 min read",
         date: "Feb 18, 2026",
-        url: "/insights/options-pricing-models"
+        url: "https://ibsintelligence.com/ibsi-news/ai-powered-algorithms-impact-on-stock-market-liquidity/",
+        imageUrl: "/images/blog/liquidity.png"
     },
     {
-        id: "institutional-drawdown-limits",
-        title: "Setting Hard Drawdown Limits: A Primer for Prop Firms",
-        excerpt: "An analysis of how top proprietary trading firms structure their automated circuit breakers to protect capital during flash crashes.",
-        category: "Market Analysis",
-        readTime: "5 min read",
-        date: "Feb 10, 2026",
-        url: "/insights/institutional-drawdown-limits"
-    },
-    {
-        id: "latency-arbitrage",
-        title: "The Death of Simple Latency Arbitrage",
-        excerpt: "As exchange matching engines approach the speed of light, alpha generation is returning to fundamental statistical modeling.",
-        category: "Research",
-        readTime: "11 min read",
-        date: "Jan 28, 2026",
-        url: "/insights/latency-arbitrage"
-    },
-    {
-        id: "case-study-delta-neutral",
-        title: "Scaling a Delta-Neutral Options Strategy Validation",
-        excerpt: "How one of our clients used Optiveon's infrastructure to stress-test their delta-neutral algorithm across 5 years of tick data.",
-        category: "Case Study",
-        readTime: "7 min read",
-        date: "Jan 15, 2026",
-        url: "/insights/case-study-delta-neutral"
-    },
-    {
-        id: "data-quality-survivorship",
-        title: "The Silent Killer: Survivorship Bias in Historical Data",
-        excerpt: "If your backtests don't include delisted assets, your Sharpe ratio is a lie. Here is how to clean your historical pricing feeds.",
-        category: "Engineering",
+        id: "machine-learning-pricing",
+        title: "Pricing Financial Derivatives using Machine Learning",
+        excerpt: "An exploration of how modern machine learning toolkits are being integrated with traditional mathematical pricing models, improving accuracy over traditional regression.",
+        category: "Quantitative Research",
         readTime: "9 min read",
-        date: "Jan 03, 2026",
-        url: "/insights/data-quality-survivorship"
+        date: "Feb 12, 2026",
+        url: "https://www.risk.net/journal-of-computational-finance/7954316/pricing-financial-derivatives-using-machine-learning-a-comprehensive-review",
+        imageUrl: "/images/blog/pricing.png"
     },
     {
-        id: "regime-detection",
-        title: "Building Adaptive Regime Detection Models",
-        excerpt: "Strategies that work in low-volatility melt-ups die in high-variance selloffs. Learn how to implement dynamic regime switching.",
-        category: "Research",
-        readTime: "12 min read",
-        date: "Dec 18, 2025",
-        url: "/insights/regime-detection"
+        id: "algo-market-growth",
+        title: "Algorithmic Trading Market Dominance in 2024",
+        excerpt: "Hedge funds and prominent banks continue to dominate the algorithmic trading landscape, utilizing automation to enhance profitability and drastically reduce execution costs.",
+        category: "Industry News",
+        readTime: "5 min read",
+        date: "Feb 01, 2026",
+        url: "https://www.grandviewresearch.com/industry-analysis/algorithmic-trading-market",
+        imageUrl: "/images/blog/dominance.png"
     },
     {
-        id: "execution-slippage",
-        title: "Modeling Execution Slippage in Crypto Perpetuals",
-        excerpt: "A deep dive into measuring the true cost of crossing the spread on major centralized exchanges during high-volume periods.",
-        category: "Market Analysis",
-        readTime: "6 min read",
-        date: "Dec 05, 2025",
-        url: "/insights/execution-slippage"
+        id: "quantum-computing",
+        title: "Quantum Computing Applications for Multi-Option Portfolio Pricing",
+        excerpt: "Emerging research demonstrates the long-term potential of applying quantum mechanics and computing to complex, multi-option portfolio valuation and risk assessment.",
+        category: "Technology",
+        readTime: "11 min read",
+        date: "Jan 22, 2026",
+        url: "https://www.tandfonline.com/doi/full/10.1080/14697688.2023.2183549",
+        imageUrl: "/images/blog/quantum.png"
+    },
+    {
+        id: "options-volatility",
+        title: "Navigating Earnings Season: Implied Volatility Analysis",
+        excerpt: "Tools and visual methods to help traders analyze key structural options data—like volume, open interest, and implied volatility crush—ahead of major earnings reports.",
+        category: "Market Structure",
+        readTime: "7 min read",
+        date: "Jan 10, 2026",
+        url: "https://www.barchart.com/story/news/24128549/unusual-options-activity",
+        imageUrl: "/images/blog/volatility.png"
     }
 ];
