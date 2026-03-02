@@ -141,8 +141,13 @@ const config: Config = {
         "blob-4": "blobDrift4 22s ease-in-out infinite",
         "text-shimmer": "text-shimmer 2.5s ease-out infinite alternate",
         "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
+        "pulse-glow": "pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       keyframes: {
+        pulseGlow: {
+          "0%, 100%": { opacity: "1", boxShadow: "0 0 10px rgba(5, 150, 105, 0.5)" },
+          "50%": { opacity: "0.7", boxShadow: "0 0 20px rgba(5, 150, 105, 0.8)" },
+        },
         fadeInUp: {
           from: { opacity: "0", transform: "translateY(30px)" },
           to: { opacity: "1", transform: "translateY(0)" },

@@ -165,11 +165,16 @@ export function TrustStrip() {
                     isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 )}
             >
-                {/* Heading styled like section tags */}
-                <div className="text-center mb-8">
-                    <Badge variant="outline">
+                {/* Heading & Live Metric */}
+                <div className="text-center mb-8 flex flex-col items-center gap-md">
+                    <Badge variant="outline" className="bg-background-elevated/50 border-accent/20">
                         Powered by Industry-Leading Technology
                     </Badge>
+                    <div className="flex items-center gap-sm text-sm text-foreground-secondary bg-background-dark/80 px-4 py-2 rounded-full border border-border/50">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse-glow" />
+                        <span className="font-mono text-emerald-400 font-semibold">$120M+</span>
+                        <span>in daily algorithmic volume verified</span>
+                    </div>
                 </div>
 
                 {/* Layout: Grain — Wide Scrolling Logos — Grain */}

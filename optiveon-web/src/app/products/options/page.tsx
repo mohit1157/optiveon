@@ -139,12 +139,20 @@ export default function OptionsPage() {
                     <div className="flex-1">
                         <div className="flex items-center gap-md flex-wrap">
                             <h1 className="text-2xl font-bold">Options Trade Bot</h1>
-                            <Badge
-                                variant={status.running ? "success" : "muted"}
-                                className="text-xs"
-                            >
-                                {status.running ? "Running" : "Stopped"}
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                                <Badge
+                                    variant={status.running ? "success" : "muted"}
+                                    className="text-xs relative pr-4"
+                                >
+                                    {status.running && (
+                                        <span className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-1.5 w-1.5">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                                        </span>
+                                    )}
+                                    {status.running ? "Running" : "Stopped"}
+                                </Badge>
+                            </div>
                             <Badge variant="outline" className="text-xs">
                                 {status.mode === "paper" ? "📝 Paper Trading" : "🔴 Live Trading"}
                             </Badge>
@@ -202,7 +210,7 @@ export default function OptionsPage() {
 
                 {/* Controls */}
                 <div className="grid sm:grid-cols-2 gap-lg mb-xl">
-                    <div className="rounded-2xl border border-border bg-background-card p-xl">
+                    <div className="glass-panel p-xl rounded-2xl">
                         <h2 className="text-sm uppercase tracking-[0.15em] text-foreground-muted mb-lg">
                             Bot Controls
                         </h2>
@@ -245,7 +253,7 @@ export default function OptionsPage() {
                         )}
                     </div>
 
-                    <div className="rounded-2xl border border-border bg-background-card p-xl">
+                    <div className="glass-panel p-xl rounded-2xl">
                         <h2 className="text-sm uppercase tracking-[0.15em] text-foreground-muted mb-lg">
                             Watchlist
                         </h2>
@@ -267,10 +275,11 @@ export default function OptionsPage() {
 
                 {/* Stats Grid */}
                 <div className="grid sm:grid-cols-3 gap-lg mb-xl">
-                    <div className="rounded-2xl border border-border bg-background-card p-xl">
-                        <div className="flex items-center gap-md mb-md">
-                            <div className="w-10 h-10 rounded-lg bg-background-elevated border border-border flex items-center justify-center">
-                                <TrendingUp className="w-5 h-5 text-accent" />
+                    <div className="glass-panel p-xl rounded-xl relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="flex items-center gap-md mb-md relative z-10">
+                            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                                <TrendingUp className="w-5 h-5 text-emerald-400" />
                             </div>
                             <p className="text-xs uppercase tracking-[0.15em] text-foreground-muted">
                                 Today&apos;s P&amp;L
@@ -281,10 +290,11 @@ export default function OptionsPage() {
                         </p>
                     </div>
 
-                    <div className="rounded-2xl border border-border bg-background-card p-xl">
-                        <div className="flex items-center gap-md mb-md">
-                            <div className="w-10 h-10 rounded-lg bg-background-elevated border border-border flex items-center justify-center">
-                                <Activity className="w-5 h-5 text-accent" />
+                    <div className="glass-panel p-xl rounded-xl relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="flex items-center gap-md mb-md relative z-10">
+                            <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                                <Activity className="w-5 h-5 text-blue-400" />
                             </div>
                             <p className="text-xs uppercase tracking-[0.15em] text-foreground-muted">
                                 Open Positions
@@ -293,10 +303,11 @@ export default function OptionsPage() {
                         <p className="text-2xl font-bold">{status.positions}</p>
                     </div>
 
-                    <div className="rounded-2xl border border-border bg-background-card p-xl">
-                        <div className="flex items-center gap-md mb-md">
-                            <div className="w-10 h-10 rounded-lg bg-background-elevated border border-border flex items-center justify-center">
-                                <Shield className="w-5 h-5 text-accent" />
+                    <div className="glass-panel p-xl rounded-xl relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="flex items-center gap-md mb-md relative z-10">
+                            <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                                <Shield className="w-5 h-5 text-purple-400" />
                             </div>
                             <p className="text-xs uppercase tracking-[0.15em] text-foreground-muted">
                                 Total Trades
@@ -307,7 +318,7 @@ export default function OptionsPage() {
                 </div>
 
                 {/* Positions Table */}
-                <div className="rounded-2xl border border-border bg-background-card p-xl mb-xl">
+                <div className="glass-panel p-xl rounded-2xl mb-xl">
                     <h2 className="text-sm uppercase tracking-[0.15em] text-foreground-muted mb-lg">
                         Positions &amp; Trade History
                     </h2>
@@ -371,14 +382,14 @@ export default function OptionsPage() {
 
                 {/* Recent Activity */}
                 {status.recentActivity && status.recentActivity.length > 0 && (
-                    <div className="rounded-2xl border border-border bg-background-card p-xl mb-xl">
+                    <div className="glass-panel p-xl rounded-2xl mb-xl">
                         <h2 className="text-sm uppercase tracking-[0.15em] text-foreground-muted mb-lg">
                             Recent Activity
                         </h2>
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             {status.recentActivity.map((activity, i) => (
-                                <div key={i} className="flex items-center gap-md text-sm">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+                                <div key={i} className="signal-card p-sm rounded-lg flex items-start gap-md text-sm">
+                                    <div className="mt-1 w-2 h-2 rounded-full bg-accent flex-shrink-0 animate-pulse" />
                                     <span className="text-foreground-secondary">{activity}</span>
                                 </div>
                             ))}
@@ -386,37 +397,68 @@ export default function OptionsPage() {
                     </div>
                 )}
 
-                {/* Bot Logs */}
+                {/* Bot Logs - Signal Stream */}
                 {status.recentLogs && status.recentLogs.length > 0 && (
-                    <div className="rounded-2xl border border-border bg-background-card p-xl mb-xl">
+                    <div className="glass-panel p-xl rounded-2xl mb-xl">
                         <h2 className="text-sm uppercase tracking-[0.15em] text-foreground-muted mb-lg flex items-center gap-2">
-                            <Terminal className="w-4 h-4" />
-                            Bot Logs
+                            <Terminal className="w-4 h-4 text-accent" />
+                            Live Terminal Stream
                         </h2>
-                        <div className="bg-background rounded-lg border border-border p-md overflow-x-auto max-h-64 overflow-y-auto">
-                            <pre className="text-xs font-mono text-foreground-secondary leading-relaxed whitespace-pre-wrap">
+                        <div className="bg-background-dark/80 rounded-xl border border-border/50 p-md overflow-x-auto max-h-64 overflow-y-auto relative">
+                            {/* Subtle scanline effect */}
+                            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px]" />
+                            <pre className="text-xs font-mono text-foreground-secondary leading-relaxed whitespace-pre-wrap relative z-10">
                                 {status.recentLogs.join("\n")}
                             </pre>
                         </div>
                     </div>
                 )}
 
-                {/* Strategy Info */}
-                <div className="rounded-2xl border border-accent/20 bg-accent/5 p-xl">
-                    <h3 className="text-sm font-semibold mb-sm">
-                        Strategy: Pop-Pullback-Hold (3-Min EMA)
-                    </h3>
-                    <p className="text-sm text-foreground-secondary leading-relaxed">
-                        Detects continuation patterns on 3-minute candles using EMA9. Enters
-                        after a pop above/below EMA, a pullback to EMA, and a 1-2 candle
-                        hold confirmation. Places bracket orders with stop-loss and
-                        take-profit via Alpaca.
-                    </p>
-                    {status.lastUpdate && (
-                        <p className="text-xs text-foreground-muted mt-md">
-                            Last updated: {status.lastUpdate}
-                        </p>
-                    )}
+                {/* Strategy Tear-Sheet */}
+                <div className="glass-panel p-xl rounded-2xl border-accent/20">
+                    <div className="flex items-center justify-between mb-lg">
+                        <h3 className="text-sm uppercase tracking-[0.15em] text-accent font-semibold flex items-center gap-2">
+                            <Activity className="w-4 h-4" />
+                            Active Engine: 3-Min EMA Continuation
+                        </h3>
+                        {status.lastUpdate && (
+                            <Badge variant="outline" className="text-[10px] text-foreground-muted border-foreground-muted/30">
+                                Synced: {status.lastUpdate}
+                            </Badge>
+                        )}
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-md relative">
+                        {/* Connecting line for desktop */}
+                        <div className="hidden md:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent -translate-y-1/2 z-0" />
+
+                        {/* Step 1 */}
+                        <div className="bg-background-dark/50 p-md rounded-xl border border-border/50 relative z-10 flex flex-col items-center text-center">
+                            <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mb-sm border border-blue-500/30">
+                                1
+                            </div>
+                            <h4 className="text-sm font-semibold text-foreground mb-1">Detect Pop</h4>
+                            <p className="text-xs text-foreground-muted">Identifies strong momentum breaking above or below the 9 EMA.</p>
+                        </div>
+
+                        {/* Step 2 */}
+                        <div className="bg-background-dark/50 p-md rounded-xl border border-border/50 relative z-10 flex flex-col items-center text-center">
+                            <div className="w-8 h-8 rounded-full bg-warning/20 text-warning flex items-center justify-center mb-sm border border-warning/30">
+                                2
+                            </div>
+                            <h4 className="text-sm font-semibold text-foreground mb-1">Wait for Pullback</h4>
+                            <p className="text-xs text-foreground-muted">Monitors price retracing to test the EMA as dynamic support/resistance.</p>
+                        </div>
+
+                        {/* Step 3 */}
+                        <div className="bg-background-dark/50 p-md rounded-xl border border-border/50 relative z-10 flex flex-col items-center text-center">
+                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-sm border border-emerald-500/30">
+                                3
+                            </div>
+                            <h4 className="text-sm font-semibold text-foreground mb-1">Confirm & Execute</h4>
+                            <p className="text-xs text-foreground-muted">Validates a 1-2 candle hold before routing bracket orders to Alpaca.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

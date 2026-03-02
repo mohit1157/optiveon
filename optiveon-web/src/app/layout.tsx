@@ -6,6 +6,7 @@ import {
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { JsonLd } from "@/components/seo/json-ld";
+import { FloatingTicker } from "@/components/marketing/floating-ticker";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -107,6 +108,7 @@ export default function RootLayout({
       <body className="font-sans">
         {children}
         <Toaster />
+        <FloatingTicker />
       </body>
     </html>
   );
