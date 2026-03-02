@@ -123,60 +123,64 @@ export function Hero() {
                   </span>
                 </div>
 
-                {/* Interactive Preview Flow */}
-                <div className="p-xl bg-background-dark/80 relative">
-                  {/* Subtle scanline effect */}
-                  <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px]" />
-
-                  <div className="relative z-10 space-y-md">
-                    {/* Step 1: Signal */}
-                    <div className="signal-card p-md rounded-xl border border-border/50 flex items-center gap-md animate-fade-in-up">
-                      <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30 flex-shrink-0">
-                        <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xs uppercase tracking-wider text-blue-400 font-semibold mb-0.5">Signal Detected</p>
-                        <p className="text-sm text-foreground font-mono">TSLA • 3m EMA Pullback</p>
-                      </div>
-                      <Badge variant="outline" className="text-[10px] bg-blue-500/10 border-blue-500/20 text-blue-300">New</Badge>
-                    </div>
-
-                    {/* Step 2: Validation */}
-                    <div className="bg-background-elevated/50 p-md rounded-xl border border-border/50 ml-lg relative animate-fade-in-up delay-150">
-                      {/* Connection Line */}
-                      <div className="absolute -left-5 top-1/2 w-5 h-px bg-border border-dashed" />
-                      <div className="absolute -left-5 -top-8 w-px h-[calc(100%+32px)] bg-border border-dashed" />
-
-                      <div className="flex justify-between items-center mb-sm">
-                        <p className="text-xs text-foreground-secondary flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-warning animate-pulse" />
-                          Validating Strategy Health...
-                        </p>
-                        <span className="text-xs font-mono text-warning">86%</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-background-dark rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-accent w-[86%] rounded-full relative overflow-hidden">
-                          <div className="absolute inset-0 bg-white/20 animate-marquee" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Step 3: Execution */}
-                    <div className="signal-card border-l-emerald-500 p-md rounded-xl border border-border/50 border-l-2 bg-emerald-500/5 flex items-center gap-md animate-fade-in-up delay-300">
-                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 flex-shrink-0">
-                        <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xs uppercase tracking-wider text-emerald-400 font-semibold mb-0.5">Order Executed</p>
-                        <p className="text-sm text-foreground font-mono ml-0">Buy 5x ATM Calls</p>
-                      </div>
-                      <Badge variant="outline" className="text-[10px] bg-emerald-500/10 border-emerald-500/20 text-emerald-300">Alpaca Live</Badge>
-                    </div>
-                  </div>
+                {/* Terminal Content */}
+                <div className="p-lg md:p-xl">
+                  <pre className="font-mono text-xs md:text-sm leading-relaxed overflow-x-auto">
+                    <code>
+                      <span className="code-keyword">from</span> optiveon{" "}
+                      <span className="code-keyword">import</span>{" "}
+                      StrategyPipeline{"\n\n"}
+                      <span className="code-comment">
+                        # Build a production-grade research to execution
+                        pipeline
+                      </span>
+                      {"\n"}
+                      pipeline = StrategyPipeline({"\n"}
+                      {"    "}assets=[{"\n"}
+                      {"      "}
+                      <span className="code-string">
+                        &quot;equities&quot;
+                      </span>,{" "}
+                      <span className="code-string">&quot;futures&quot;</span>,{" "}
+                      <span className="code-string">&quot;fx&quot;</span>,{" "}
+                      <span className="code-string">&quot;crypto&quot;</span>
+                      {"\n"}
+                      {"    "}],
+                      {"\n"}
+                      {"    "}regime_model=
+                      <span className="code-string">
+                        &quot;adaptive_volatility&quot;
+                      </span>
+                      ,{"\n"}
+                      {"    "}risk_profile=
+                      <span className="code-string">
+                        &quot;institutional&quot;
+                      </span>
+                      {"\n"}){"\n\n"}
+                      <span className="code-comment">
+                        # Validate before deployment
+                      </span>
+                      {"\n"}
+                      report = pipeline.validate({"\n"}
+                      {"    "}in_sample=
+                      <span className="code-string">&quot;2018-2022&quot;</span>
+                      ,{"\n"}
+                      {"    "}out_of_sample=
+                      <span className="code-string">&quot;2023-2025&quot;</span>
+                      ,{"\n"}
+                      {"    "}max_drawdown=
+                      <span className="code-number">0.08</span>
+                      {"\n"}){"\n\n"}
+                      <span className="code-keyword">if</span> report.status ==
+                      <span className="code-string">&quot;approved&quot;</span>:
+                      {"\n"}
+                      {"    "}deployment = pipeline.deploy(mode=
+                      <span className="code-string">
+                        &quot;paper_or_live&quot;
+                      </span>
+                      )
+                    </code>
+                  </pre>
                 </div>
               </div>
 
